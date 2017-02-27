@@ -6,7 +6,7 @@ Personal Finance Web
 * You need to create database user to match application.properties, as following:  
 
     CREATE USER 'pf_local'@'localhost' IDENTIFIED BY 'secret';
-    GRANT ALL PRIVILEGES ON * . * TO 'pf_locla'@'localhost';
+    GRANT ALL PRIVILEGES ON * . * TO 'pf_local'@'localhost';
     FLUSH PRIVILEGES;
 
 
@@ -39,16 +39,16 @@ The following screen shots are utilizing and showing sample test data.
 
 Transactions View:
 -------------------
-![alt tag](screenshot-1.png)
+![transactions](screenshot-1.png)
 
 
 
 Accounts View:
 --------------
-![alt tag](screenshot-2.png)
+![accounts](screenshot-2.png)
 
 
 
 Charts View:
 ------------
-![alt tag](screenshot-3.png)
+![charts](screenshot-3.png)

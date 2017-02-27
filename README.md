@@ -2,7 +2,13 @@ Personal Finance Web
 =====================
 
 * This is a multiuser system for handling finances. 
-* The sample data uses the following account email test@test.test and password is test.  
+* The sample data uses the following account email test@test.test and password is test.
+* You need to create database user to match application.properties, as following:  
+
+    CREATE USER 'pf_local'@'localhost' IDENTIFIED BY 'secret';
+    GRANT ALL PRIVILEGES ON * . * TO 'pf_locla'@'localhost';
+    FLUSH PRIVILEGES;
+
 
 
 Why developing it?
@@ -17,6 +23,9 @@ Technology:
 * The code used MySQL database through Hibernate Mysql driver. 
 * The code send email using smtp.sendgrid.net, with fictional account. In order to be able to get email notifications, you must configure 
 a correct user name and password.  
+
+
+
 
 
 License:

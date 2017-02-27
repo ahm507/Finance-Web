@@ -1,6 +1,9 @@
 Personal Finance Web
 =====================
 
+* This is a multiuser system for handling finances. 
+* The sample data uses the following account email test@test.test and password is test.  
+
 
 Why developing it?
 -------------------

@@ -1,0 +1,126 @@
+*{
+	font-size:12px;
+}
+
+html {
+ /* to stop scrolling and elastic effect*/
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+    font-family:helvetica,tahoma,verdana,sans-serif;
+    padding:0px;
+    font-size:13px;
+    margin:0;
+    margin-top:0;
+    margin-left:0px;
+    margin-right:0px;
+/* to stop scrolling and elastic effect*/
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color:#a2a8cd;  
+
+}
+h2 {
+    font-size:18px;
+    font-weight:bold;
+    margin:0;
+    margin-bottom:15px;
+}
+.demo-info{
+	background:#FFFEE6;
+	color:#8F5700;
+	padding:12px;
+}
+.demo-tip{
+	width:16px;
+	height:16px;
+	margin-right:8px;
+	float:left;
+}
+
+/* Set Header
+keep this empty one !!!
+ */
+
+div.page_topbar {
+
+}
+
+#page_topbar {
+	height:20px; width:100%; margin:0px; background-color:#1A4F67;
+}
+
+div.header-separator {
+	height:10px; width:100%; margin:0px; background-color:#f5f5f5;
+}
+
+div.header-separator2 {
+	height:30px; width:100%; margin:0px; background-color:#f5f5f5;
+}
+
+div.header-container {
+	height:67px; width:100%; margin:0px; border:0px solid white; color:#FF0000; background-color:#f5f5f5
+}
+div.header-logo { 
+	height:67px; width:200px; float:left; margin:0px; border:0px solid white; background-color:#f5f5f5;
+}
+div.header-toolbar {
+	
+	background-color:#a2a8cd;
+	
+/* 	margin-top:0px; margin-left:0px; border:0px solid white; 
+	vertical-align:bottom;  
+	padding: 0px;
+	border: 0px solid #000;
+*/
+
+	border-radius: 5px;
+/*  	-moz-border-radius: 15px;  */
+
+/* 	position:relative ;fixed absolute
+	top:33px;
+	left:200px;
+	height:25px; 
+	width:1000px; 
+ */		
+}
+
+div.footer-separator {
+	height:10px; width:100%; margin:0px; background-color:#f5f5f5;
+}
+
+div.footer{
+ text-align:center;
+} 
+
+
+
+div.body-outer {
+	background-color:#f5f5f5;
+}
+
+div.body-inner {
+	background-color:#FFFFFF;
+	width: 800px;
+	margin-left:auto;
+	margin-right:auto;
+	
+	border-radius: 5px; /* rounded*/
+}
+
+div.body-wide-inner {
+	background-color:#FFFFFF;
+/* 	width: 800px;
+ */	margin-left:auto;
+	margin-right:auto;
+	border-radius: 5px; /*rounded */
+}
+
+
+#status{
+	background-color:#FFFFFF;
+}

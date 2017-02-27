@@ -1,0 +1,152 @@
+<!doctype html>
+<html manifest="offline.manifest">
+<head>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SalaryControl.com Login</title>  
+
+    <link rel="stylesheet" type="text/css" href="easyui/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+	<script type="text/javascript" src="easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/rest.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+
+
+	<!-- icon for iphone -->
+	<link rel="apple-touch-icon" sizes="57x57" href="images/icon-57.png" />
+	<link rel="apple-touch-icon" sizes="80x80" href="images/icon-80.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="images/icon-120.png" />
+	
+<script>
+
+        $(function(){ //on page load event
+        	
+        	var loggedIn = readIsLoggedIn();
+        	//alert(loggedIn);
+        	if(loggedIn == "true") { //already logged in, then just go. if you want to login, just logout
+				$(location).attr('href','mobile-transactions.html');
+        	}
+	        var email = readEmail();
+	        if(email != undefined && email != null) {
+		        $('#email').val(email);
+	        }
+
+		});
+
+
+	function login() {
+		
+        var email = $('#email').val();
+        if(email == undefined) {
+        	alert("Type email address!");
+        }
+		//ensure email and password makes sense
+        if(validateEmail(email) == false ) {
+        	alert("Invalid email address, please check. ");
+        	return ;
+        }
+        var password = $('#password').val();
+        if(password == undefined) {
+        	alert("Type password!");
+        }
+        
+        if(password.length < 1 ) {
+        	alert("No password, please check");
+        	return ;
+        }
+		
+		var storedEmail = readEmail();
+		var storedPassword = readPassword();
+		if(storedEmail == null || storedPassword == null) { //not logged in before
+			//you must make successful online login once
+			if(navigator.onLine == false) {
+				alert("Please connect to the Internet as this is the first login");
+				return;
+			}
+	        var resp = loginRest(email, password);
+	        if(resp.status != "success") {
+	        	alert("Server: Login error, invalid email and/or password");
+	        	return;
+	        } 
+			storeEmailAndPassword(email, password);			
+			window.location = "mobile-transactions.html";
+			return;
+		}
+
+		if(email == storedEmail && password == storedPassword) {
+			//successful login
+			window.location = "mobile-transactions.html";
+			// storageSetValue("loggedIn", "true");
+			storeEmailAndPassword(email, password);			
+			return;			
+		} 
+		//offline, logged in before and invalid login
+		else { 
+			alert("Invalid user name or password, please check.");
+		}
+	}
+	
+</script>	
+	
+	
+</head>
+<body>
+
+        <div style="text-align:center;margin:20px;overflow:hidden">
+            <img src="images/logo.png" style="margin:0">
+        </div>
+        <div style="padding:0 20px">
+            <div class="m-item" style="">
+                <div><input id="email" class="m-input" placeholder="Type email"></div>
+            </div>
+            <div class="m-item">
+                <div><input id="password" class="m-input" type="password" placeholder="Type password"></div>
+            </div>
+            <div style="text-align:center;margin-top:30px">
+                <a href="javascript:login()" class="easyui-linkbutton" style="width:40%"><span style="font-size:16px">Login</span></a>
+
+            </div>
+
+            <div style="text-align:left;margin:20px;overflow:hidden">
+                <br>
+                <br>
+                <a href="login">Goto Full website</a>
+            </div>
+
+
+        </div>
+
+    <style scoped>
+        .panel-title{
+            text-align:center;
+            font-size:14px;
+            font-weight:bold;
+            text-shadow:0 -1px rgba(0,0,0,0.3);
+        }
+        .m-item{
+            height:30px;
+            line-height:30px;
+            padding:10px;
+            background:#fff;
+            color:#000;
+        }
+        .m-label{
+            float:left;
+            width:100px;
+            font-size:16px;
+        }
+        .m-input{
+            height:30px;
+            line-height:30px;
+            font-size:16px;
+            border:0;
+            width:150px;
+        }
+    </style>
+</body>    
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html manifest="offline.manifest">
+	<head>
+	    <meta charset="UTF-8">  
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	    <title>New Expense</title>  
+	
+	    <link rel="stylesheet" type="text/css" href="easyui/themes/metro/easyui.css">
+	    <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+		<script type="text/javascript" src="easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="js/data.js"></script>
+        <script type="text/javascript" src="js/rest.js"></script>
+        <script type="text/javascript" src="js/transactions.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
+	
+	    <style scoped>
+	        .panel-title{
+	            text-align:center;
+	            font-size:14px;
+	            font-weight:bold;
+	            text-shadow:0 -1px rgba(0,0,0,0.3);
+	        }
+	        .m-item{
+	            height:30px;
+	            line-height:30px;
+	            padding:10px;
+	            background:#fff;
+	            color:#000;
+	        }
+	        .m-label{
+	            float:left;
+	            width:100px;
+	            font-size:16px;
+	        }
+	        .m-input{
+	            height:30px;
+	            line-height:30px;
+	            font-size:16px;
+	            border:0;
+	            width:150px;
+	        }
+	    </style>
+	<script>
+	        
+	    $(function(){
+	    	var loggedIn = readIsLoggedIn();
+	    	if(loggedIn == null) {
+				window.location = "mobile-login.html";
+	    	}
+	    	initForm();
+	    });
+	
+		function initForm() {
+		    var data = new AccountsTreeData();
+		    var accountsTreeData = data.load();
+		    if(accountsTreeData == null) { //no saved data
+		        var resp = loginRest(readEmail(), readPassword());
+		        if(resp.status != "success") {
+		        	alert("ERROR login");
+		        	return;
+		        } 
+		    	accountsTreeData = getAccountsTreeRest();
+		    	data.save(accountsTreeData);
+		    }
+		    $('#withdraw').combotree('loadData', accountsTreeData);
+		    $('#deposit').combotree('loadData', accountsTreeData);
+			var today = getTodayYYMMDD();	    
+		    $('#date').datebox('setValue', today);
+		    //init from & to 
+		    iniFormFromCookies();
+		    
+		}
+	
+		function getTodayYYMMDD() {
+		    var dt = new Date();
+		    var today = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+		    return today;
+		}     
+	
+		function addExpense() {
+			//colect form data
+	        var depositVal = $('#deposit').combotree('getText');
+	        var withdrawVal = $('#withdraw').combotree('getText');
+			var withdrawId = $('#withdraw').combotree('tree').tree('getSelected').id;
+			var depositId = $('#deposit').combotree('tree').tree('getSelected').id;
+	        var amount = $('#amount').val();
+			if(amount == "") {
+				alert ("Please enter an amount");
+	            return false;
+			}
+			if(withdrawVal == "") {
+				alert ("Please select withdraw account");
+	            return false;
+			}
+			if(depositVal == "") {
+				alert ("Please select deposit account");
+	            return false;
+			}
+	        if (depositVal == withdrawVal && amount != 0) {
+	            alert("Please select different deposit account than withdraw account, or zero amount.");
+	            return false;
+	        }
+	        var rootElements = "Assets;Income;Expenses;Liabilities";
+	        if (rootElements.indexOf(depositVal) != -1) {
+	            alert("Please select leaf account.");
+	            return false;
+	        }
+	        if (rootElements.indexOf(withdrawVal) != -1) {
+	            alert("Please select leaf account.");
+	            return false;
+	        }
+	        var description = $('#description').val();
+		    var date = $('#date').datebox('getValue');
+	
+			//compose object
+			var recordObj = {"description":description, "withdrawId": withdrawId, "depositId": depositId, 
+				"withdrawVal": withdrawVal, "depositVal": depositVal, "date":date, "amount":amount};
+
+			storeTransaction(recordObj);
+			
+			storeCookies(); 
+			
+			$(location).attr('href','mobile-transactions.html');
+		}
+		
+		
+		function cancelForm() {
+			$(location).attr('href','mobile-transactions.html');
+	
+		}
+		
+	function storeCookies() {
+		var selectedWithdrawNode = $('#withdraw').combotree('tree').tree('getSelected');
+		createCookie("withdrawId", selectedWithdrawNode.id, 356);
+		var selectedDepositNode = $('#deposit').combotree('tree').tree('getSelected');
+		createCookie("depositId", selectedDepositNode.id, 356);
+	}
+
+	function iniFormFromCookies() {
+        var withdrawId = readCookie("withdrawId");
+        if(withdrawId != null) {
+        	$('#withdraw').combotree('setValue', withdrawId);
+        }
+        var depositId = readCookie("depositId");
+        if(depositId != null) {
+        	$('#deposit').combotree('setValue', depositId);
+        }
+	}		
+		
+		
+	</script>	
+	
+</head>
+<body>
+	
+
+  <div class="easyui-panel" title="Add New Expense" data-options="fit:true,border:false">
+        <div style="padding:0 20px">
+        	<form id="fm" method="post" novalidate>	
+
+	        	
+	            <div class="m-item" style="">
+	                <div><input id="description" class="m-input" placeholder="Type description"></div>
+	            </div>
+	
+	            <div class="m-item">
+	                <div><input id="amount" class="m-input" placeholder="Type amount"></div>
+	            </div>
+	
+	            <div class="m-item">
+	                <div class="m-label">Withdraw</div>
+	                <div>
+						<select id="withdraw" name="withdraw" class="easyui-combotree" style="width:150px;" 
+					        data-options="">
+					    </select>
+	                </div>
+	            </div>
+	
+	            <div class="m-item">
+	                <div class="m-label">Deposit</div>
+	                <div>
+		                <select id="deposit" name="deposit" class="easyui-combotree" style="width:150px;"  
+					        data-options="">
+					    </select>
+	                	
+	                </div>
+	            </div>
+	
+	            <div class="m-item">
+	                <div>
+	                	<!--input class="m-input" placeholder="Type date"-->
+					<input class="easyui-datebox" data-options="formatter:ymdDateFormatter,parser:ymdDateParser" required="true" id="date" name="date" >
+	            	</div>
+	                
+	            </div>
+	
+	            <div style="text-align:center;margin-top:30px">
+	                <a href="javascript:addExpense()" class="easyui-linkbutton" style="width:40%"><span style="font-size:16px">Add Expense</span></a>
+	                <a href="javascript:cancelForm()" class="easyui-linkbutton" style="width:40%"><span style="font-size:16px">Cancel</span></a>
+	            </div>
+            
+            </form>        
+
+            
+        </div>
+   </div>
+        
+</body>    
+</html>

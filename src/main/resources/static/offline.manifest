@@ -1,0 +1,55 @@
+CACHE MANIFEST
+# offline manifest to allow the app to work in offline mode
+# Cache manifest version 1.0.25
+
+
+#my files
+
+
+mobile-login.html
+mobile-transactions.html
+mobile-add-new.html
+mobile-accounts.html
+js/transactions.js
+js/login.js
+js/data.js
+js/rest.js
+js/accounts.js
+finance.css
+images/icon-57.png
+images/icon-80.png
+images/icon-120.png
+images/logo.png
+
+#easyui
+
+easyui/themes/icon.css
+easyui/jquery.min.js
+easyui/jquery.easyui.min.js
+easyui/themes/metro/easyui.css
+easyui/themes/finance/easyui.css
+
+#images from easyui
+easyui/themes/metro/images/blank.gif
+easyui/themes/metro/images/calendar_arrows.png
+easyui/themes/metro/images/combo_arrow.png
+easyui/themes/metro/images/datagrid_icons.png
+easyui/themes/metro/images/datebox_arrow.png
+easyui/themes/metro/images/layout_arrows.png
+easyui/themes/metro/images/linkbutton_bg.png
+easyui/themes/metro/images/loading.gif
+easyui/themes/metro/images/messager_icons.png
+easyui/themes/metro/images/tree_icons.png
+easyui/themes/metro/images/validatebox_warning.png
+easyui/themes/icons/edit_add.png
+easyui/themes/icons/edit_remove.png
+
+
+
+NETWORK:
+# All URLs that start with the following lines are whitelisted.
+rest/users/login.do
+
+
+CACHE:
+# Additional items to cache.

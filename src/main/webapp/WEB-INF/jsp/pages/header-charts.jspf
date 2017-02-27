@@ -1,0 +1,95 @@
+
+
+
+<div id="page_topbar">
+
+</div>
+
+<div class="header-separator">
+
+</div>
+
+<div class="header-container">
+
+	<div class="header-logo">
+		<a href="transactions"><img src="images/logo.png"> </a>
+	</div>
+	
+	<div class="header-separator2">
+	</div>
+		
+	<div class="header-toolbar">
+		<% 
+		String headerUserEmail = (String)session.getAttribute("email"); 
+		%>
+	
+		
+			<select id="chart_kind" name="chart_kind">
+				<option value="column">Column Chart</option>
+				<option value="line">Line Chart</option>
+			</select>
+
+			<select id="chart_year" name="chart_year"> <!-- filled dynamically by charts.jsp-->
+			</select>
+
+			<select id="chart_type" name="chart_type">
+				<option value="totals">Totals</option>
+				<option value="asset">Asset</option>
+				<option value="income">Income</option>
+				<option value="expense">Expense</option>
+				<option value="liability">Liability</option>
+			</select>
+			 &nbsp;
+	     
+		
+		<% if(headerUserEmail != null) { %>
+			<a href="transactions" plain="true" class="easyui-linkbutton">Transactions</a>
+			<a href="accounts" plain="true" class="easyui-linkbutton">Accounts</a>
+			<a href="charts" plain="true" class="easyui-linkbutton">Charts</a>
+			<a href="export" plain="true" class="easyui-linkbutton">Backup</a>
+			<a href="import" plain="true" class="easyui-linkbutton">Restore</a>
+			&nbsp; 
+			<a href="settings" plain="true" class="easyui-linkbutton">Settings</a>
+			&nbsp;
+		
+<script type="text/javascript">
+    
+	function onClickLogout(e) {
+		var response;
+	    jQuery.ajax({
+	        url : 'rest/users/logout.do?',
+	        async : false,
+	        dataType : 'json'
+	    });
+		
+		$(location).attr('href','login');
+	}    
+    
+</script>		
+			<a href="#" onclick="onClickLogout()" plain="true" class="easyui-linkbutton">Logout <%=headerUserEmail%></a>
+			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a>
+			
+		<% }  else {%>
+			&nbsp; &nbsp; 
+			<a href="register" plain="true" class="easyui-linkbutton">Register</a> &nbsp; &nbsp;
+			<a href="login" plain="true" class="easyui-linkbutton">Login</a> &nbsp; &nbsp;
+			<a href="password-forget" plain="true" class="easyui-linkbutton">Forget Password</a> &nbsp; &nbsp;
+			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a> &nbsp; &nbsp;
+			 
+		<% } %>
+		
+	</div>
+	
+</div>
+
+	<div class="body-outer">
+
+		
+
+		<div class="body-wide-inner">
+			
+		
+		<table width="100%"><tr><td align="center">
+				
+				
+			

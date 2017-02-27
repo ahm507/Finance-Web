@@ -1,0 +1,15 @@
+Date, Description, Account, Transfer to, Amount, Currency
+2016-11-19,"salary",Assets:Bank,Expenses:Gifts,200.0,egp
+2016-10-19,"salary",Assets:Bank,Expenses:Home,600.0,egp
+2016-11-19,"salary",Income:Bonus,Assets:Bank,9000.0,egp
+2016-12-19,"travel allowance",Income:Travel Allowance,Assets:Cash in Wallet,500.0,egp
+2016-11-19,"allowance",Income:Car Allowance,Assets:Bank,2000.0,egp
+2016-12-19,"other",Income:Tourism Allowance,Assets:Bank,200.0,egp
+2016-02-19,"other",Income:Travel Allowance,Assets:Bank,200.0,egp
+2016-11-19,"Safari books",Liabilities:Master Card,Expenses:MySelf,110.0,egp
+2016-09-19,"other",Income:Salary,Assets:Bank,3000.0,egp
+2016-09-19,"other",Income:Other Income,Assets:Bank,200.0,egp
+2016-08-19,"salary",Assets:Bank,Expenses:Car,100.0,egp
+2016-08-19,"salary",Assets:Bank,Expenses:MySelf,110.0,egp
+2016-07-19,"charity",Assets:Bank,Expenses:Charity,1000.0,egp
+

@@ -33,11 +33,13 @@ public class AccountService {
 
 
     double usdRate, sarRate;
-    public List<AccountEntity> getAccountsTree(String userId, String userEmail) throws Exception {
+    public List<AccountEntity> getAccountsTree(String userEmail) throws Exception {
         String parent = "0";
         usdRate = getUsdRate(userEmail);
         sarRate = getSarRate(userEmail);
-        return getAccountsTreeRecursive(userId, parent);
+        UserEntity user = userRepo.findByEmail(userEmail);
+        //FIXME: Is it easier to just send the user entity
+        return getAccountsTreeRecursive(user.getId(), parent);
     }
 
     public double getUsdRate(String userEmail) throws Exception {
@@ -71,7 +73,7 @@ public class AccountService {
      * Inject root tree for the selection of new Account parent
      */
     public List<AccountEntity> getAccountsTreeWithOneRoot(String userId, String userEmail) throws Exception {
-        List<AccountEntity> accounts = getAccountsTree(userId, userEmail);
+         List<AccountEntity> accounts = getAccountsTree(userEmail);
         List<AccountEntity> root = new ArrayList<>(); // one element only
 //    	public AccountEntity(String uuid, String parentId, UserEntity user, String name, String description, String type, String currency) {
         UserEntity userEntity = userRepo.findById(userId);
@@ -85,7 +87,7 @@ public class AccountService {
     }
 
     public String getAccountPath(String userId, String accId, String accName,
-                                 Map<String, AccountEntity> map) throws Exception {
+                                 Map<String, AccountEntity> map) throws NullAccountException, DeepAccountLayersException {
         // Get one level parent
         AccountEntity accountRecord = map.get(accId);
         if (accountRecord == null) {
@@ -93,7 +95,7 @@ public class AccountService {
             // parent
             // id
             if (accountRecord == null) {
-                throw new Exception("Fatal: Null account for user:" + userId
+                throw new NullAccountException("Fatal: Null account for user:" + userId
                         + ",acc:" + accId);
             }
             map.put(accId, accountRecord);
@@ -109,7 +111,7 @@ public class AccountService {
             }
             path = acc2.getText() + ":" + accName;
             if (!acc2.getParent().equals("0")) {
-                throw new Exception(
+                throw new DeepAccountLayersException(
                         "[getAccountPath]: Only two layers of Accounts are supported");
             }
         }

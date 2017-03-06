@@ -103,7 +103,6 @@
 	
 	<body>
 
-		<% String curPage = "register";%>
 		<%@include file="header.jspf" %>
 
 		<br><br>

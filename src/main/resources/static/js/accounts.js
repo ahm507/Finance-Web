@@ -53,29 +53,51 @@
 	}
 	
 	function saveAccount(){
-		$('#fm').form('submit',{
-			url: url,
-			onSubmit: function(){
-				return $(this).form('validate');
-			},
-			success: function(result){
-				var result = eval('('+result+')');
-				if (result.success){
-					var accName = $('#text').val();
-					$('#status').text(accName);
-					
-					$('#dlg').dialog('close');		// close the dialog
-					$('#dg').treegrid('reload');	// reload the user data
-					location.reload(true); //true to force not get from cache
-//					loadTreeGrid();
-				} else {
-					$.messager.show({
-						title: 'Error',
-						msg: result.msg
-					});
-				}
-			}
-		});
+
+	 var data = {
+
+            text: $('#text').val(),
+            description: $('#description').val(),
+            type: $('#type').combobox('getValue'),
+            currency: $('#currency').combobox('getValue')
+	    };
+	 $.post(url, data, function(data, status){
+//                          alert("Data: " + data + "\nStatus: " + status);
+                            var accName = $('#text').val();
+                            $('#status').text(accName);
+
+                            $('#dlg').dialog('close');		// close the dialog
+                            $('#dg').treegrid('reload');	// reload the user data
+                            location.reload(true); //true to force not get from cache
+
+                          }
+             );
+
+
+//
+//		$('#fm').form('submit',{
+//			url: url,
+//			onSubmit: function(){
+//				return $(this).form('validate');
+//			},
+//			success: function(result){
+//				var result = eval('('+result+')');
+//				if (result.success){
+//					var accName = $('#text').val();
+//					$('#status').text(accName);
+//
+//					$('#dlg').dialog('close');		// close the dialog
+//					$('#dg').treegrid('reload');	// reload the user data
+//					location.reload(true); //true to force not get from cache
+////					loadTreeGrid();
+//				} else {
+//					$.messager.show({
+//						title: 'Error',
+//						msg: result.msg
+//					});
+//				}
+//			}
+//		});
 	}
 
 	function removeAccount(){

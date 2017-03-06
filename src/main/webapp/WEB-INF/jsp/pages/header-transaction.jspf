@@ -1,5 +1,5 @@
 
-
+<!--  Header Start +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 <div id="page_topbar">
 
@@ -20,14 +20,14 @@
 		
 	<div class="header-toolbar">
 		<% 
-		String headerUserEmail = (String)session.getAttribute("email"); 
+		String headerUserEmail = request.getRemoteUser(); 
 		%>
 	
 
 			<select id="transactions_year" name="transactions_year"> <!-- filled dynamically by transactions.jsp-->
 			</select>
 		
-		<% if(headerUserEmail != null) { %>
+	
 			<a href="transactions" plain="true" class="easyui-linkbutton">Transactions</a>
 			<a href="accounts" plain="true" class="easyui-linkbutton">Accounts</a>
 			<a href="charts" plain="true" class="easyui-linkbutton">Charts</a>
@@ -36,32 +36,52 @@
 			&nbsp; 
 			<a href="settings" plain="true" class="easyui-linkbutton">Settings</a>
 			&nbsp;
+			
+			
+			
+<style type="text/css">
+form  {
+     display:inline;
+/*      margin:0px;
+     padding:0px;
+ */}
+</style>
 		
 <script type="text/javascript">
     
 	function onClickLogout(e) {
+
 		var response;
 	    jQuery.ajax({
-	        url : 'rest/users/logout.do?',
+	        url : 'logout',
 	        async : false,
-	        dataType : 'json'
+	        dataType : 'json',
+	        type : 'POST',
+	        _csrf : '${_csrf.token}'
+
 	    });
+	    
+	   
 		
-		$(location).attr('href','login');
+	   
 	}    
     
 </script>		
-			<a href="#" onclick="onClickLogout()" plain="true" class="easyui-linkbutton">Logout <%=headerUserEmail%></a>
+<%-- 		
+		<a href="#" onclick="onClickLogout()" plain="true" class="easyui-linkbutton">Logout <%=headerUserEmail%></a>
+ --%>			
+			
 			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a>
 			
-		<% }  else {%>
-			&nbsp; &nbsp; 
-			<a href="register" plain="true" class="easyui-linkbutton">Register</a> &nbsp; &nbsp;
-			<a href="login" plain="true" class="easyui-linkbutton">Login</a> &nbsp; &nbsp;
-			<a href="password-forget" plain="true" class="easyui-linkbutton">Forget Password</a> &nbsp; &nbsp;
-			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a> &nbsp; &nbsp;
-			 
-		<% } %>
+			<form action="logout" method="post">
+            	<input type="submit" value="Sign Out <%=headerUserEmail%>"/>
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+														
+				            	
+        	</form>			
+			
+		
 		
 	</div>
 	
@@ -77,4 +97,7 @@
 		<table width="100%"><tr><td align="center">
 				
 				
-			
+
+
+
+<!--  Header End +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->			

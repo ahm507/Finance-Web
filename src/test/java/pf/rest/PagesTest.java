@@ -48,7 +48,7 @@ public class PagesTest {
 
     @Test
     public void testPaths2() throws Exception {
-        mockMvc.perform(get("/login.jsp"))
+        mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
 //                .andExpect(content().string(startsWith("pages/login.jsp")))
                 .andReturn();

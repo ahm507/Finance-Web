@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pf.user.UserRepository;
 import pf.webmvc.RestLib;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,9 @@ public class AccountRest {
 	
 	@Autowired
 	AccountService accountService;
+
+	@Autowired
+	UserRepository userRepository;
 //	private final static Logger LOGGER = Logger.getLogger(AccountRest.class.getName()); 
 
 //	public void configure() throws Exception {
@@ -26,28 +30,34 @@ public class AccountRest {
 //	}
 
 //	@POST //to match the easyui tree grid way
-	@RequestMapping(method = RequestMethod.POST, value = "/getAccounts.do")
-	public String getAccounts(HttpServletRequest request){
+//	method = RequestMethod.POST,
+	@RequestMapping(value = "/getAccounts.do")
+	public String getAccounts(HttpServletRequest request) {
 		String json;
 		try {
 //			configure();
-			String userId = RestLib.getLoggedInUser(request);
-			String userEmail = (String)request.getSession().getAttribute("email");
-			json = new Gson().toJson(accountService.getAccountsTree(userId, userEmail));//, type
+//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+//			String userEmail = currentUser.getEmail();//(String)request.getSession().getAttribute("email");
+
+			json = new Gson().toJson(accountService.getAccountsTree(request.getRemoteUser()));//, type
 		} catch (Exception exp) {
 			json = RestLib.getErrorString(exp);
 		}
+		
+		//FIXME: You do not need to convert to json yourself. It is already done for you. You can also remove the mvn lib used.
 		return json;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/saveAccount.do")
-	public String saveAccount(HttpServletRequest request, @RequestParam("text") String text,
+	public String saveAccount(HttpServletRequest request,
+	                          @RequestParam("text") String text,
 							  @RequestParam("description") String description, @RequestParam("type") String type,
 							  @RequestParam("currency") String currency) {
 		String json;
 		try {
 //			configure();
-			String userId = RestLib.getLoggedInUser(request);
+			//String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			accountService.create(userId, text, description, type, currency);
 			Map<String, Boolean> map = new HashMap<>();
 			map.put("success", true);
@@ -63,7 +73,8 @@ public class AccountRest {
 		String json;
 		try {
 //			configure();
-			String userId = RestLib.getLoggedInUser(request);
+//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			accountService.removeAccount(userId, id);
 			Map<String, Boolean> map = new HashMap<>();
 			map.put("success", true);
@@ -84,7 +95,8 @@ public class AccountRest {
 		String json;
 		try {
 //			configure();
-			String userId = RestLib.getLoggedInUser(request);
+//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			accountService.updateAccount(userId, id, text, description, type, currency);
 			Map<String, Boolean> map = new HashMap<>();
 			map.put("success", true);
@@ -100,8 +112,10 @@ public class AccountRest {
 		String json;
 		try {
 //			configure();
-			String userId = RestLib.getLoggedInUser(request);
-			 AccountEntity accountentity = accountService.getAccount(userId, id);
+			//FIXME: You can send user entity directly to service layer
+//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
+			AccountEntity accountentity = accountService.getAccount(userId, id);
 			json = new Gson().toJson(accountentity);
 		} catch (Exception exp) {
 			json = RestLib.getErrorString(exp);

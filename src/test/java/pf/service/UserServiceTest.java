@@ -1,4 +1,4 @@
-package pf.user;
+package pf.service;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -9,6 +9,10 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import pf.account.AccountService;
 import pf.email.Mailer;
+import pf.user.InvalidEmailSyntaxException;
+import pf.user.UserEntity;
+import pf.user.UserRepository;
+import pf.user.UserService;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -32,6 +36,10 @@ public class UserServiceTest {
 //	       userService = new UserService ();
     }	
 	
+	//mvn -Dtest=TestCircle#xyz test
+	//mvn -Dtest=pf.service.UserServiceTest#login test
+	//mvn -Dtest=pf.repository.AccountRepositoryTest#findByUserId test
+	
 	@Test
 //	@Timed(millis=1000)
 //	@Repeat(10)
@@ -40,7 +48,8 @@ public class UserServiceTest {
         String password = "secret";
         UserEntity testUser = new UserEntity("123", email, password);
         when(mockUserRepo.findByEmailAndPassword(email, UserService.md5(password))).thenReturn(testUser);
-        assertEquals("123", userService.login(email, password));
+        UserEntity user = userService.login(email, password);
+        assertEquals("123", user.getId());
 	}
 	
 	@Test(expected = InvalidEmailSyntaxException.class)

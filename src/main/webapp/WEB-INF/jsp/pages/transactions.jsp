@@ -1,8 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%
-//If forward to login.jsp
-pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
-%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -56,6 +52,7 @@ pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
 
 
 <!-- Google Analytics -->
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -65,12 +62,17 @@ pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
   ga('send', 'pageview');
 </script>
 
+
+
+
 	<title>Transactions Management</title>
 </head>
 <body>
 
-	<% String curPage = "transactions";%>
-	<%@include file="header-transaction.jspf" %>
+<%-- 	<% String curPage = "transactions";%>
+ --%>
+ 
+ <%@include file="header-transaction.jspf" %>
 	
 	
 	<table border="0" width="99%">

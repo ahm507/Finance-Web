@@ -75,9 +75,15 @@
 </head>
 <body>
 
-  	<% String curPage = "contactus";%>
-	<%@include file="header.jspf" %>
-	
+    <% if (request.getRemoteUser() == null) { %>
+
+	        <%@include file="header.jspf" %>
+
+	<% } else { %>
+
+	        <%@include file="header-transaction.jspf" %>
+	<% } %>
+
 	
 	<br><br><br>
 

@@ -1,10 +1,13 @@
-package pf.account;
+package pf.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import pf.account.AccountEntity;
+import pf.account.AccountRepository;
 import pf.user.UserEntity;
 import pf.user.UserRepository;
 
@@ -24,6 +27,7 @@ public class AccountRepositoryTest {
     @Autowired
     private AccountRepository accountRepo;
 
+    //mvn -Dtest=pf.repository.AccountRepositoryTest#findByUserId test
     @Test
     public void findByUserId() {
         UserEntity user = userRepo.findByEmail("test@test.test");

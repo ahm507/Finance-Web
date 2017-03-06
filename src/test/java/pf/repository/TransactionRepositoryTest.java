@@ -1,4 +1,4 @@
-package pf.transaction;
+package pf.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import pf.account.AccountEntity;
 import pf.account.AccountRepository;
+import pf.transaction.TransactionEntity;
+import pf.transaction.TransactionRepository;
 import pf.user.UserEntity;
 import pf.user.UserRepository;
 
@@ -17,9 +19,7 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringApplicationConfiguration(classes = PfApplication.class)
-//@WebAppConfiguration
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

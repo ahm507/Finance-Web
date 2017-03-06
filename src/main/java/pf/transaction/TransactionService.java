@@ -130,7 +130,12 @@ public class TransactionService {
 		}
 
 		//Add time to date string
-		date += concatTimeNow();
+		//if there is no time component; because it is used from import and from brand new transaction creation.
+		//Usually space separates between data and time
+		//fixme: this way of handling dates as strings is not locale safe
+		if(date.indexOf(" ") == -1) {
+			date += concatTimeNow();
+		}
 
 		TransactionEntity transEntity = new TransactionEntity(uuid,
 				userRepo.findById(userId),
@@ -260,10 +265,10 @@ public class TransactionService {
 		return filteredTs;
 	}
 
-	public List<String> getYearList(String userId) throws Exception {
+	public List<String> getYearList(String email) throws Exception {
 		//Map<String, Object> yearRange = transactionStore.findYearRange(userId);
 //		MinMaxDate yearRange = transRepo.findYearRange(userId);
-		String minMax = transRepo.queryMinAndMaxDate(userRepo.findById(userId));
+		String minMax = transRepo.queryMinAndMaxDate(userRepo.findByEmail(email));
 		String[] minMaxArray = minMax.split(",");
 		MinMaxDate minMaxDate = null;
 		if(minMaxArray.length > 0 && minMaxArray[0].equals("null") == false) {

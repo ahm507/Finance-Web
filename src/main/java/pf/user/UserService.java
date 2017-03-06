@@ -77,7 +77,7 @@ public class UserService {
 		return newUser.getId();
 	}
 
-	public String login(String email, String password)
+	public UserEntity login(String email, String password)
 			throws InvalidEmailSyntaxException, NoSuchAlgorithmException, InvalidPasswordException, UserNotExistException {
 		if ( ! validEmailSyntax(email))
 			throw new InvalidEmailSyntaxException();
@@ -88,7 +88,7 @@ public class UserService {
 		if( userRow == null) {
 			throw new UserNotExistException("UserNotExist"); // or may be not verified
 		} else {
-			return userRow.getId();
+			return userRow;
 		}
 	}
 

@@ -4,9 +4,7 @@
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.context.embedded.LocalServerPort;
 //import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.web.client.TestRestTemplate;
 //import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.web.context.WebApplicationContext;
@@ -23,7 +21,7 @@
 //@SpringBootTest
 //@RunWith(SpringJUnit4ClassRunner.class)
 //
-//public class RestTest {
+//public class TransactionRestTest {
 //
 //	
 //	private MockMvc mockMvc;
@@ -32,55 +30,26 @@
 //	private WebApplicationContext webApplicationContext;
 //
 //	
-//	@Before
-//	public void setup() throws Exception {
-//		this.mockMvc = webAppContextSetup(webApplicationContext).build();
-//	}
-//
-//	//FIXME: find a way to test web layer and login
-////	@Test
-////	public void restLogin() throws Exception {
+////	@Before
+////	public void setup() throws Exception {
+////		this.mockMvc = webAppContextSetup(webApplicationContext).build();
+////
+////		//perform login
 ////		mockMvc.perform(get("/rest/users/login.do?email=test@test.test&password=test"))
 ////				.andExpect(status().isOk())
 ////				.andExpect(jsonPath("$.status", is("success")));
-////	}
-//	
-////	@Test
-////	public void restLoginFail() throws Exception {
-////		mockMvc.perform(get("/rest/users/login.do?email=test@test.test&password=wrong"))
-////				.andExpect(status().isOk())
-////				.andExpect(jsonPath("status", is("fail")));
-////	}
-//
-////	@Test
-////	public void wrongEmail() throws Exception {
-////		mockMvc.perform(get("/rest/users/login.do?email=wrong&password=wrong"))
-////				.andExpect(status().isOk())
-////				.andExpect(jsonPath("status", is("fail")));
-////	}
-//
 ////
+////	}
+//
+//	
+////FIXME: enable this test. 
+////Measure test coverage. 
 ////	@Test
 ////	public void transactionList() throws Exception {
-////		mockMvc.perform(get("/rest/users/login.do?email=wrong&password=wrong"))
+////		String request = "/rest/transactions/getUpToYearTransactions.do?accountId=2100ba44-4d4d-49dd-a358-8ceb43ff2714&year=2016";
+////		mockMvc.perform(get(request))
 ////				.andExpect(status().isOk())
 ////				.andExpect(jsonPath("status", is("fail")));
-////	}
-//
-//
-//	
-////	@LocalServerPort
-////	private int port;
-//
-////	@Autowired
-////	private TestRestTemplate restTemplate;
-//
-////	@Test
-////	public void greetingShouldReturnDefaultMessage() throws Exception {
-//
-////		String page = restTemplate.getForObject("http://localhost:" + port + "/login",
-////				String.class);
-////		assertThat(page).contains("<title>Login</title>");
 ////	}
 //
 //

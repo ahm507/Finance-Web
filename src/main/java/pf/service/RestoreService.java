@@ -44,7 +44,7 @@ public class RestoreService {
 		}
 		return output;
 	}
-
+	@Transactional
 	public Vector<String> importFile(String userId, String fileName) throws Exception {
 		CSVReader reader = null;
 		Vector<String> output = new Vector<>();

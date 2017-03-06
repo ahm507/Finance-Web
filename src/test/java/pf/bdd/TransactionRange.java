@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import pf.account.AccountService;
 import pf.service.*;
-import pf.BddBase;
 import pf.account.AccountEntity;
 import pf.transaction.TransactionDTO;
 import pf.transaction.TransactionService;

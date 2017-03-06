@@ -143,47 +143,113 @@ function openEditExpenseDialog() {
 
 //save Expense in case of New, New & Add, and Edit
 function saveExpense(close) {
-    $('#fm').form('submit', {
-        url : url,
-        onSubmit : function() {
-            var depositVal = $('#deposit').combotree('getText');
-            var withdrawVal = $('#withdraw').combotree('getText');
-            var amount = $('#amount').val();
-            //0 amounts transfer is allowed as a mark for Credit card statement as example.
-            //Still not allowed to transfer amounts from-to the same account.
-            if (depositVal == withdrawVal && amount != 0) {
-                alert("Please select different deposit account than withdraw account, or zero amount.");
-                return false;
-            }
-            var rootElements = "Assets;Income;Expenses;Liabilities";
-            if (rootElements.indexOf(depositVal) != -1) {
-                alert("Please select leaf account.");
-                return false;
-            }
-            if (rootElements.indexOf(withdrawVal) != -1) {
-                alert("Please select leaf account.");
-                return false;
-            }
-            return $(this).form('validate');
+
+    //FIXME: depositVal is poor name. Amboiguous, if it is ID or text.
+    var depositVal = $('#deposit').combotree('getText');
+    var withdrawVal = $('#withdraw').combotree('getText');
+    var amount = $('#amount').val();
+    //0 amounts transfer is allowed as a mark for Credit card statement as example.
+    //Still not allowed to transfer amounts from-to the same account.
+    if (depositVal == withdrawVal && amount != 0) {
+        alert("Please select different deposit account than withdraw account, or zero amount.");
+        return false;
+    }
+    var rootElements = "Assets;Income;Expenses;Liabilities";
+    if (rootElements.indexOf(depositVal) != -1) {
+        alert("Please select leaf account.");
+        return false;
+    }
+    if (rootElements.indexOf(withdrawVal) != -1) {
+        alert("Please select leaf account.");
+        return false;
+    }
+
+
+   var depositId = $('#deposit').combotree('getValue');
+   var withdrawId = $('#withdraw').combotree('getValue');
+
+   $.post(url,
+        {
+            amount:  amount,
+            date:  $('#date').datebox('getValue'),
+            description:  $('#description').val(),
+            withdraw: withdrawId,
+            deposit: depositId
+
         },
-        success : function(result) {
-            var result = eval('(' + result + ')');
-            if (result.success) {
-                if (close) {
-                    $('#dlg').dialog('close');
-                    // close the dialog
-                }
-                //The following line did not update data grid. seems it POST, so it does not work with REST
-                // $('#dg').datagrid('reload');
-                loadTransactionsGrid(); 
-            } else {
-                $.messager.show({
-                    title : 'Error',
-                    msg : result.msg
-                });
+        function(data, status){
+            //alert("Data: " + data + "\nStatus: " + status);
+
+            if (close) {
+                $('#dlg').dialog('close');
+                // close the dialog
             }
-        }
-    });
+            //The following line did not update data grid. seems it POST, so it does not work with REST
+            // $('#dg').datagrid('reload');
+            loadTransactionsGrid();
+
+        });
+
+//
+//    $('#fm').form('submit', {
+//        url : url,
+//        onSubmit : function() {
+//
+//
+//            //return $(this).form('validate');
+//
+//            var depositId = $('#deposit').combotree('getValue');
+//            var withdrawId = $('#withdraw').combotree('getValue');
+//
+//           $.post(url,
+//                {
+//                    amount:  amount,
+//                    date:  $('#date').datebox('getValue'),
+//                    description:  $('#description').val(),
+//                    withdraw: withdrawId,
+//                    deposit: depositId
+//
+//                },
+//                function(data, status){
+//                    //alert("Data: " + data + "\nStatus: " + status);
+//
+//                    if (close) {
+//                        $('#dlg').dialog('close');
+//                        // close the dialog
+//                    }
+//                    //The following line did not update data grid. seems it POST, so it does not work with REST
+//                    // $('#dg').datagrid('reload');
+//                    loadTransactionsGrid();
+//
+//                });
+//
+//            return false; // DO NOT VALIDATE
+//
+//        },
+//        success : function(result) {
+//            var result = eval('(' + result + ')');
+//            if (result.success) {
+//                if (close) {
+//                    $('#dlg').dialog('close');
+//                    // close the dialog
+//                }
+//                //The following line did not update data grid. seems it POST, so it does not work with REST
+//                // $('#dg').datagrid('reload');
+//                loadTransactionsGrid();
+//            } else {
+//                $.messager.show({
+//                    title : 'Error',
+//                    msg : result.msg
+//                });
+//            }
+//        },
+//        error : function (result) {
+//                $.messager.show({
+//                    title : 'Error',
+//                    msg : result.msg
+//                    });
+//        }
+//    });
 }
 
 function openRemoveExpenseDialog() {

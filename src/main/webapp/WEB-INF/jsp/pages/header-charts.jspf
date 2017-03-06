@@ -42,7 +42,7 @@
 			 &nbsp;
 	     
 		
-		<% if(headerUserEmail != null) { %>
+		
 			<a href="transactions" plain="true" class="easyui-linkbutton">Transactions</a>
 			<a href="accounts" plain="true" class="easyui-linkbutton">Accounts</a>
 			<a href="charts" plain="true" class="easyui-linkbutton">Charts</a>
@@ -59,7 +59,8 @@
 	    jQuery.ajax({
 	        url : 'rest/users/logout.do?',
 	        async : false,
-	        dataType : 'json'
+	        dataType : 'json',
+	        method : 'POST'
 	    });
 		
 		$(location).attr('href','login');
@@ -69,14 +70,7 @@
 			<a href="#" onclick="onClickLogout()" plain="true" class="easyui-linkbutton">Logout <%=headerUserEmail%></a>
 			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a>
 			
-		<% }  else {%>
-			&nbsp; &nbsp; 
-			<a href="register" plain="true" class="easyui-linkbutton">Register</a> &nbsp; &nbsp;
-			<a href="login" plain="true" class="easyui-linkbutton">Login</a> &nbsp; &nbsp;
-			<a href="password-forget" plain="true" class="easyui-linkbutton">Forget Password</a> &nbsp; &nbsp;
-			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a> &nbsp; &nbsp;
-			 
-		<% } %>
+		
 		
 	</div>
 	

@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
-<%
+<%-- <%
 	//If forward to login.jsp
         pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
 %>
-
+ --%>
 <html>
 <head>
 <!--  Research using Google Charts https://developers.google.com/chart/interactive/docs/quick_start -->
@@ -62,7 +62,6 @@ $(document).ready(function() {
 </head>
 <body>
 
-	<% String curPage = "charts";%>
 	<%@include file="header-charts.jspf" %>
 
 	<br>

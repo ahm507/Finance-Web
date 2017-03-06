@@ -8,17 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import pf.BddBase;
 import pf.account.AccountEntity;
-import pf.transaction.TransactionEntity;
-import pf.transaction.TransactionRepository;
-import pf.user.UserEntity;
-import pf.user.UserRepository;
 import pf.account.AccountService;
-import pf.transaction.TransactionService;
 import pf.service.BackupService;
 import pf.service.RestoreService;
+import pf.transaction.TransactionEntity;
+import pf.transaction.TransactionRepository;
+import pf.transaction.TransactionService;
+import pf.user.UserEntity;
+import pf.user.UserRepository;
 import pf.user.UserService;
 
 import java.io.PrintWriter;
@@ -27,7 +25,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -148,7 +145,7 @@ public class ExportImport extends BddBase {
 
     @Then("ensure accounts are:$table")
     public void then1(ExamplesTable table) throws Exception {
-        List<AccountEntity> accounts = accountService.getAccountsTree(userId, userEmail);
+        List<AccountEntity> accounts = accountService.getAccountsTree(userEmail);
 //        assertEquals("Account count is not matched", accountsTable.getRowCount(), table.getRowCount());
         for (int i = 0; i < table.getRowCount(); i++) {
             Map<String, String> row = table.getRow(i);

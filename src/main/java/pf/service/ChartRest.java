@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pf.user.UserRepository;
 import pf.webmvc.RestLib;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,21 +24,32 @@ public class ChartRest {
 	@Autowired
 	ChartService chartService;
 
+	@Autowired
+	UserRepository userRepository;
+
 
 	@RequestMapping("/getExpensesTrend.do")
 	public String getExpensesTrend(HttpServletRequest request,
 								   @RequestParam("year") String year,
 								   @RequestParam("type") String type) throws Exception {
 
+
+
 		String jsonString;
 
 		try {
-			String userId = RestLib.getLoggedInUser(request);
-			String email = (String)request.getSession().getAttribute("email");
 
-			List<Map<String, Object>> out2 = chartService.getExpensesTrend(year, type, userId, email);
+			String userEmail = request.getRemoteUser();//currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userId = userRepository.findByEmail(userEmail).getId();//currentUser.getEmail();//(String)request.getSession().getAttribute("email");
 
-			jsonString = new Gson().toJson(out2);
+			List<Map<String, Object>> out2 = chartService.getExpensesTrend(year, type, userId, userEmail);
+
+
+			//fixme: centralize error handling
+			//fixme: remove json conversion
+					jsonString = new Gson().toJson(out2);
+
+
 
 		} catch (Exception e) {
 			jsonString = RestLib.getErrorString(e);
@@ -51,13 +63,17 @@ public class ChartRest {
 
 		String jsonString;
 		try {
-			String userId = RestLib.getLoggedInUser(request);
+
+//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userEmail = request.getRemoteUser();//currentUser.getId();//RestLib.getLoggedInUser(request);
+			String userId = userRepository.findByEmail(userEmail).getId();//currentUser.getEmail();//(String)request.getSession().getAttribute("email");
 
 			List<Map<String, String>> out = chartService.getChartFields(type, userId);
 
 			jsonString = new Gson().toJson(out);
 
 		} catch (Exception e) {
+			//FIXME: all this error handling is repeated in a dull way, centralize it through /error somehow.
 			jsonString = RestLib.getErrorString(e);
 		}
 		return jsonString;

@@ -20,7 +20,6 @@ if(exception == null)
 </head>
 <body>
 
-  	<% String curPage = "error";%>
 	<%@include file="header.jspf" %>
 
 	<br>
@@ -65,7 +64,7 @@ if(exception == null)
 	<br>
 	<br>
 
-	<hr>
+<!-- 	<hr> -->
 
 	<%@include file="footer.jspf" %>
 

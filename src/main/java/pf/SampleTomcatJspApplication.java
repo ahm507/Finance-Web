@@ -18,19 +18,29 @@ package pf;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
-@SpringBootApplication
+import java.util.logging.Logger;
+
+@SpringBootApplication 
+//FIXME: poor name: SampleTomcatJspApplication
 public class SampleTomcatJspApplication extends SpringBootServletInitializer {
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(SampleTomcatJspApplication.class);
-	}
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//		return application.sources(SampleTomcatJspApplication.class);
+//	}
+	private final static Logger LOGGER = Logger.getLogger(SampleTomcatJspApplication.class.getName());
 
 	public static void main(String[] args) throws Exception {
+		LOGGER.info("The main() API is called");
+		
 		SpringApplication.run(SampleTomcatJspApplication.class, args);
+		
+		LOGGER.info("The main() API is called again");
+
+		
 	}
 
+	
 }

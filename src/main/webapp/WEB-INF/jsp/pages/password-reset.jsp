@@ -63,7 +63,6 @@
 </head>
 <body>
 
-  	<% String curPage = "password-reset";%>
 	<%@include file="header.jspf" %>
 
 <br>

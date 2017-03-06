@@ -1,4 +1,4 @@
-package pf;
+package pf.bdd;
 
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;

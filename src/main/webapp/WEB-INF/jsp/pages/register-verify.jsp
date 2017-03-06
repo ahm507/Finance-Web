@@ -21,7 +21,6 @@
 </head>
 <body>
 
-  	<% String curPage = "register-verify";%>
 	<%@include file="header.jspf" %>
 
 	<br>

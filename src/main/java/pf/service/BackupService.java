@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pf.account.AccountEntity;
 import pf.account.AccountService;
+import pf.account.DeepAccountLayersException;
+import pf.account.NullAccountException;
 import pf.transaction.TransactionEntity;
 import pf.transaction.TransactionRepository;
 
@@ -30,7 +32,7 @@ public class BackupService {
 	String userId;
 
 
-	public List<TransactionEntity> backupUserData(String userId) throws Exception { 
+	public List<TransactionEntity> backupUserData(String userId) throws NullAccountException, DeepAccountLayersException { 
 		this.userId = userId;
 		List<TransactionEntity> transes = transRepo.findByUser_Id(userId);
 		//Use HashMap as a cache
@@ -47,12 +49,12 @@ public class BackupService {
 		return "Date, Description, Account, Transfer to, Amount, Currency";
 	}
 
-	public String getRowFormatted(TransactionEntity t) throws Exception {
+	public String getRowFormatted(TransactionEntity t) throws CurrencyTransefereException  {
 		AccountEntity account1 = t.getWithdrawAccount();
 		AccountEntity account2 = t.getDepositAccount();
 
 		if (!account1.getCurrency().equals(account2.getCurrency())) {
-			throw new Exception("Data Error: transfer between two different currencies is not allowed - " +
+			throw new CurrencyTransefereException("Data Error: transfer between two different currencies is not allowed - " +
 					account1.getCurrency() + " & " + account2.getCurrency());
 		}
 		return t.getDate() + ",\"" + t.getDescription() + "\"," +

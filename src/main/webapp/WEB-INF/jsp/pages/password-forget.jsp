@@ -61,7 +61,6 @@
 </head>
 	<body>
 
-		<% String curPage = "password-forget";%>
 		<%@include file="header.jspf" %>
 
 		<br> <br>

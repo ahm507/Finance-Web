@@ -1,11 +1,8 @@
 package pf.webmvc;
 
 import com.google.gson.Gson;
-import pf.user.AuthenticationRequiredException;
 import pf.user.UserRest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -46,14 +43,14 @@ public class RestLib {
 		return path.substring(0, path.lastIndexOf("/")); //remove trailing slash
 	}
 
-	public static String getLoggedInUser(HttpServletRequest request) throws Exception {
-		HttpSession session = request.getSession();
-		String userId = (String)session.getAttribute("userId");
-		if(userId == null) {
-			throw new AuthenticationRequiredException("");
-		}
-		return userId;
-	}
+//	public static String getLoggedInUser(HttpServletRequest request) throws Exception {
+//		HttpSession session = request.getSession();
+//		String userId = (String)session.getAttribute("userId");
+//		if(userId == null) {
+//			throw new AuthenticationRequiredException("");
+//		}
+//		return userId;
+//	}
 
 	public static String getErrorString(Exception exp) {
 		Map<String, String> map = new HashMap<>();

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import pf.BddBase;
+
 import pf.account.AccountEntity;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
@@ -100,7 +100,7 @@ public class AccountBalance extends BddBase {
 
     @When("getting account total balances")
     public void when1() throws Exception {
-        accounts = accountService.getAccountsTree(userId, userEmail);//it computes balances
+        accounts = accountService.getAccountsTree(userEmail);//it computes balances
     }
 
     @Then("Income balance is $amount")

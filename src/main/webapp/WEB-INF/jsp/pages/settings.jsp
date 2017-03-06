@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%
+
+
+<%-- <%
 	//If forward to login.jsp
 pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
-%>
+%> --%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -108,8 +110,7 @@ pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
 </head>
 <body>
 
-  	<% String curPage = "login";%>
-	<%@include file="header.jspf" %>
+	<%@include file="header-transaction.jspf" %>
 
 	<br>
 	<br>
@@ -126,7 +127,7 @@ pf.webmvc.JspRequests.processIfNotLoggedUser(request, response);
 		<table>
 			<tr>
 				<td>Email</td>
-				<td><input id="email" name="email" READONLY value="<%=session.getAttribute("email")%>"></td>
+				<td><input id="email" name="email" READONLY value="<%=request.getRemoteUser()%>"></td>
 			</tr>
 
 			<tr>

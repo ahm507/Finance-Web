@@ -59,6 +59,7 @@ import static org.junit.Assert.assertNotEquals;
 public class WebServerTests {
 
 	
+	
 	private final static Logger logger = Logger.getLogger(WebServerTests.class.getName());
 	
 	@Autowired

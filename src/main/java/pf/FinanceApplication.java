@@ -24,18 +24,18 @@ import java.util.logging.Logger;
 
 @SpringBootApplication 
 //FIXME: poor name: SampleTomcatJspApplication
-public class SampleTomcatJspApplication extends SpringBootServletInitializer {
+public class FinanceApplication extends SpringBootServletInitializer {
 
 //	@Override
 //	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 //		return application.sources(SampleTomcatJspApplication.class);
 //	}
-	private final static Logger LOGGER = Logger.getLogger(SampleTomcatJspApplication.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(FinanceApplication.class.getName());
 
 	public static void main(String[] args) throws Exception {
 		LOGGER.info("The main() API is called");
 		
-		SpringApplication.run(SampleTomcatJspApplication.class, args);
+		SpringApplication.run(FinanceApplication.class, args);
 		
 		LOGGER.info("The main() API is called again");
 

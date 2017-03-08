@@ -49,23 +49,30 @@
 		<%@include file="header.jspf" %>
 		
 		
-	
-		
-		<c:if test="${not empty error}">
-			<div class="error">${error}</div>
-		</c:if>
-		<c:if test="${not empty msg}">
-			<div class="msg">${msg}</div>
-		</c:if>
-
 		
 			<table border="0">
 			<tr>
 				<td> 	
-					<h2>Personal Finance</h2>
-					Hello <%= request.getRemoteUser() %>
-					<br>
-					<br>
+					<h2>Personal Finance Login</h2>
+					<%-- Hello <%= request.getRemoteUser() %> --%>
+					
+					<!-- This is error block = -->					
+					<% 
+					String msg = request.getParameter("msg");
+					if("error".equals(msg)) {
+%>											
+
+						<div class="error">Login Error. Please check user name and/or password.</div>
+	
+
+<%					} else if("logout".equals(msg)) {   %>
+
+						<div class="msg">You Logout successfully.</div>
+
+						
+<%						}  %>
+					
+					
 					
 				</td>
 				<td>
@@ -85,7 +92,6 @@
 			 --%>		
 					
 					
-					Login:
 					<form name='loginForm' method="POST" id="login_form"  action="<c:url value='login' />">
 					<b>
 					<div id="error">

@@ -54,6 +54,7 @@ public class ApplicationController  extends WebMvcConfigurerAdapter {
 			{"/password-reset", 	"pages/password-reset.jsp"},
 			{"/privacy", 			"pages/privacy.jsp"},
 			{"/register", 			"pages/register.jsp"},			
+			{"/error2", 				"pages/error.jsp"},
 			//authorized only 
 			{"/transactions", 		"pages/transactions.jsp"},
 			{"/accounts", 			"pages/accounts.jsp"},

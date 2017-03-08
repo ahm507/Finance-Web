@@ -42,15 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//FIXME: remove "/rest/users/login.do", as it is no longer used
 		http.authorizeRequests()
 			.antMatchers("/**/*.js", "/**/*.html", "/**/*.css", "/**/*.png", "/**/*.jpg", 
-					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/privacy", "/index", 
+					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error2", "/privacy", "/index", 
 					"/", "/password-reset")
 				.permitAll()
 				.anyRequest().fullyAuthenticated()
 		.and()
-			.formLogin().loginPage("/login").failureUrl("/error").successForwardUrl("/transactions").
-			defaultSuccessUrl("/transactions").permitAll()
+			.formLogin().loginPage("/login").failureUrl("/login?msg=error").successForwardUrl("/transactions")
+				.defaultSuccessUrl("/transactions").permitAll()
 		.and()
-			.logout().invalidateHttpSession(true).permitAll()
+			.logout().logoutSuccessUrl("/login?msg=logout").invalidateHttpSession(true).permitAll()
 				//TODO: enable CSRF protection
 				.and().csrf().disable();
 		
@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					user = userService.login(email, providedPassword);
 				} catch( Exception ex) {
 					throw new BadCredentialsException(
-							"Username/Password does not match for " + authentication.getPrincipal(), ex);
+							"Username and/or Password is not correct.", ex);
 				}
 				
 				LOGGER.info("Logged in user " + user.getEmail());

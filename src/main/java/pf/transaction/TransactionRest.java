@@ -56,12 +56,7 @@ public class TransactionRest {
 	public String getYearList(HttpServletRequest request) {
 		String yearsString;
 		try {
-			//FIXME: remove commented code from the whole file
-//			String userId = RestLib.getLoggedInUser(request);
-//			String userId = currentUser.getId();
-//			LOGGER.info("UserEntity in User: " + currentUser.getEmail());
 			LOGGER.info("Logged in User Id request.getRemoteUser(): " + request.getRemoteUser());
-			
 			List<String> years = transactionService.getYearList(request.getRemoteUser());
 			if(null == years || years.size() == 0){
 				yearsString = new Gson().toJson("NO-DATA");
@@ -74,13 +69,7 @@ public class TransactionRest {
 		}
 		return yearsString;
 	}
-	
-//	public void configure() throws Exception {
-//		StoreFactory storeFactory = new RestLib().getStoreFactory();
-//		//load business objects
-//		transactionService = storeFactory.createTransactionMgmt();
-//	}
-	
+		
 	@RequestMapping("/getYearTransactions.do")
 	public String getYearTransactions(HttpServletRequest request,
 			@RequestParam("year") String year, @RequestParam("accountId") String accountId) {
@@ -89,8 +78,7 @@ public class TransactionRest {
 			String userEmail = request.getRemoteUser();
 			LOGGER.info("Logged in user email: " + userEmail);
 			String userId = userRepository.findByEmail(userEmail).getId();
-//
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
+
 			if(year.equals("all")) {
 				jsonString = new Gson().toJson(transactionService.getTransactionsMap(userId, accountId));
 			} else {
@@ -112,7 +100,6 @@ public class TransactionRest {
 			String userEmail = request.getRemoteUser();
 			LOGGER.info("Logged in user email: " + userEmail);
 			String userId = userRepository.findByEmail(userEmail).getId();
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
 			jsonString = new Gson().toJson(transactionService.getUpToMonthTransactions(userId, accountId, year, month));
 		} catch (Exception e) {
 			jsonString = RestLib.getErrorString(e);
@@ -147,7 +134,6 @@ public class TransactionRest {
 		String jsonString;
 		try {
 			
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
 			String userEmail = request.getRemoteUser();
 			LOGGER.info("Logged in user email: " + userEmail);
 			String userId = userRepository.findByEmail(userEmail).getId();

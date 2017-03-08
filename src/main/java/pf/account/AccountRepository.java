@@ -19,7 +19,7 @@ public interface AccountRepository  extends CrudRepository<AccountEntity, Long> 
                                                               String text,
                                                               String parent);
 
-    //FIXME: Making account type ENUM
+    //TODO: Making account type ENUM
     List<AccountEntity> findByUserAndTypeOrderByText(UserEntity user, String type);
 
 

@@ -42,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//FIXME: remove "/rest/users/login.do", as it is no longer used
 		http.authorizeRequests()
 			.antMatchers("/**/*.js", "/**/*.html", "/**/*.css", "/**/*.png", "/**/*.jpg", 
-					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/privacy", "/index", "/")
+					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/privacy", "/index", 
+					"/", "/password-reset")
 				.permitAll()
 				.anyRequest().fullyAuthenticated()
 		.and()
@@ -50,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			defaultSuccessUrl("/transactions").permitAll()
 		.and()
 			.logout().invalidateHttpSession(true).permitAll()
-				//FIXME: enable CSRF protection
+				//TODO: enable CSRF protection
 				.and().csrf().disable();
 		
 //		http.authorizeRequests().antMatchers("/css/**").permitAll().anyRequest()

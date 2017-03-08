@@ -42,10 +42,10 @@ public class AccountEntity  {
 
 
 	private String text;
-	//FIXME: type as table
+	//TODO: type as table
 	private String type;
 	private String description;
-	//FIXME: currency as table
+	//TODO: currency as table
 	private String currency;
 
 

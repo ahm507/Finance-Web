@@ -76,6 +76,19 @@ public class BackupService {
 		}
 	}
 
+	
+	public String getExportContents(String userId)
+			throws NullAccountException, DeepAccountLayersException, CurrencyTransefereException {
+		List<TransactionEntity> ts = backupUserData(String.valueOf(userId));
+
+		StringBuilder buffer = new StringBuilder();	
+		buffer.append(getTitleFormatted()).append("\r\n");
+		for(TransactionEntity t: ts) {
+			buffer.append(getRowFormatted(t)).append("\r\n");
+		}
+		String contents = buffer.toString();
+		return contents;
+	}
 
 
 }

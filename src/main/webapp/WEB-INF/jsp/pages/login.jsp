@@ -3,12 +3,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
+    
+	<!-- icon for iphone -->
+	<link rel="apple-touch-icon" sizes="57x57" href="images/icon-57.png" />
+	<link rel="apple-touch-icon" sizes="80x80" href="images/icon-80.png" />
+	<link rel="apple-touch-icon" sizes="120x120" href="images/icon-120.png" />
+    
+    
 	<link rel="stylesheet" type="text/css" href="easyui/themes/finance/easyui.css">
 	<link rel="stylesheet" type="text/css" href="finance.css">
 	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
 	<script type="text/javascript" src="easyui/jquery.min.js"></script>
-	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+ 	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script> 
 	<script type="text/javascript" src="js/rest.js"></script>
 	<script type="text/javascript" src="js/data.js"></script>
 <!-- 	<script type="text/javascript" src="js/login.js"></script> -->
@@ -21,11 +31,17 @@
 	  b {
 	    color: red;
 	  }
+	  
+	  div.body-inner {
+			/* Override finance CSS file  */
+			width: 400px !important; 
+		}
+	  
+	  
 	  </style>
-
-
 	  
 	<script type="text/javascript">
+	
 		//$ is shorthand to jQuery
 		$(document).ready(function() {
 			var email = readCookie("email");
@@ -36,23 +52,13 @@
 
 	</script>
 
-
-
-
-
-
-
 	<title>Login</title>
 </head>
 <body class="easyui-layout">
 	
 		<%@include file="header.jspf" %>
 		
-		
-		
-			<table border="0">
-			<tr>
-				<td> 	
+			
 					<h2>Personal Finance Login</h2>
 					<%-- Hello <%= request.getRemoteUser() %> --%>
 					
@@ -72,32 +78,13 @@
 						
 <%						}  %>
 					
-					
-					
-				</td>
-				<td>
-					<h2>
-					<a href="mobile-login.html">Mobile Access</a>
-					</h2> 
-				</td>
-			</tr>
-				<tr> 
-				<td width="60%"> 
- 				
- 				
- 				
- 			<%-- 	<c:url value='/login' /> 
- 				<hr> 
-				<c:url value='j_spring_security_check' />
-			 --%>		
-					
-					
-					<form name='loginForm' method="POST" id="login_form"  action="<c:url value='login' />">
+				
+					<form name='loginForm' method="POST" id="login_form"  action="login">
 					<b>
 					<div id="error">
 					</div>
 					</b>
-							<table>
+							<table border="0">
 								<tr>
 									<td align="right">Email:</td>
 									<td>
@@ -127,17 +114,13 @@
 								</tr>
 							</table>
 							
-								<input type="hidden" name="${_csrf.parameterName}"
+							<%-- 	<input type="hidden" name="${_csrf.parameterName}"
 								value="${_csrf.token}" />
-														
+														 --%>
 							
 						</form>
 		
-		</td>
-				
-				</tr>
-			</table>
-
+	
 
 	
 	<%@include file="footer.jspf" %>

@@ -20,7 +20,7 @@
 		
 	<div class="header-toolbar">
 		<% 
-		String headerUserEmail = (String)session.getAttribute("email"); 
+		String headerUserEmail = request.getRemoteUser();
 		%>
 	
 		
@@ -51,6 +51,13 @@
 			&nbsp; 
 			<a href="settings" plain="true" class="easyui-linkbutton">Settings</a>
 			&nbsp;
+
+
+<style type="text/css">
+form  {
+     display:inline;
+}
+</style>
 		
 <script type="text/javascript">
     
@@ -67,8 +74,13 @@
 	}    
     
 </script>		
-			<a href="#" onclick="onClickLogout()" plain="true" class="easyui-linkbutton">Logout <%=headerUserEmail%></a>
 			<a href="contactus" plain="true" class="easyui-linkbutton">Contact us</a>
+
+			<form action="logout" method="post">
+            	<input type="submit" value="Sign Out <%=headerUserEmail%>"/>
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+        	</form>			
 			
 		
 		

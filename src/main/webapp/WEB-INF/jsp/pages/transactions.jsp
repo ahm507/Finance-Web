@@ -14,6 +14,15 @@
 	<script type="text/javascript" src="js/transactions.js"></script>
 
 	<script>
+	
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		window.location.href = "mobile-transactions.html";
+	}
+/* 	if (typeof window.orientation != 'undefined') { //mobile device
+ 			window.location.href = "mobile-transactions.html";
+	 	}
+ */ 
+	
 		//$ is shorthand to jQuery
 		$(document).ready(function() {
 

@@ -71,7 +71,6 @@ public class ApplicationController  extends WebMvcConfigurerAdapter {
 		}
 		
 	}	
-
 	
 	//@ResponseBody
 //	@RequestMapping(value="/exporting",  produces = "text/csv")

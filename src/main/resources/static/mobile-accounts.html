@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="offline.manifest">
+<html>
 <head>
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,12 +35,20 @@
 			display:inline-block;
 			width:80px;
 		}
+		
+		form  {
+     		display:inline;
+		}
+		
 	</style>
 
 <script>
     $(document).ready(function () {
 
-        	var loggedIn = readIsLoggedIn();
+		loadTreeGrid();
+
+    	
+/*         	var loggedIn = readIsLoggedIn();
     		if(loggedIn == null) {
 				window.location = "mobile-login.html";
 			}
@@ -53,21 +61,14 @@
 				}
 
 				loadTreeGrid();
-
-				//On resize of window
-				//doResize();
-
-				//$(window).resize(function() {
-				//	doResize();
-				//});
 			}
-
+ */
     });
 
-	function logout() {
+	/* function logout() {
 		storeLogout();
     	window.location = "mobile-login.html";
-	}
+	} */
 
     function gotoTransaction() {
     	window.location = "mobile-transactions.html";
@@ -90,7 +91,11 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;
 -->
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="gotoTransaction()">Transactions</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="logout()">Logout</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="logout()">Logout</a> -->
+		<form action="logout" method="post">
+           	<input type="submit" value="Sign Out"/>
+        </form>	
+		
 	</div>
 
 

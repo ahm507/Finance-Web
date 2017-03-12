@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html manifest="offline.manifest">
-<head>
+<html>
+
+ <head>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 	
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trasnaction List</title>
+    <title>Transaction List</title>
     <link rel="stylesheet" type="text/css" href="easyui/themes/metro/easyui.css">
     <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
 	<script type="text/javascript" src="easyui/jquery.min.js"></script>
@@ -15,6 +16,9 @@
     <script type="text/javascript" src="js/rest.js"></script>
 	<script type="text/javascript" src="js/login.js"></script>
     
+    
+
+</style>    
     <style scoped>
         .panel-title{
             text-align:center;
@@ -28,7 +32,13 @@
         .datagrid-body td{  
             border-right:1px dotted transparent;  
             border-bottom:1px dotted transparent;  
-        }  
+        }
+        
+        
+		form  {
+     		display:inline;
+		}
+          
     </style>
 
 	<!-- icon for iphone -->
@@ -39,11 +49,12 @@
     <script type="text/javascript">
         
         $(function(){ //on page load event
-        	var loggedIn = readIsLoggedIn();
+/*         	var loggedIn = readIsLoggedIn();
     		if(loggedIn == null) {
 					window.location = "mobile-login.html";
         	}
-        	loadGridData();
+ */
+ 			loadGridData();
         });
         
         function loadGridData() {
@@ -79,11 +90,11 @@
 				if(transactions  == null || transactions.length == 0) {
 					alert("There is no transactions to post.");
 				}
-				var resp = loginRest(readEmail(), readPassword());
-				if(resp.status != "success") {
-					alert("ERROR login");
-					return false;
-				}
+//				var resp = loginRest(readEmail(), readPassword());
+//				if(resp.status != "success") {
+//					alert("ERROR login");
+//					return false;
+//				}
 				var trans;
 				for( i = transactions.length-1 ; i >= 0; i--) { //loop from bottom to up for the grid deletion
 					var status = postSingleTransaction(transactions[i]);
@@ -125,7 +136,7 @@
 		       success : function(response) {
 		           if(response.success != true) {
 		           		success = false;
-		           		alert("Error posting to the server");
+		           		alert("Error posting to the server:" + response);
 		           } 
 		       }
 		   });
@@ -133,11 +144,11 @@
 		    return success;
 		}
 	
-	function logout() {
+/* 	function logout() {
 		storeLogout();
     	window.location = "mobile-login.html";
 	}
-        
+ */        
     </script>
 
 </head>
@@ -151,7 +162,14 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addNewTransaction()"></a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="postExpensesToServer()">Post</a>
 				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="seeAccountsBalance()">Accounts</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="logout()">Logout</a>
+                
+    <!--             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true" onclick="logout()">Logout</a>
+	 -->			
+	 				<form action="logout" method="post">
+            			<input type="submit" value="Sign Out"/>
+	        		</form>			                
+                
+                
             </div>
             <span class="panel-title" style="line-height:30px">Transactions</span>
             <div style="clear:both"></div>

@@ -122,6 +122,10 @@ public class TransactionService {
 		//verify no transfer between accounts of different currencies
 		AccountEntity withdrawAccount = accountRepo.findByUser_IdAndId(userId, withdrawId);
 		AccountEntity depositAccount = accountRepo.findByUser_IdAndId(userId, depositId);
+		
+		if(withdrawAccount == null) throw new Exception("withdrawAccount is null for userId:" + userId + ", and withdrawID=" + withdrawId);
+		if(depositAccount == null) throw new Exception("depositAccount is null for userId:" + userId + ", and depositId=" + depositId);
+		
 		if(  !  withdrawAccount.getCurrency().equals(depositAccount.getCurrency())) {
 			String error = "Unable to transfer amount between different accounts:" +
 					withdrawAccount.getText() + " " + withdrawAccount.getCurrency() + " & " +

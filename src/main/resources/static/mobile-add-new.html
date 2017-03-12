@@ -1,5 +1,5 @@
 <!doctype html>
-<html manifest="offline.manifest">
+<html>
 	<head>
 	    <meta charset="UTF-8">  
 	    <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -46,15 +46,15 @@
 	<script>
 	        
 	    $(function(){
-	    	var loggedIn = readIsLoggedIn();
+	    	/* var loggedIn = readIsLoggedIn();
 	    	if(loggedIn == null) {
 				window.location = "mobile-login.html";
-	    	}
+	    	} */
 	    	initForm();
 	    });
 	
 		function initForm() {
-		    var data = new AccountsTreeData();
+		    /* var data = new AccountsTreeData();
 		    var accountsTreeData = data.load();
 		    if(accountsTreeData == null) { //no saved data
 		        var resp = loginRest(readEmail(), readPassword());
@@ -65,6 +65,11 @@
 		    	accountsTreeData = getAccountsTreeRest();
 		    	data.save(accountsTreeData);
 		    }
+		    
+		     */
+		     
+	    	var accountsTreeData = getAccountsTreeRest();
+		     
 		    $('#withdraw').combotree('loadData', accountsTreeData);
 		    $('#deposit').combotree('loadData', accountsTreeData);
 			var today = getTodayYYMMDD();	    

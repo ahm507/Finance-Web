@@ -42,14 +42,12 @@
 <style type="text/css">
 form  {
      display:inline;
-/*      margin:0px;
-     padding:0px;
- */}
+}
 </style>
 		
 <script type="text/javascript">
     
-	function onClickLogout(e) {
+	function onClick (e) {
 
 		var response;
 	    jQuery.ajax({
@@ -77,8 +75,6 @@ form  {
             	<input type="submit" value="Sign Out <%=headerUserEmail%>"/>
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" />
-														
-				            	
         	</form>			
 			
 		

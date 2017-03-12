@@ -1,18 +1,30 @@
 //Target: Move all rest apis to this file
 
 
+
+//Used by mobile only currently
 function loginRest(email, pass) {
-        var serviceUrl = 'rest/users/login.do?email='+ email + '&password='+pass;
+		var serviceUrl = 'login';
         var resp = null;
-    	$.ajax({
-    		  url: serviceUrl,
-    		  async: false,
-    		  dataType: 'json',
-    		  success: function (response) {
-    			  resp = response;//JSON.parse()//eval()//already done
-    		  }
-    		});
-    	return resp;
+    	var data = {
+        	email: email,
+        	password: pass
+        };
+        $.post(serviceUrl, data, function (response) {
+        	return "success"
+        });
+
+        return "error";
+        
+//        $.ajax({
+//    		  url: serviceUrl,
+//    		  async: false,
+//    		  dataType: 'json',
+//    		  success: function (response) {
+//    			  resp = response;//JSON.parse()//eval()//already done
+//    		  }
+//    		});
+//    	return resp;
 }
 
 function getAccountsTreeRest() {

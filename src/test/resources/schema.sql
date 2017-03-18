@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS `pf_test` DEFAULT CHARACTER SET utf8 ;
 
 DROP table account;
 
-CREATE TABLE  IF NOT EXISTS `account` (
+CREATE TABLE  `account` (
   `id` char(40) NOT NULL DEFAULT '',
   `user_id` char(40) NOT NULL DEFAULT '',
   `text` char(100) NOT NULL DEFAULT '',
@@ -17,7 +17,7 @@ CREATE TABLE  IF NOT EXISTS `account` (
 
 DROP table transaction;
 
-CREATE TABLE  IF NOT EXISTS `transaction` (
+CREATE TABLE  `transaction` (
   `id` char(40) NOT NULL DEFAULT '',
   `user_id` char(40) NOT NULL DEFAULT '',
   `date` datetime NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE  IF NOT EXISTS `transaction` (
 
 DROP table user;
 
-CREATE TABLE  IF NOT EXISTS `user` (
+CREATE TABLE  `user` (
   `id` char(40) NOT NULL DEFAULT '',
   `email` char(60) NOT NULL DEFAULT '',
   `password` char(45) NOT NULL DEFAULT '',

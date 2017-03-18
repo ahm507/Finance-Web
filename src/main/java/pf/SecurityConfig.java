@@ -13,10 +13,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import pf.user.UserEntity;
+import pf.user.UserRepository;
 import pf.user.UserService;
 
 import javax.sql.DataSource;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
 @Configuration
@@ -31,6 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	 @Autowired
    UserService userService;
+	 
+	 @Autowired
+	 UserRepository userRepository;
+	 
 	
 		private final static Logger LOGGER = Logger.getLogger(SecurityConfig.class.getName());
 
@@ -42,10 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//FIXME: remove "/rest/users/login.do", as it is no longer used
 		http.authorizeRequests()
 			.antMatchers("/**/*.js", "/**/*.html", "/**/*.css", "/**/*.png", "/**/*.jpg", 
-					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error2", "/privacy", "/index", 
+					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/error2", "/privacy", "/index", 
 					"/", "/password-reset")
 				.permitAll()
-				.anyRequest().fullyAuthenticated()
+				.antMatchers("/admin").hasRole("ADMIN") //No admn interface yet!
+				.antMatchers("/transactions", "/accounts", "/charts", "/export", "/import", "/settings").hasRole("USER")
+				.antMatchers("/rest/**").hasRole("USER")
+				.anyRequest().fullyAuthenticated() 
 		.and()
 			.formLogin().loginPage("/login").failureUrl("/login?msg=error").successForwardUrl("/transactions")
 				.defaultSuccessUrl("/transactions").permitAll()
@@ -54,43 +68,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				//TODO: enable CSRF protection
 				.and().csrf().disable();
 		
-//		http.authorizeRequests().antMatchers("/css/**").permitAll().anyRequest()
-//		.fullyAuthenticated().and().formLogin().loginPage("/login")
-//		.failureUrl("/login?error").permitAll().and().logout().permitAll();
-		
-		
-		
-//		 .antMatchers("/transactions", "/accounts", "/export",
-//		 "/exporting", "/settings", "/import",
-//		 "/charts").fullyAuthenticated()
-				
-//				.successForwardUrl("/transactions")
-//				.and().logout().permitAll();
-				
-//				.usernameParameter("email").passwordParameter("password")
-//				.and().successForwardUrl("/transactions")
-//				.defaultSuccessUrl("/transactions")
-				
-//				.and()
-//				.exceptionHandling().accessDeniedPage("/403")
-//				.and().logout().logoutUrl("/logout")
-//				.logoutSuccessUrl("/login?logout");
-
 	}
 	
 	
-	
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//		 auth
-//		 .jdbcAuthentication()
-//		 .dataSource(dataSource)
-//		 .usersByUsernameQuery("select username, password, enabled from users where username=?")
-//		 .authoritiesByUsernameQuery("select email, 'USER' from user where email=?");
-//		 .withUser("user").password("password").roles("USER");
-
-
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
+		
+//		auth.jdbcAuthentication()
+//				.usersByUsernameQuery("select email,password,verified from user where email = ?")
+//				.authoritiesByUsernameQuery("select username, authority from authorities where username = ?")
+//				.passwordEncoder(new PasswordEncoder() {
+//
+//					@Override
+//					public String encode(CharSequence rawPassword) {
+//						try {
+//							return UserService.md5(rawPassword.toString());
+//						} catch (NoSuchAlgorithmException e) {
+//							LOGGER.severe("NoSuchAlgorithmException: MD5 algorithim does not exist");
+//							e.printStackTrace();
+//						}
+//						return rawPassword.toString();						
+//					}
+//
+//					@Override
+//					public boolean matches(CharSequence rawPassword, String encodedPassword) {
+//						return encode(rawPassword).equals(encodedPassword);
+//					}
+//					
+//				});
+			
 		auth.authenticationProvider(new AuthenticationProvider() {
 			@Override
 			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -99,14 +106,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				UserEntity user = null;
 				try {
 					user = userService.login(email, providedPassword);
-				} catch( Exception ex) {
+				} catch( Exception ex) { //throwing exception is the only way to show user name/password is incorrect.
 					throw new BadCredentialsException(
 							"Username and/or Password is not correct.", ex);
 				}
 				
 				LOGGER.info("Logged in user " + user.getEmail());
 				
-				return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+				return new UsernamePasswordAuthenticationToken(email, providedPassword, user.getAuthorities());
+//				return new UsernamePasswordAuthenticationToken(email, providedPassword);
 			}
 			
 			@Override
@@ -117,14 +125,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			
 		});
 	
-		auth.jdbcAuthentication().dataSource(this.dataSource);
-		//TODO: Use ready made BCryptPasswordEncoder, but must updated register and login services
-		//.passwordEncoder(new BCryptPasswordEncoder()); //
+		
 
-	
-	
+		
+		
 	}
-
-
+	
+	
 }
 

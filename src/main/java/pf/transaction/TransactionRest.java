@@ -2,6 +2,7 @@ package pf.transaction;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,15 +36,16 @@ public class TransactionRest {
 
 	@RequestMapping("/getTransactions.do")
 	public String getTransactions(HttpServletRequest request,
-			@RequestParam("account") String account) {
+			@RequestParam("account") String accountId) {
 		try {
 			
 //			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
-			String userEmail = request.getRemoteUser();
+//			String userEmail = request.getRemoteUser();
+			String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 			LOGGER.info("Logged in user email: " + userEmail);
 			String userId = userRepository.findByEmail(userEmail).getId();
 
-			Map<String, Object> transactions = transactionService.getTransactionsMap(userId, account);
+			Map<String, Object> transactions = transactionService.getTransactionsMap(userId, accountId);
 			return new Gson().toJson(transactions);
 		} catch (Exception e) {
 			return RestLib.getErrorString(e);
@@ -127,7 +129,6 @@ public class TransactionRest {
 		return jsonString;
 	}
 
-	
 	@RequestMapping("/getMonthTransactions.do")
 	public String getMonthTransactions(HttpServletRequest request,
 			@RequestParam("year") String year, @RequestParam("accountId") String accountId, @RequestParam("month") String month) {
@@ -168,7 +169,6 @@ public class TransactionRest {
 		}
 		return jsonString;
 	}
-
 
 	@RequestMapping(method = RequestMethod.POST, value = "/updateTransaction.do")
 	public String updateTransaction(HttpServletRequest request,

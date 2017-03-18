@@ -41,7 +41,7 @@
 	  </style>
 	  
 	<script type="text/javascript">
-	
+		
 		//$ is shorthand to jQuery
 		$(document).ready(function() {
 			var email = readCookie("email");

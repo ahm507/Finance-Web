@@ -1,7 +1,6 @@
 package pf.service;
 
 import au.com.bytecode.opencsv.CSVReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pf.account.AccountEntity;
@@ -18,15 +17,21 @@ import java.util.Vector;
 @Service
 public class RestoreService {
 
-	@Autowired
 	AccountRepository accountRepo;
-	@Autowired
 	AccountService accountService;
-	@Autowired
 	TransactionRepository transRepo;
-	@Autowired
 	TransactionService transactionService;
-	
+	public RestoreService(	AccountRepository accountRepo,
+			AccountService accountService,
+			TransactionRepository transRepo,
+			TransactionService transactionService) {
+
+		this.accountRepo = accountRepo;
+		this.accountService = accountService;
+		this.transRepo = transRepo;
+		this.transactionService = transactionService;
+		
+	}
 	
 	HashMap<String, String> map = new HashMap<>();
 	

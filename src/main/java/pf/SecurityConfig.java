@@ -32,18 +32,12 @@ import java.util.logging.Logger;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private DataSource dataSource;
-
+	 UserService userService;
+	 public SecurityConfig(UserService userService) {
+		 this.userService = userService;
+	}	 
 	
-	 @Autowired
-   UserService userService;
-	 
-	 @Autowired
-	 UserRepository userRepository;
-	 
-	
-		private final static Logger LOGGER = Logger.getLogger(SecurityConfig.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(SecurityConfig.class.getName());
 
 		
 	@Override

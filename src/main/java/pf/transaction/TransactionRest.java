@@ -1,7 +1,6 @@
 package pf.transaction;
 
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,11 +19,12 @@ import java.util.logging.Logger;
 @RequestMapping("/rest/transactions")
 public class TransactionRest {
 	
-	@Autowired
 	TransactionService transactionService;
-
-	@Autowired
 	UserRepository userRepository;
+	public TransactionRest(TransactionService transactionService, UserRepository userRepository) {
+		this.transactionService = transactionService;
+		this.userRepository = userRepository;
+	}
 
 	private final static Logger LOGGER = Logger.getLogger(TransactionRest.class.getName());
 

@@ -1,6 +1,5 @@
 package pf.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pf.account.AccountEntity;
@@ -22,21 +21,20 @@ import java.util.logging.Logger;
 @Service
 public class UserService {
 	
-	@Autowired
 	private UserRepository userRepo;
-
-	@Autowired
 	private AccountRepository accountRepo;
-	
-	@Autowired
 	private TransactionRepository transactionRepo;
 	
+	public UserService(TransactionRepository transactionRepo, AccountRepository accountRepo, UserRepository userRepo) {
+		this.userRepo = userRepo;
+		this.accountRepo = accountRepo;
+		this.transactionRepo = transactionRepo;
+	}
+
 	
 	private final static Logger logger = Logger.getLogger(UserService.class.getName());
 
-	public UserService() { //prevent instantiation
-	}
-
+	
 	static public String getUUID() {
 		return UUID.randomUUID().toString();
 	}

@@ -12,9 +12,11 @@ import pf.user.UserService;
 
 @Controller
 public class JspRequests {
-
-	@Autowired
+	
     UserService userService;
+    public JspRequests(UserService userService) {
+    	this.userService = userService;
+	}
 	
 	//Called directly from JSP
 //	public static void processIfNotLoggedUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

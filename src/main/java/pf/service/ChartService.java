@@ -1,6 +1,5 @@
 package pf.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pf.account.AccountEntity;
 import pf.account.AccountRepository;
@@ -16,6 +15,24 @@ import java.util.*;
 @Service
 public class ChartService {
 
+	
+    AccountRepository accountRepo;
+    UserRepository userRepo;
+    AccountService accountService;
+    TransactionService transactionService;
+    public ChartService(AccountRepository accountRepo, 
+    				UserRepository userRepo, 
+    				AccountService accountService, 
+    				TransactionService transactionService) {
+        this.accountRepo = accountRepo;
+        this.userRepo = userRepo;
+        this.accountService = accountService;
+        this.transactionService = transactionService;
+ 
+    	
+    }
+	
+	
     static public final String CAT_INCOME = "Income";
     static public final String CAT_LIABILITIES = "Liabilities";
    
@@ -23,14 +40,6 @@ public class ChartService {
     static public final String CAT_ASSETS = "Assets";
     static public final String CAT_OTHER = "Other";
     final String TOTALS = "totals";
-    @Autowired
-    AccountRepository accountRepo;
-    @Autowired
-    UserRepository userRepo = null;
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    TransactionService transactionService;
     double usdRate;
     double sarRate;
 

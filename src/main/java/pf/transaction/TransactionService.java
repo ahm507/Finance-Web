@@ -1,6 +1,5 @@
 package pf.transaction;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pf.account.AccountEntity;
 import pf.account.AccountRepository;
@@ -22,9 +21,14 @@ public class TransactionService {
 	//DO NOT CHANGE. JSON GENERATION BASED ON THAT NAMES
 	//FIELD NAMES ARE CORRELATED TO WEB INTERFACE
 	
-	@Autowired UserRepository userRepo;
-	@Autowired AccountRepository accountRepo;
-	@Autowired TransactionRepository transRepo;
+	UserRepository userRepo;
+	AccountRepository accountRepo;
+	TransactionRepository transRepo;
+	public TransactionService(UserRepository userRepo, AccountRepository accountRepo, TransactionRepository transRepo) {
+		this.userRepo = userRepo;
+		this.accountRepo = accountRepo;
+		this.transRepo = transRepo;
+	}
 	
 //	private String id;
 //	private String withdrawId;

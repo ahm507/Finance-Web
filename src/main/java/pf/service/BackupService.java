@@ -1,6 +1,5 @@
 package pf.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pf.account.AccountEntity;
 import pf.account.AccountService;
@@ -24,12 +23,17 @@ import java.util.List;
 @Service
 public class BackupService {
 
-	@Autowired
-	AccountService accountService;
-
+	private AccountService accountService;
+	private TransactionRepository transRepo;
 	
-	@Autowired TransactionRepository transRepo;
-	String userId;
+	public BackupService(AccountService accountService, TransactionRepository transRepo) {
+		this.accountService = accountService;
+		this.transRepo = transRepo;
+	}
+
+
+
+String userId;
 
 
 	public List<TransactionEntity> backupUserData(String userId) throws NullAccountException, DeepAccountLayersException { 

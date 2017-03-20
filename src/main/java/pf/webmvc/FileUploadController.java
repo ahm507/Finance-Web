@@ -1,7 +1,6 @@
 package pf.webmvc;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import pf.service.RestoreService;
@@ -29,12 +28,15 @@ public class FileUploadController {
 
 	private final static Logger LOGGER = Logger.getLogger(FileUploadController.class.getName());
 
-	@Autowired
 	UserRepository userRepository;
-
-	@Autowired
 	RestoreService restoreService;
 
+	public FileUploadController(UserRepository userRepository, RestoreService restoreService) {
+		this.userRepository = userRepository;
+		this.restoreService = restoreService;
+	}
+	
+	
 
 	@PostMapping("/upload")
 	void upload(HttpServletRequest request,

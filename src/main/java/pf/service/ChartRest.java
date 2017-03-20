@@ -1,7 +1,6 @@
 package pf.service;
 
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +20,12 @@ import java.util.Map;
 @RequestMapping("/rest/charts")
 public class ChartRest {
 
-	@Autowired
 	ChartService chartService;
-
-	@Autowired
 	UserRepository userRepository;
+	ChartRest(ChartService chartService, UserRepository userRepository) {
+		this.chartService = chartService;
+		this.userRepository = userRepository;
+	}
 
 
 	@RequestMapping("/getExpensesTrend.do")

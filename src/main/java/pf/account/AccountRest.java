@@ -1,7 +1,6 @@
 package pf.account;
 
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,11 +16,16 @@ import java.util.Map;
 @RequestMapping("/rest/accounts")
 public class AccountRest {
 	
-	@Autowired
-	AccountService accountService;
 
-	@Autowired
+	AccountService accountService;
 	UserRepository userRepository;
+
+	public AccountRest(AccountService accountService, UserRepository userRepository) {
+		this.accountService = accountService;
+		this.userRepository = userRepository;
+	}
+		
+	
 //	private final static Logger LOGGER = Logger.getLogger(AccountRest.class.getName()); 
 
 //	public void configure() throws Exception {

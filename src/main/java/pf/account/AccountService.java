@@ -1,7 +1,5 @@
 package pf.account;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pf.transaction.TransactionEntity;
 import pf.transaction.TransactionRepository;
@@ -15,20 +13,21 @@ import java.util.*;
 public class AccountService {
 	
 
-	@Autowired
 	private UserRepository userRepo;
-	
-	@Autowired
 	private AccountRepository accountRepo;	
-    
-	@Autowired
 	private TransactionRepository transRepo;	
-	
-	@Autowired
 	private TransactionService transService;
 
-
-    public AccountService() {
+    public AccountService(	UserRepository userRepo, 
+    						AccountRepository accountRepo,	
+    						TransactionRepository transRepo,	
+    						TransactionService transService) {
+    	
+    	this.userRepo = userRepo;
+    	this.accountRepo = accountRepo;	
+    	this.transRepo = transRepo;	
+    	this.transService = transService;    	
+    	
     }
 
 

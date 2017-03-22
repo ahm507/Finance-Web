@@ -33,8 +33,6 @@ public class ChartRest {
 								   @RequestParam("year") String year,
 								   @RequestParam("type") String type) throws Exception {
 
-
-
 		String jsonString;
 
 		try {
@@ -44,10 +42,9 @@ public class ChartRest {
 
 			List<Map<String, Object>> out2 = chartService.getExpensesTrend(year, type, userId, userEmail);
 
-
 			//fixme: centralize error handling
 			//fixme: remove json conversion
-					jsonString = new Gson().toJson(out2);
+			jsonString = new Gson().toJson(out2);
 
 
 

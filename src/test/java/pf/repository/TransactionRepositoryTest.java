@@ -39,7 +39,7 @@ public class TransactionRepositoryTest {
 		UserEntity user = userRepo.findByEmail("test@test.test");
 		assertNotNull(user);
 		List<TransactionEntity> transactions = transRepo.findByUserOrderByDate(user);
-		assertEquals(13, transactions.size());
+		assertEquals(17, transactions.size());
 		// assertThat(transactions.size(), hasSize(13));
 	}
 
@@ -50,7 +50,7 @@ public class TransactionRepositoryTest {
 		String accountId = "2100ba44-4d4d-49dd-a358-8ceb43ff2714";// Liability
 		AccountEntity account = accountRepo.findByUserAndId(user, accountId);
 		List<TransactionEntity> transactions = transRepo.queryByUserAndAccountOrderByDate(user, account);
-		assertEquals(1, transactions.size());
+		assertEquals(2, transactions.size());
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class TransactionRepositoryTest {
 		UserEntity user = userRepo.findByEmail("test@test.test");
 		assertNotNull(user);
 		String minMax = transRepo.queryMinAndMaxDate(user);
-		assertEquals("2016-02-19,2016-12-19", minMax); // concatenated by ,
+		assertEquals("2016-02-19,2017-03-19", minMax); // concatenated by ,
 	}
 
 	@Test
@@ -105,7 +105,7 @@ public class TransactionRepositoryTest {
 		assertNotNull(assetAccount);
 
 		List<TransactionEntity> transactions = transRepo.queryByUserAndAccountOrderByDate(user, assetAccount);
-		assertEquals(11, transactions.size());
+		assertEquals(14, transactions.size());
 
 	}
 
@@ -117,7 +117,7 @@ public class TransactionRepositoryTest {
 		assertNotNull(user);
 
 		List<TransactionEntity> transactions = transRepo.findByUser_Id(user.getId()); 
-		assertEquals(13, transactions.size());
+		assertEquals(17, transactions.size());
 		
 //		transRepo.deleteByUser_Id(user.getId());
 		transRepo.deleteByUser(user);
@@ -129,7 +129,7 @@ public class TransactionRepositoryTest {
 		transRepo.save(transactions);
 
 		transactions2 = transRepo.findByUser_Id(user.getId());
-		assertEquals(13, transactions.size());
+		assertEquals(17, transactions.size());
 
 	}
 

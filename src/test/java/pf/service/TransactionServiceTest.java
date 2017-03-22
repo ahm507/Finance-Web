@@ -20,14 +20,14 @@ public class TransactionServiceTest {
     @Autowired
     TransactionService trasnService;
 
-
-
     @Test
     public void getYearList() throws Exception {
 
         List<String> years = trasnService.getYearList("Not Exist ID");
         assertEquals(0, years.size());
 
+        years = trasnService.getYearList("test@test.test");
+        assertEquals(2, years.size());
 
     }
 

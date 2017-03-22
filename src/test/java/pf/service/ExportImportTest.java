@@ -10,8 +10,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
 import pf.user.UserRepository;
 
+import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.Transactional;
 import java.io.*;
+import java.util.Date;
 import java.util.Vector;
 
 @RunWith(SpringRunner.class)
@@ -51,12 +53,10 @@ public class ExportImportTest {
 //
 //    }
 
-
-
     @Test
     @Transactional
     public void importFile() throws Exception {
-
+    	
         String userId = "4f680c93-838d-4329-9aba-7bedca232a89";
         Resource resource = resourceLoader.getResource("classpath:import.csv");
         FileReader file2 = new FileReader(resource.getURL().getPath());

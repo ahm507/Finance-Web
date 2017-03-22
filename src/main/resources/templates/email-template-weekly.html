@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+
+Hello <span th:text="${USER_NAME}">UserName</span>, we hope this email find you well.
+
+This is our weekly email that is designed to show you a summary of your expenses in this month and in the whole year with some analysis.
+
+
+<br/>
+
+<h2>  <span th:text="${MONTH_NAME}"></span> Analysis Report:</h2>
+<ul>
+	<li>Total Income: <span th:text="${MONTH_INCOME}">MONTH_INCOME</span></li>
+	<li>Total expenses: <span th:text="${MONTH_EXPENSES}"></span> </li>
+	<li>Current Assets is: <span th:text="${MONTH_ASSETS}"></span> </li>
+	<li>Current Liabilities: <span th:text="${MONTH_LIABILITIES}"></span> </li>
+</ul>	
+
+<h2>Average Monthly Analysis:</h2>
+<ul>
+	<li>Income: <span th:text="${AVERAGE_INCOME}"></span> </li>
+	<li>expenses: <span th:text="${AVERAGE_EXPENSES}"></span> </li>
+</ul>	
+
+
+<h2>Total Year Analysis:</h2>
+<ul>
+	<li>Income: <span th:text="${TOTAL_INCOME}"></span> </li>
+	<li>expenses: <span th:text="${TOTAL_EXPENSES}"></span> </li>
+</ul>	
+
+	   
+	   <hr/>
+	   
+	   We hope you find this email useful.<br/>
+	   For feedback, please contact us.<br/>
+	   Regards,<br/>
+	   SalaryControl.com<br/>
+	   
+
+	
+	</body>
+
+</html>
+

@@ -58,8 +58,8 @@ public class ChartService {
 //        this.storeFactory = getStoreFactory();
 //        configure();
         List<Map<String, Object>> out2 = new ArrayList<>();
-        if("all".equals(year)) {
-            Map<String, Map<String, Object>> out = getTrendDataAllYears(userId, email, type);
+        if("all".equals(year)) { //NOT WORKING YET
+            Map<String, Map<String, Object>> out = getTrendDataAllYears(userId, email);
             //convert map to array for html/JS compatibility
             Set<String> keys = out.keySet();
             for(String key : keys) {
@@ -73,13 +73,12 @@ public class ChartService {
 
 
 
-    public Map<String, Map<String, Object>> getTrendDataAllYears(String userId, String email,
-                                                                 String type) throws Exception {
+    public Map<String, Map<String, Object>> getTrendDataAllYears(String userId, String email) throws Exception {
 
         usdRate = userRepo.findByEmail(email).getUsd_rate();
         sarRate = userRepo.findByEmail(email).getSar_rate();
 
-        return getTotalsAllYearsAllAccountTypes(userId);
+        return getTotalsAllYearsAllAccountTypes(email, userId);
 
     }
 
@@ -288,17 +287,14 @@ public class ChartService {
     }
 
 
-    private Map<String, Map<String, Object>> getTotalsAllYearsAllAccountTypes(String userId) throws Exception {
+    private Map<String, Map<String, Object>> getTotalsAllYearsAllAccountTypes(String email, String userId) throws Exception {
         // Add All years Entries
 //        List<Map<String, Object>> out = new ArrayList<Map<String, Object>>();
         Map<String, Map<String, Object>> out = new HashMap<>();
-        List<String> years = transactionService.getYearList(userId);
+        List<String> years = transactionService.getYearList(email);
         for (String yearString : years) {
             HashMap<String, Object> year = new HashMap<>();
-//            month.put("Month", getMonthName(i + 1));
-//            String yearString = year1;
             year.put("Month", yearString);
-//            year.put("Year", years.get(i));
             year.put(CAT_ASSETS, 0.0);        //initialization
             year.put(CAT_LIABILITIES, 0.0);    //initialization
             out.put(yearString, year);

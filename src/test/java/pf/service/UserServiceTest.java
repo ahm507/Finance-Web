@@ -23,11 +23,14 @@ import static org.mockito.Mockito.when;
 //@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-	@InjectMocks private UserService userService;
+	@InjectMocks 
+	private UserService userService;
 
-	@Mock private UserRepository mockUserRepo;
+	@Mock 
+	private UserRepository mockUserRepo;
 
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule(); //create the mocks based on the @Mock annotation 
+    @Rule 
+    public MockitoRule mockitoRule = MockitoJUnit.rule(); //create the mocks based on the @Mock annotation 
 
 
 	@Before

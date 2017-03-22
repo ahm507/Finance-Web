@@ -13,6 +13,10 @@ import pf.user.UserService;
 @Controller
 public class JspRequests {
 	
+	public JspRequests() {
+		
+	}
+	
     UserService userService;
     public JspRequests(UserService userService) {
     	this.userService = userService;

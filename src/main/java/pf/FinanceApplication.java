@@ -19,11 +19,23 @@ package pf;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
 @SpringBootApplication 
-//FIXME: poor name: SampleTomcatJspApplication
+@EnableScheduling
+@EnableAsync
+
 public class FinanceApplication extends SpringBootServletInitializer {
 
 //	@Override
@@ -33,14 +45,22 @@ public class FinanceApplication extends SpringBootServletInitializer {
 	private final static Logger LOGGER = Logger.getLogger(FinanceApplication.class.getName());
 
 	public static void main(String[] args) throws Exception {
-		LOGGER.info("The main() API is called");
-		
 		SpringApplication.run(FinanceApplication.class, args);
 		
-		LOGGER.info("The main() API is called again");
-
-		
+		LOGGER.info("Loading Context is completed");
+		LOGGER.info("------------------------------");
+	
 	}
-
+	
+	//LOOKS LIKE ENFORCING JSP CONFIGURATION
+	@Bean       
+    public InternalResourceViewResolver internalResourceViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/jsp/");
+        resolver.setSuffix("");//No suffix
+        resolver.setOrder(1);
+        return resolver;
+    }
+	
 	
 }

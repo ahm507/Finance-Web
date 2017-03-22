@@ -177,7 +177,7 @@ public class ChartStats extends BddBase {
 //        StoreFactory jdbcFactory = Settings.getStoreFactoryForJdbc();
 //        ChartService chartMgmt = jdbcFactory.createChartMgmt();
         String category = "";
-        allYearsTrendData = chartService.getTrendDataAllYears(userId, userEmail, category);
+        allYearsTrendData = chartService.getTrendDataAllYears(userId, userEmail);
     }
 
     @Then("balance of expenses in year $year is $balance")

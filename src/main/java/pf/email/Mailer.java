@@ -1,16 +1,20 @@
 package pf.email;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Mailer {
 
 //	private Settings settings;
 	@Value("${smtp.host}")
-	private String smtp;
+	private String smtpHost;
+	
 	@Value("${smtp.user}")
-	private String user;
+	private String smtpUser;
+	
 	@Value("${smtp.password}")
-	private String password;
+	private String smtpPassword;
 	
 	@Value("${registerVerifyEmail.from}")
 	String registerSendFrom;// = settings.getRegisterMailFrom();
@@ -18,7 +22,6 @@ public class Mailer {
 	String registerMailSubject;// = settings.getRegisterMailSubject();
 	@Value("${registerVerifyEmail.body}")
 	String registerMailBody;// = settings.getRegisterMailSubject();
-	
 	
 	@Value("${passwordReset.from}")
 	String resetMailFrom;
@@ -29,23 +32,17 @@ public class Mailer {
 
 	
 	public boolean sendVerifyEmail(String email, String uuid) throws Exception {
-//		boolean isSendMail = Settings.getObject().isSendMail();
-		SendMail mail = new SendMail();
-//		loadSettings();
+		Zoho mail = new Zoho();
 		String mailBody = String.format(registerMailBody, email, uuid);
-		mail.sendZohoMail( smtp, user, password, email, registerMailSubject, mailBody, registerSendFrom);
-		//FIXME: why retuen value!!
+		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, email, registerMailSubject, mailBody, registerSendFrom);
+		//FIXME: why return value!!
 		return true;
 	}
 
 	public void sendResetEmail(String email, String resetCode) throws Exception {
-//		boolean  reallySendMail =  Settings.getObject().isSendMail();
-		//Send email
-		pf.email.SendMail mail = new pf.email.SendMail();
-//		Settings settings = Settings.getObject();
-//		loadSettings();
+		pf.email.Zoho mail = new pf.email.Zoho();
 		String mailBody = String.format(resetMailBody, email, resetCode);
-		mail.sendZohoMail( smtp, user, password, email, resetMailSubject, mailBody,
+		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, email, resetMailSubject, mailBody,
 				resetMailFrom);
 	}
 
@@ -54,14 +51,22 @@ public class Mailer {
 		//Send email
 		assert name != null;
 		assert title != null;
-//		boolean  reallySendMail =  Settings.getObject().isSendMail();
-		pf.email.SendMail mail = new pf.email.SendMail();
-//		loadSettings();
+		pf.email.Zoho mail = new pf.email.Zoho();
 		String sendFrom = email;
 		String mailSubject = "Support: " + title;
 		String mailBody = comments;
-		mail.sendZohoMail( smtp, user, password, email, mailSubject, mailBody, sendFrom);
+		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, email, mailSubject, mailBody, sendFrom);
 	}
 
-
+	public void sendWeeklyReport(String to, String subject, String body) throws Exception {
+		//Send email
+		assert to != null;
+		assert subject != null;
+		Zoho mail = new Zoho();
+//		String sendFrom = email;
+//		String mailSubject = "Support: " + title;
+//		String mailBody = comments;
+		String sendFrom = "support@salarycontrol.com";
+		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, to, subject, body, sendFrom);
+	}
 }

@@ -32,10 +32,10 @@ public class WeeklyReport {
 	private UserRepository userRepository;
 	private Mailer mailer;
 	private String batchReportsFolder;
-	
+
 	@Autowired
 	public WeeklyReport(ChartService chartService, TransactionService transactionService, UserRepository userRepository,
-			SpringTemplateEngine templateEngine, Mailer mailer, 
+			SpringTemplateEngine templateEngine, Mailer mailer,
 			@Value("${pf.service.weekly-report.folder:/Users/Macpro/Server/pf-batch-reports/}") String batchReportsFolder) {
 		this.chartService = chartService;
 		this.transactionService = transactionService;
@@ -57,9 +57,9 @@ public class WeeklyReport {
 	public String getUserEmail() {
 		return userEmail;
 	}
-	
-//	@Scheduled(cron="0 0 0 1,5,10,15,20,25,30 * *") //Every 5 days
-	@Scheduled(cron="0 0 0 * * *") //Every day as a testing period
+
+	// @Scheduled(cron="0 0 0 1,5,10,15,20,25,30 * *") //Every 5 days
+	@Scheduled(cron = "0 0 0 * * *") // Every day as a testing period
 	public void process() throws Exception {
 		Iterable<UserEntity> allUsers = userRepository.findAll();// OrderByEmail
 		for (UserEntity user : allUsers) {
@@ -133,10 +133,8 @@ public class WeeklyReport {
 
 	}
 
-	
-	
 	public String renderEmailTemplate(String email) {
-		
+
 		//
 		Context thymeleafCtx = new Context();// locale!
 		thymeleafCtx.setVariable("USER_NAME", email);
@@ -153,15 +151,8 @@ public class WeeklyReport {
 		thymeleafCtx.setVariable("TOTAL_INCOME", currentYearTotalBalance.getIncomeFormatted());
 		thymeleafCtx.setVariable("TOTAL_EXPENSES", currentYearTotalBalance.getExpensesFormatted());
 
-		//
-		String htmlContent = templateEngine.process("email-template-weekly", thymeleafCtx); // default
-																							// settings
-																							// add
-																							// ".html"
-																							// and
-																							// uses
-																							// /resources/templates
-//		System.out.println(htmlContent);
+		// settings add ".html" and uses /resources/templates
+		String htmlContent = templateEngine.process("email-template-weekly", thymeleafCtx);
 
 		logger.info(String.format("email-template-weekly.html template is populated successfully for user %s.", email));
 
@@ -169,4 +160,3 @@ public class WeeklyReport {
 	}
 
 }
-

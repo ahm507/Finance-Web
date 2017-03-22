@@ -226,7 +226,7 @@ public class AccountService {
 		case AccountEntity.SAR:
 			return sarRate;
 		default:
-			return 1.0;
+			return 1.0; //EGP
 		}
 	}
 

@@ -1,4 +1,4 @@
-package pf.rest;
+package pf.web;
 /*
  * Copyright 2012-2016 the original author or authors.
  *

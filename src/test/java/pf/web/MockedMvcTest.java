@@ -1,4 +1,4 @@
-package pf.rest;
+package pf.web;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;

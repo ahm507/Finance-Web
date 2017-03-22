@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pf.user.UserRepository;
-import pf.webmvc.RestLib;
+import pf.web.RestLib;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

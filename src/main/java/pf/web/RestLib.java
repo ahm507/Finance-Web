@@ -1,4 +1,4 @@
-package pf.webmvc;
+package pf.web;
 
 import com.google.gson.Gson;
 import pf.user.UserRest;

@@ -1,11 +1,6 @@
 <%@ page contentType="text/html; charset=Cp1256" pageEncoding="Cp1256"%>
 <%@ page isErrorPage="true" %>
 
-<%
-if(exception == null)
-	exception = (Exception)request.getAttribute("exception");
-%>
-
 <html>
 <head>
 
@@ -39,6 +34,9 @@ if(exception == null)
 	</font>
 
 		<br>
+		<br>
+		<br>
+		<br>
 			
 				Internal application error, please contact support. 
 				
@@ -57,6 +55,15 @@ if(exception == null)
 		out.print("-->");
 	}
 	%>
+	<hr>
+	
+	<!--
+    Failed URL: ${url}
+    Exception:  ${exception.message}
+        <c:forEach items="${exception.stackTrace}" var="ste">    ${ste} 
+    </c:forEach>
+  -->
+	
 	</font>
 		
 	<br>

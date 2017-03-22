@@ -1,4 +1,4 @@
-package pf.webmvc;
+package pf.web;
 
 
 import org.springframework.stereotype.Controller;

@@ -22,8 +22,6 @@ import pf.transaction.TransactionService;
 import pf.user.UserEntity;
 import pf.user.UserRepository;
 
-
-//FIXME: remove Lombok
 @Service
 public class WeeklyReport {
 

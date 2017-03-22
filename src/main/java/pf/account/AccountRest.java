@@ -28,21 +28,12 @@ public class AccountRest {
 	
 //	private final static Logger LOGGER = Logger.getLogger(AccountRest.class.getName()); 
 
-//	public void configure() throws Exception {
-//		StoreFactory storeFactory = new RestLib().getStoreFactory();
-//		accountService = storeFactory.createAccountMgmt();
-//	}
-
 //	@POST //to match the easyui tree grid way
 //	method = RequestMethod.POST,
 	@RequestMapping(value = "/getAccounts.do")
 	public String getAccounts(HttpServletRequest request) {
 		String json;
 		try {
-//			configure();
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
-//			String userEmail = currentUser.getEmail();//(String)request.getSession().getAttribute("email");
-
 			json = new Gson().toJson(accountService.getAccountsTree(request.getRemoteUser()));//, type
 		} catch (Exception exp) {
 			json = RestLib.getErrorString(exp);
@@ -59,8 +50,6 @@ public class AccountRest {
 							  @RequestParam("currency") String currency) {
 		String json;
 		try {
-//			configure();
-			//String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
 			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			accountService.create(userId, text, description, type, currency);
 			Map<String, Boolean> map = new HashMap<>();
@@ -76,8 +65,6 @@ public class AccountRest {
 	public String removeAccount(HttpServletRequest request, @RequestParam("id") String id) {
 		String json;
 		try {
-//			configure();
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
 			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			accountService.removeAccount(userId, id);
 			Map<String, Boolean> map = new HashMap<>();
@@ -98,8 +85,6 @@ public class AccountRest {
 								@RequestParam("currency") String currency) {
 		String json;
 		try {
-//			configure();
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
 			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			accountService.updateAccount(userId, id, text, description, type, currency);
 			Map<String, Boolean> map = new HashMap<>();
@@ -115,9 +100,7 @@ public class AccountRest {
 	public String getAccount(HttpServletRequest request, @RequestParam("id") String id) {
 		String json;
 		try {
-//			configure();
 			//FIXME: You can send user entity directly to service layer
-//			String userId = currentUser.getId();//RestLib.getLoggedInUser(request);
 			String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 			AccountEntity accountentity = accountService.getAccount(userId, id);
 			json = new Gson().toJson(accountentity);

@@ -44,7 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 
-		//FIXME: remove "/rest/users/login.do", as it is no longer used
 		http.authorizeRequests()
 			.antMatchers("/**/*.js", "/**/*.html", "/**/*.css", "/**/*.png", "/**/*.jpg", 
 					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/error2", "/privacy", "/index", 

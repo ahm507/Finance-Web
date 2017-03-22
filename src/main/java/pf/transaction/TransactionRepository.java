@@ -41,7 +41,6 @@ public interface TransactionRepository extends CrudRepository<TransactionEntity,
 		    UserEntity user, String dateFrom, String dateTo,
 		    AccountEntity account);
 
-    //FIXME: not tested
     @Query("SELECT t FROM TransactionEntity t where t.user = ?1 AND (t.withdrawAccount = ?2 OR t.depositAccount=?2) ORDER BY t.date")
     List<TransactionEntity> queryByUserAndAccountOrderByDate(UserEntity user, AccountEntity account);
 

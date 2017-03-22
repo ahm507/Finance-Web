@@ -20,8 +20,6 @@ import java.util.List;
 public class UserEntity implements UserDetails {
 
 	
-	//TODO: use lombok to eliminate the bloated code of setters and getters
-	
 	private static final long serialVersionUID = -6092199166051420344L;
 	@Id  //primary key
 	private String id;

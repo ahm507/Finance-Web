@@ -51,9 +51,7 @@ public class TransactionRest {
 			return RestLib.getErrorString(e);
 		}
 	}
-	
-	//FIXME: request is no longer used after the new authentication.
-	
+		
 	@RequestMapping("/getYearList.do")
 	public String getYearList(HttpServletRequest request) {
 		String yearsString;

@@ -30,63 +30,12 @@ public class TransactionService {
 		this.transRepo = transRepo;
 	}
 	
-//	private String id;
-//	private String withdrawId;
-//	private String depositId;
-//	private String date;
-//	private String description;
-//	private double amount;
-//	private String withdraw; //came from Account table
-//	private String deposit;
-//	//FIXME: Account withdraw, deposit; //association
-//
-//	private Transaction() {
-//	}
-
-	//Just for unit test usage
-//	public Transaction(String id, String date, String description, String withdrawId, String depositId, double amount) {
-////		super(id, date, description, withdrawId, depositId, amount);
-//		this.id = id;
-//		this.date = date;
-//		this.description = description;
-//		this.withdrawId = withdrawId;
-//		this.depositId = depositId;
-//		this.amount = amount;
-//	}
-
-//	public Transaction(TransactionRepository record) {
-//		this.id = record.getId();
-//		this.withdrawId = record.getWithdrawId();
-//		this.depositId = record.getDepositId();
-//		this.date = record.getDate();
-//		this.description = record.getDescription();
-//		this.amount = record.getAmount();
-//		this.withdraw = record.getWithdraw_id();
-//		this.deposit = record.getDeposit_id();
-//	}
-
-//	public Transaction(AccountRepository accountDao, TransactionRepository transactionDao) {
-//		this.accountrepo = accountDao;
-//		this.transRepo = transactionDao;
-//	}
-
-//	private List<TransactionEntity> mapStoreArray(TransactionRepository[] records) {
-//		List<TransactionEntity> transactions = new Transaction[records.length];
-//		int i = 0;
-//		for (TransactionRepository record : records) {
-//			transactions[i] = new Transaction(record);
-//			i++;
-//		}
-//		return transactions;
-//	}
-
 	static public String formatMoney(double number) {
 		//Format the numbers for display as example "100,050,676.574";
 		if (number == 0) { //double have some error factor
 			return "0.00";
 		}
 
-		//FIXME: Use Formatter class, as ex, fmt.format("%,.2f", 4356783497.34);
 		DecimalFormat formatter = new DecimalFormat("#,###.00");
 		return formatter.format(number);
 	}

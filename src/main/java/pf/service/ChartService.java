@@ -55,8 +55,6 @@ public class ChartService {
 
 
     public List<Map<String, Object>> getExpensesTrend(String year, String type, String userId, String email) throws Exception {
-//        this.storeFactory = getStoreFactory();
-//        configure();
         List<Map<String, Object>> out2 = new ArrayList<>();
         if("all".equals(year)) { //NOT WORKING YET
             Map<String, Map<String, Object>> out = getTrendDataAllYears(userId, email);

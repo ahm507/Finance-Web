@@ -31,12 +31,10 @@ public class Mailer {
 	String resetMailBody;
 
 	
-	public boolean sendVerifyEmail(String email, String uuid) throws Exception {
+	public void sendVerifyEmail(String email, String uuid) throws Exception {
 		Zoho mail = new Zoho();
 		String mailBody = String.format(registerMailBody, email, uuid);
 		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, email, registerMailSubject, mailBody, registerSendFrom);
-		//FIXME: why return value!!
-		return true;
 	}
 
 	public void sendResetEmail(String email, String resetCode) throws Exception {

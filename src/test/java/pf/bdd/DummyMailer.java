@@ -4,8 +4,8 @@ import pf.email.Mailer;
 
 public class DummyMailer extends Mailer {
 
-    public boolean sendVerifyEmail(String email, String uuid) throws Exception {
-        return true;
+    public void sendVerifyEmail(String email, String uuid) throws Exception {
+
     }
 
 

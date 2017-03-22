@@ -66,8 +66,6 @@ public class UserService {
 		newUser.setVerified(verified);
 		newUser.setUsd_rate(usdRate);
 		newUser.setSar_rate(sarRate);
-//		userRepo.insert(user2.getId(), user2.getEmail(), user2.getPassword(), user2.getDate(), verified,
-//				user2.getVerification_key(), usdRate, sarRate);
 		userRepo.save(newUser);
 		//send email notification
 		mailer.sendVerifyEmail(email, newUser.getVerification_key());

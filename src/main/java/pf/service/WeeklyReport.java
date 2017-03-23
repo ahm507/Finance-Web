@@ -93,25 +93,22 @@ public class WeeklyReport {
 		for (Map<String, Object> element : data) {
 			// [{"Month":"Jan","Expenses":21279.0,"Assets":269613.95999999996,"Liabilities":-468.5600000000006,"Income":23210.91}
 			// double expenses, double income, double liabilities, double assets
-			currentYearBalance.add(new Balance((String) element.get("Month"), (Double) element.get("Expenses"),
-					(Double) element.get("Income"), (Double) element.get("Liabilities"),
-					(Double) element.get("Assets")));
+			double expenses = (Double) element.get("Expenses");
+			double income = (Double) element.get("Income");
+			if( expenses > 0.001 || income > 0.001) { //empty months will not be added
+				currentYearBalance.add(new Balance((String) element.get("Month"), expenses,
+						income, (Double) element.get("Liabilities"),
+						(Double) element.get("Assets")));
+			}
 		}
 	}
 
 	public void doAnalysis() throws Exception {
 		// this.userEmail = userEmail;
 
-		// List<String> years = transactionService.getYearList(userEmail);
-
-		// String currentYear =
-		// String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 		int currentMonthIndex = Calendar.getInstance().get(Calendar.MONTH);
 		currentMonth = currentYearBalance.get(currentMonthIndex);
-		// if( ! years.contains(yearString)) {
-		//
-		// return ;
-		// }
+		
 
 		// I assume last element is current year
 		// compute all data analysis

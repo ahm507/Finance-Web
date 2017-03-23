@@ -135,7 +135,6 @@ public class MockedMvcTest {
   
   @Test
   @WithMockUser(username="test@test.test",password="test", roles={"USER","ADMIN"})
-  
   public void accountTransactions() throws Exception {
 	  
 	  String accountId = "d2cedb8e-b049-464a-8142-c92814036047";

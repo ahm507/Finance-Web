@@ -58,13 +58,11 @@ public class WeeklyReportTest {
 	
 	@Test
 	public void weeklyReport() throws Exception {
-		// String userId = "4f680c93-838d-4329-9aba-7bedca232a89", userEmail =
-		// "test@test.test";
-//		 when(mailerMock.sendWeeklyReport(anyString(), anyString(), anyString())).thenReturn();
-
+		//when(mailerMock.sendWeeklyReport(anyString(), anyString(), anyString())).thenReturn();
 		WeeklyReport weeklyReport = new WeeklyReport(chartService, transactionService, userRepository, templateEngine, mailerMock, batchReportsFolder); 
 		weeklyReport.process();
 		assertEquals("test@test.test", weeklyReport.getUserEmail());
+		assertEquals(570.0, weeklyReport.getCurrentYearAverageBalance().getExpenses(), 000.1);
 	
 	}
 

@@ -52,6 +52,10 @@ public class WeeklyReport {
 	private Balance currentMonth = new Balance("", 0, 0, 0, 0);
 	private Balance currentYearTotalBalance = new Balance("", 0, 0, 0, 0);
 	private Balance currentYearAverageBalance = new Balance("", 0, 0, 0, 0);
+	public Balance getCurrentYearAverageBalance() {
+		return currentYearAverageBalance;
+	}
+
 	private String userEmail;
 
 	public String getUserEmail() {

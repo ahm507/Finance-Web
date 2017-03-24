@@ -184,7 +184,7 @@ public class TransactionRest {
 
 	private Map<String, Boolean> getSuccessStatus() {
 		Map<String, Boolean> map = new HashMap<>();
-		map.put("status", true);
+		map.put("success", true);
 		return map;
 	}
 

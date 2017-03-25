@@ -1,7 +1,4 @@
-<%
 
-/* response.sendRedirect("login"); */
-%>
 
 <html>
 

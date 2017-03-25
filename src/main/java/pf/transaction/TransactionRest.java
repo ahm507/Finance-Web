@@ -40,6 +40,8 @@ public class TransactionRest {
 		// String userId =
 		// currentUser.getId();//RestLib.getLoggedInUser(request);
 		// String userEmail = request.getRemoteUser();
+
+		//FIXME: Use SecurityContextHolder instead of gertRemoteUser
 		String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 		logger.info("Logged in user email: " + userEmail);
 		String userId = userRepository.findByEmail(userEmail).getId();

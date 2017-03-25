@@ -5,7 +5,8 @@
 	String root = request.getServletContext().getRealPath("/WEB-INF");
 	String email = request.getParameter("email");
 	String code = request.getParameter("code");
-	Boolean success = new pf.webmvc.JspRequests().verifyUserEmail(root, email, code);
+	//FIXME: Convert this call to a REST request
+	Boolean success = new pf.web.JspRequests().verifyUserEmail(root, email, code);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

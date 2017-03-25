@@ -1,5 +1,6 @@
 package pf.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -79,12 +81,12 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 		return "pages/exporting.jsp";
 
 	}
-	
+
 	@GetMapping("/exception")
 	public String exception() throws Exception {
-		throw new Exception ("This is a test exception!");
+		throw new Exception("This is a test exception!");
 	}
-	
+
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleError(HttpServletRequest req, Exception ex) {
 		logger.severe("Request: " + req.getRequestURL() + " raised " + ex);
@@ -95,6 +97,26 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 		modelView.setViewName("pages/error.jsp");
 		return modelView;
 	}
+
+		
+	 @GetMapping("/test")
+	 @ResponseBody
+	 public String test(HttpServletRequest request, HttpServletResponse
+	 response, Map<String, Object> model)
+	 throws NullAccountException, DeepAccountLayersException,
+	 CurrencyTransefereException {
+	
+	 StringBuilder buffer = new StringBuilder();
+	 
+	 buffer.append("User is:" + request.getRemoteUser() + "<br>");
+
+	 return buffer.toString();
+	
+	 }
+
+	// @Autowired
+	// CurrentUser currentUser;
+	// currentUser.setUserEntity(user);
 
 	// FATAL ERROR: YOU CAN NOT MAP TO STATIC RESOURCES. ONLY JSP.
 

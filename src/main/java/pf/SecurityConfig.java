@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers("/**/*.js", "/**/*.html", "/**/*.css", "/**/*.png", "/**/*.jpg", 
 					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/error2", "/privacy", "/index", 
-					"/", "/password-reset")
+					"/", "/password-reset", "/test")
 				.permitAll()
 				.antMatchers("/admin").hasRole("ADMIN") //No admn interface yet!
 				.antMatchers("/transactions", "/accounts", "/charts", "/export", "/import", "/settings").hasRole("USER")

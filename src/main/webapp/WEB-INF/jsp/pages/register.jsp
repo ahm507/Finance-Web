@@ -147,8 +147,11 @@
 				<br>
 				If you did not receive the email within a couple of minutes, you can resend the email, click the following form
 				<br>  
+				<br>
+				<br>
+				<br>
 				<form id="resend_form" method="post">
-					<input type="submit" value="Resend Email">
+					<input type="submit" value="              Resend Email              ">
 				</form>
 				
 			</div>

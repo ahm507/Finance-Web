@@ -90,11 +90,11 @@ public class UserService {
 
 	public void resendVerifyEmail(String email) throws Exception {
 		UserEntity user = userRepo.findByEmail(email);
-		if(user != null) {
+		if(null != user) {
 			Mailer mailer = new Mailer();
 			mailer.sendVerifyEmail(email, user.getVerification_key());
 		} else {
-			throw new Exception("InvalidEmail");
+			throw new Exception("Email does not exist in database:" + email);
 		}
 	}
 

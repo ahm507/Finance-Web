@@ -43,13 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-
+//		http://localhost:8080/rest/users/register.do?email=test2@test.test&password=test&password2=test
 		http.authorizeRequests()
 			.antMatchers("/**/*.js", "/**/*.html", "/**/*.css", "/**/*.png", "/**/*.jpg", 
-					"/password-forget", "/register", "/contactus", "/login", "/rest/users/login.do", "/error", "/error2", "/privacy", "/index", 
-					"/", "/password-reset", "/test")
+					"/password-forget", "/register", "/contactus", "/login", "/error", "/error2", "/privacy", "/index", 
+					"/", "/password-reset", "/test", 
+					"/rest/users/**") 
 				.permitAll()
-				.antMatchers("/admin").hasRole("ADMIN") //No admn interface yet!
+				.antMatchers("/admin").hasRole("ADMIN") //No admin interface yet!
 				.antMatchers("/transactions", "/accounts", "/charts", "/export", "/import", "/settings").hasRole("USER")
 				.antMatchers("/rest/**").hasRole("USER")
 				.anyRequest().fullyAuthenticated() 

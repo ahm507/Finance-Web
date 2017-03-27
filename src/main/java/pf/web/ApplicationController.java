@@ -114,10 +114,6 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 	
 	 }
 
-	// @Autowired
-	// CurrentUser currentUser;
-	// currentUser.setUserEntity(user);
-
 	// FATAL ERROR: YOU CAN NOT MAP TO STATIC RESOURCES. ONLY JSP.
 
 }

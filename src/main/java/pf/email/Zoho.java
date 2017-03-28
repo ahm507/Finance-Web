@@ -10,32 +10,38 @@ import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Properties;
 
 public class Zoho {
 
-	public void sendZohoMail(String smtpAddress, String userName, String password,
-			String recipient, String subject, String message, String from)
-			throws MessagingException {
+	@Value("${smtp.send-email}")
+	boolean sendEmail;
+
+	public boolean sendZohoMail(String smtpAddress, String userName, String password, String recipient, String subject,
+			String message, String from) throws MessagingException {
 		String recipientsTo[] = new String[1];
 		recipientsTo[0] = recipient;
-		sendAuthZohoMail(smtpAddress, userName, password, recipientsTo, null, null,
-				subject, message, from);
+
+		sendAuthZohoMail(smtpAddress, userName, password, recipientsTo, null, null, subject, message, from);
+
+		return true;
 	}
 
-	public void sendAuthZohoMail(String smtpAddress, String userName, String password,
-			String recipientsTo[], String recipientsCC[],
-			String recipientsBCC[], String subject, String message, String from)
+	private void sendAuthZohoMail(String smtpAddress, String userName, String password, String recipientsTo[],
+			String recipientsCC[], String recipientsBCC[], String subject, String message, String from)
 			throws MessagingException {
 		// Set the host smtp address
 		Properties props = new Properties();
-	    props.setProperty("mail.transport.protocol", "smtp");     
+		props.setProperty("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.host", smtpAddress);
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "false"); //false for zohomail
-		
+		props.put("mail.smtp.starttls.enable", "false"); // false for zohomail
+
 		props.put("mail.smtp.EnableSSL.enable", "true");
-//		props.put("mail.debug", "true");
+		// props.put("mail.debug", "true");
 
 		props.setProperty("mail.smtp.port", "465");
 		props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
@@ -74,15 +80,16 @@ public class Zoho {
 
 		// Setting the Subject and Content Type
 		msg.setSubject(subject);
-//		msg.setContent(message, "text/plain");
+		// msg.setContent(message, "text/plain");
 		msg.setContent(message, "text/html");
 
-		//reallySendMail is used primary to stop sending too much emails in testing
+		// reallySendMail is used primary to stop sending too much emails in
+		// testing
+		if (sendEmail) {
 			Transport.send(msg);
+		}
 
 	}
-	
-
 
 	/**
 	 * SimpleAuthenticator is used to do simple authentication when the SMTP

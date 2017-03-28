@@ -62,10 +62,19 @@ public class Mailer {
 		assert to != null;
 		assert subject != null;
 		Zoho mail = new Zoho();
-//		String sendFrom = email;
-//		String mailSubject = "Support: " + title;
-//		String mailBody = comments;
 		String sendFrom = "support@salarycontrol.com";
 		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, to, subject, body, sendFrom);
 	}
+	
+	
+	public void sendBackupEmail(String to, String subject, String body, String fileFullPath) throws Exception {
+		//Send email
+		assert to != null;
+		assert subject != null;
+		Zoho mail = new Zoho();
+		String sendFrom = "support@salarycontrol.com";
+		mail.sendMailMultiPart( smtpHost, smtpUser, smtpPassword, to, subject, body, sendFrom, fileFullPath);
+	}
+
+	
 }

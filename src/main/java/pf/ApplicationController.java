@@ -89,7 +89,7 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 
 		model.put("csvFileName", backupService.getFileName());
 		model.put("csvContents", backupService.getExportContents(userId));
-
+		//FIXME: just return results directely. No need to exporting.jsp
 		return "pages/exporting.jsp";
 
 	}

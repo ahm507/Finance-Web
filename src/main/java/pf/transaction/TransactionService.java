@@ -3,7 +3,7 @@ package pf.transaction;
 import org.springframework.stereotype.Service;
 import pf.account.AccountEntity;
 import pf.account.AccountRepository;
-import pf.service.MinMaxDate;
+import pf.backup.MinMaxDate;
 import pf.user.UserEntity;
 import pf.user.UserRepository;
 

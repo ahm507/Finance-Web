@@ -20,6 +20,8 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import pf.charts.ChartService;
+import pf.charts.WeeklyReport;
 import pf.email.Mailer;
 import pf.transaction.TransactionService;
 import pf.user.UserRepository;

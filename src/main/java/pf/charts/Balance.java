@@ -1,9 +1,9 @@
-package pf.service;
+package pf.charts;
 
 import pf.transaction.TransactionService;
 
 //@Data
-class Balance {
+public class Balance {
 	private double expenses, income, liabilities, assets;
 	private String month;
 
@@ -15,7 +15,7 @@ class Balance {
 		this.setMonth(month);
 	}
 
-	double getExpenses() {
+	public double getExpenses() {
 		return expenses;
 	}
 

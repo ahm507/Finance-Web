@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import pf.backup.BackupService;
+import pf.backup.RestoreService;
 import pf.user.UserRepository;
 
 import javax.transaction.TransactionSynchronizationRegistry;

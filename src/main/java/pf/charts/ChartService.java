@@ -1,4 +1,4 @@
-package pf.service;
+package pf.charts;
 
 import org.springframework.stereotype.Service;
 import pf.account.AccountEntity;

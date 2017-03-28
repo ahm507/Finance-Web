@@ -1,4 +1,4 @@
-package pf.service;
+package pf.charts;
 
 import com.google.gson.Gson;
 

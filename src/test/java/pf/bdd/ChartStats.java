@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import pf.account.AccountEntity;
 import pf.account.AccountService;
-import pf.service.ChartService;
+import pf.charts.ChartService;
 import pf.transaction.TransactionService;
 import pf.user.UserService;
 

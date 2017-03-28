@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import pf.service.WeeklyReport;
 import pf.user.UserRepository;
 import pf.RestLib;
+import pf.charts.WeeklyReport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

@@ -2,7 +2,7 @@ package pf.account;
 
 import org.springframework.stereotype.Service;
 
-import pf.service.WeeklyReport;
+import pf.charts.WeeklyReport;
 import pf.transaction.TransactionEntity;
 import pf.transaction.TransactionRepository;
 import pf.transaction.TransactionService;

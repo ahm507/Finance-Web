@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import pf.account.AccountService;
+import pf.charts.ChartService;
 import pf.service.*;
 import pf.account.AccountEntity;
 import pf.transaction.TransactionDTO;

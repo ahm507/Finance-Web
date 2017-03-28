@@ -1,4 +1,4 @@
-package pf.web;
+package pf;
 
 import com.google.gson.Gson;
 import pf.user.UserRest;
@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class RestLib {
-//	private static final String JPA_FACTORY = "jpa";
-//	private static final String JDBC_FACTORY = "jdbc";
 	private final static Logger LOGGER = Logger.getLogger(UserRest.class.getName());
 
 	public static String getErrorInfo(Throwable exception) {

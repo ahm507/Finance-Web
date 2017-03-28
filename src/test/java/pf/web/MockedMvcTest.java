@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
@@ -28,6 +29,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
+import pf.email.Mailer;
+import pf.email.Zoho;
 import pf.user.UserEntity;
 import pf.user.UserRepository;
 
@@ -46,7 +49,9 @@ import javax.validation.constraints.AssertFalse;
 import static org.assertj.core.api.Assertions.not;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.startsWith;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -157,9 +162,17 @@ public class MockedMvcTest {
 				.param("year", "2016")).andExpect(MockMvcResultMatchers.jsonPath("$.total", CoreMatchers.is("1")));
 	}
 
+	
+	@MockBean
+	private Zoho zohoMail; 
+	
 	@Test
 	public void registerAndVerify() throws Exception {
 		// register new user
+		
+//		when(zohoMail.sendZohoMail(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(true);
+		
+		
 		String email = "test2@test.test";
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/register.do").param("email", email)
 				.param("password", "2016").param("password2", "2016"))
@@ -167,7 +180,6 @@ public class MockedMvcTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("success")));
 
 		UserEntity user = userRepository.findByEmail(email);
-
 		assertNotNull(user);
 
 		// Verify the email
@@ -179,7 +191,7 @@ public class MockedMvcTest {
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/resendVerifyEmail.do").param("email", email))
 		.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("fail"))); //should not be able to send email to a fake email
 
-		
+	
 	}
 	
 	

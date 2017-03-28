@@ -45,6 +45,7 @@ public class Mailer {
 	}
 
 
+
 	public void sendFeedbackEmail(String email, String name, String title, String comments) throws Exception {
 		//Send email
 		assert name != null;

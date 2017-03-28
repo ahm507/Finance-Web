@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import pf.user.UserRepository;
 import pf.user.UserRest;
-import pf.web.RestLib;
+import pf.RestLib;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

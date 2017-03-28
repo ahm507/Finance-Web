@@ -1,4 +1,4 @@
-package pf.web;
+package pf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,15 +20,25 @@ import pf.account.DeepAccountLayersException;
 import pf.account.NullAccountException;
 import pf.service.BackupService;
 import pf.service.CurrencyTransefereException;
+import pf.service.RestoreService;
 import pf.service.WeeklyReport;
 import pf.transaction.TransactionEntity;
 import pf.user.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 //import java.util.Date;
@@ -40,10 +51,11 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 
 	BackupService backupService;
 	UserRepository userRepository;
-
-	ApplicationController(BackupService backupService, UserRepository userRepository) {
+	RestoreService restoreService;
+	ApplicationController(BackupService backupService, UserRepository userRepository, RestoreService restoreService) {
 		this.backupService = backupService;
 		this.userRepository = userRepository;
+		this.restoreService = restoreService;
 	}
 
 	@Override
@@ -114,6 +126,66 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 	
 	 }
 
+	 
+	 @PostMapping("/upload")
+		void upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+			// FIXME: This is too much work, see:
+			// https://www.mkyong.com/spring-boot/spring-boot-file-upload-example/
+			// In one single parameter you can get byte array with the file. CSV
+			// reader acceot any kind of Reader, including StringReader.
+
+			logger.info("Started inside upload() API");
+
+			// String userId = getLoggedInUser(request);
+			String userEmail = request.getRemoteUser();
+			String userId = userRepository.findByEmail(userEmail).getId();
+
+			final String path = request.getServletContext().getRealPath("/WEB-INF/upload-temp/");
+			final Part filePart = request.getPart("file");
+			final String fileName = getFileName(filePart);
+
+			OutputStream out = null;
+			InputStream filecontent = null;
+			response.setContentType("text/html;charset=UTF-8");
+			final PrintWriter writer = response.getWriter();
+			String fullFileName = path + File.separator + userId + "-" + fileName;
+			out = new FileOutputStream(new File(fullFileName));
+			filecontent = filePart.getInputStream();
+
+			int read = 0;
+			final byte[] bytes = new byte[1024];
+
+			while ((read = filecontent.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			writer.println("<h2>" + fileName + " is uploaded successfully</h2>");
+			logger.log(Level.INFO, "File{0}being uploaded to {1}", new Object[] { fileName, path });
+			
+			// Here, we start the import
+			Vector<String> output = restoreService.importFile(userId, fullFileName);
+			for (String str : output) {
+				writer.println(str);
+			}
+
+			writer.println("<br>Import is completed successfully");
+			
+			if(null != out) out.close();
+			if(null != filecontent) filecontent.close();
+			
+		}
+	 
+	 
+		private String getFileName(final Part part) {
+			final String partHeader = part.getHeader("content-disposition");
+			logger.log(Level.INFO, "Part Header = {0}", partHeader);
+			for (String content : part.getHeader("content-disposition").split(";")) {
+				if (content.trim().startsWith("filename")) {
+					return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+				}
+			}
+			return null;
+		}
 	// FATAL ERROR: YOU CAN NOT MAP TO STATIC RESOURCES. ONLY JSP.
 
 }

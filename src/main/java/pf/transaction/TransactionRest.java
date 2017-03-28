@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pf.service.WeeklyReport;
 import pf.user.UserRepository;
-import pf.web.RestLib;
+import pf.RestLib;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

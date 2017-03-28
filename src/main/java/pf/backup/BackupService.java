@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -133,31 +134,37 @@ public class BackupService {
 	@Scheduled(cron = "0 0 0 * * *") // Every day as a testing period
 	
 	public void autoBackup() throws Exception {
-		//for all users
-			//do backup
-		
 		Iterable<UserEntity> allUsers = userRepository.findAll();// OrderByEmail
 		for (UserEntity user : allUsers) {
 			String userEmail = user.getEmail();
-			
-			String fullFileName = userEmail + "-" + getFileName();
-			this.fullPathName = batchReportsFolder + fullFileName; 
-			//FIXME: Unify into Export/Backup one naming system
-			String contents = getExportContents(user.getId());
-			ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(fullPathName + ".zip")));
-			
-			ZipEntry entry = new ZipEntry(fullFileName);
-			zip.putNextEntry(entry);
-			zip.write(contents.getBytes("utf-8"));
-			zip.close();
-			
-			//send it attached into email
-			String htmlEmail = renderEmailTemplate(userEmail);
-			String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-			String subject = String.format("Weekly Backup as of %s ", dateStamp);
-			mailer.sendBackupEmail(userEmail, subject, htmlEmail, fullPathName);
-			
+			autoBackupForUser(user.getId(), userEmail);
 		}
+	}
+
+	public void autoBackupForUser(String email) throws FileNotFoundException, UnsupportedEncodingException, NullAccountException, DeepAccountLayersException, CurrencyTransefereException, IOException, Exception {
+		UserEntity userEntity = userRepository.findByEmail(email);
+		autoBackupForUser(userEntity.getId(), email);
+	}
+	
+	private void autoBackupForUser(String userId, String userEmail)
+			throws NullAccountException, DeepAccountLayersException, CurrencyTransefereException, FileNotFoundException,
+			IOException, UnsupportedEncodingException, Exception {
+		String fullFileName = userEmail + "-" + getFileName();
+		this.fullPathName = batchReportsFolder + fullFileName; 
+		//FIXME: Unify into Export/Backup one naming system
+		String contents = getExportContents(userId);
+		ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(fullPathName + ".zip")));
+		
+		ZipEntry entry = new ZipEntry(fullFileName);
+		zip.putNextEntry(entry);
+		zip.write(contents.getBytes("utf-8"));
+		zip.close();
+		
+		//send it attached into email
+		String htmlEmail = renderEmailTemplate(userEmail);
+		String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String subject = String.format("Weekly Backup as of %s ", dateStamp);
+		mailer.sendBackupEmail(userEmail, subject, htmlEmail, fullPathName);
 	}
 
 	public String getPeridicFileFullPath() {

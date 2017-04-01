@@ -144,7 +144,8 @@ public class TransactionRest {
 	public Map<String, Boolean> updateTransaction(HttpServletRequest request, @RequestParam("amount") String amount,
 			@RequestParam("date") String date, @RequestParam("description") String description,
 			@RequestParam("withdraw") String withdraw, @RequestParam("deposit") String deposit,
-			/* Note that, id is query parameter */@RequestParam("id") String id) throws Exception {
+			/* Note that, id is query parameter */
+			@RequestParam("id") String id) throws Exception {
 		// We are happy, because we are sure the user is authenticated
 		// already
 		// RestLib.getLoggedInUser(request); // you can delete

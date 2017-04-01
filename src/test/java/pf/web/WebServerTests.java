@@ -18,6 +18,9 @@ package pf.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,27 +111,9 @@ public class WebServerTests {
 //		
 //	}
 	
-//	@Test
-//	public void testLoginPage() throws Exception {
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setAccept(Arrays.asList(MediaType.TEXT_HTML));
-//		ResponseEntity<String> entity = this.restTemplate.exchange("/login",
-//				HttpMethod.GET, new HttpEntity<Void>(headers), String.class);
-//		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-////		assertThat(entity.getBody()).contains("_csrf");
-//	}
+
 	
-//	
-//	@Test
-//	public void testLoginUsingTemplate() throws Exception {
-//		logger.info(">>>>>trying to login u sing Template");
-//		MultiValueMap<String, String> postParams = new LinkedMultiValueMap<>();
-//	    postParams.add("username", "test@test.test");
-//	    postParams.add("password", "test");
-//		String body = restTemplate.postForObject("/login", postParams, String.class);
-//		logger.info(">>>>>Value returned:" + body);
-//		
-//	}
+
 
 
 	@Test
@@ -153,16 +138,16 @@ public class WebServerTests {
 	private HttpHeaders getCSRFHeaders() {
 		HttpHeaders headers = new HttpHeaders();
 		//CSRF requires session id and CSRF token
-//		ResponseEntity<String> page = this.restTemplate.getForEntity("/login",
-//				String.class);
-//		assertThat(page.getStatusCode()).isEqualTo(HttpStatus.OK);
-//		String cookie = page.getHeaders().getFirst("Set-Cookie");
-//		headers.set("Cookie", cookie);
-//The below code is for CSRF
-//		Pattern pattern = Pattern.compile("(?s).*name=\"_csrf\".*?value=\"([^\"]+).*");
-//		Matcher matcher = pattern.matcher(page.getBody());
-//		assertThat(matcher.matches()).as(page.getBody()).isTrue();
-//		headers.set("X-CSRF-TOKEN", matcher.group(1));
+		ResponseEntity<String> page = this.restTemplate.getForEntity("/login",
+				String.class);
+		assertThat(page.getStatusCode()).isEqualTo(HttpStatus.OK);
+		String cookie = page.getHeaders().getFirst("Set-Cookie");
+		headers.set("Cookie", cookie);
+		//The below code is for CSRF
+		Pattern pattern = Pattern.compile("(?s).*name=\"_csrf\".*?value=\"([^\"]+).*");
+		Matcher matcher = pattern.matcher(page.getBody());
+		assertThat(matcher.matches()).as(page.getBody()).isTrue();
+		headers.set("X-CSRF-TOKEN", matcher.group(1));
 		return headers;
 	}	
 	
@@ -178,8 +163,6 @@ public class WebServerTests {
 //	}
 
 	
-	//TODO: ensure CSRF is tested
-
 
 //	@Test
 //	public void testCss() throws Exception {

@@ -7,17 +7,18 @@ function initTransactionDlgTreeGrids() {
 	$.ajax({
 		url : 'rest/accounts/getAccounts.do?',
 		async : false,
-	    type: 'POST',
+		type : 'POST',
+		headers : getCsrfHeaders(),
 		dataType : 'json',
 		success : function(response) {
 			accountsTreeData = response;// already parsed with
 			// this api
 		}
 	});
-	
+
 	// Load tree to all elements
 	$('#withdraw').combotree('loadData', accountsTreeData);
-$('#deposit').combotree('loadData', accountsTreeData);
+	$('#deposit').combotree('loadData', accountsTreeData);
 
 }
 
@@ -26,7 +27,7 @@ function initSelectedChartTypeAndKind() {
 	if (selectedType) {
 		$("#chart_type").val(selectedType);
 	}
-	
+
 	var selectedKind = readCookie("chart_kind");
 	if (selectedKind) {
 		$("#chart_kind").val(selectedKind);
@@ -36,8 +37,9 @@ function initSelectedChartTypeAndKind() {
 function fillYearsComboBox() {
 	$.ajax({
 		url : 'rest/transactions/getYearList.do?',
+		headers : getCsrfHeaders(),
 		async : false,
-	    type: "GET",
+		type : "GET",
 		dataType : 'json',
 		success : function(response) {
 			var yearList = response;// JSON.parse()//eval()//already
@@ -88,7 +90,7 @@ function getChartSettings() {
 	$.ajax({
 		url : 'rest/charts/getChartDataFields.do?type=' + type,
 		async : false,
-        type: "GET",
+		type : "GET",
 		dataType : 'json',
 		success : function(response) {
 			accounts = response;
@@ -102,7 +104,7 @@ function getChartSettings() {
 		name : 'Month',
 		type : 'date'
 	} ];
-	for ( var i = 0; i < accounts.length; i++) {
+	for (var i = 0; i < accounts.length; i++) {
 		var acc = {
 			name : accounts[i].name
 		};
@@ -114,7 +116,7 @@ function getChartSettings() {
 		dataField : accounts[0].name,
 		displayText : accounts[0].name
 	} ];
-	for ( var i = 1; i < accounts.length; i++) {
+	for (var i = 1; i < accounts.length; i++) {
 		var acc = {
 			dataId : accounts[i].id,
 			dataField : accounts[i].name,
@@ -122,11 +124,11 @@ function getChartSettings() {
 		};
 		seriesDef = seriesDef.concat(acc);
 	}
-	var dataUrl = "rest/charts/getExpensesTrend.do?year=" + year
-			+ "&type=" + type;
+	var dataUrl = "rest/charts/getExpensesTrend.do?year=" + year + "&type=" + type;
 	var source = {
 		datatype : "json",
-        type: "GET",
+		type : "GET",
+		headers : getCsrfHeaders(),
 		datafields : dataFields,
 		url : dataUrl
 	};
@@ -194,19 +196,19 @@ function chartBarClickHandler(e) {
 	var type = $('#chart_type').val();
 	var transUrl;
 	if (type == "asset" || type == "liability") {
-		transUrl = "rest/transactions/getUpToMonthTransactions.do?accountId="
-				+ e.serie.dataId + "&year=" + y + "&month=" + e.elementIndex;
+		transUrl = "rest/transactions/getUpToMonthTransactions.do?accountId=" + e.serie.dataId + "&year=" + y
+				+ "&month=" + e.elementIndex;
 	} else if (type == "income" || type == "expense") {
-		transUrl = "rest/transactions/getMonthTransactions.do?accountId="
-				+ e.serie.dataId + "&year=" + y + "&month=" + e.elementIndex;
+		transUrl = "rest/transactions/getMonthTransactions.do?accountId=" + e.serie.dataId + "&year=" + y + "&month="
+				+ e.elementIndex;
 	} else {
 		transUrl = "rest/transactions/getMonthTransactions.do?";
 	}
-//	loadExpensesGridWithRest('#dg', transUrl);
+	//	loadExpensesGridWithRest('#dg', transUrl);
 	$('#dg').datagrid({
-		data:getRest(transUrl)
-		});
-	
+		data : getRest(transUrl)
+	});
+
 	// Select last row in the grid after loading
 	$('#dg').datagrid({
 		onLoadSuccess : function(data) {
@@ -214,13 +216,10 @@ function chartBarClickHandler(e) {
 		}
 	});
 	var value = e.elementValue;
-	var formattedValue = value.toFixed(2).replace(
-			/(\d)(?=(\d{3})+\.)/g, "$1,");
+	var formattedValue = value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
 
 	// + ' is ' + e.elementValue + ' LE'
-	var eventData = formattedValue + ' LE for '
-			+ e.serie.dataField + ' in '
-			+ getMonthName(e.elementIndex);
+	var eventData = formattedValue + ' LE for ' + e.serie.dataField + ' in ' + getMonthName(e.elementIndex);
 	$('#eventText').text(eventData);
 }
 
@@ -251,7 +250,7 @@ function getMonthName(m) {
 	case 11:
 		return "Dec";
 	default:
-	    return m; //in case of year charts
+		return m; //in case of year charts
 	}
 }
 
@@ -262,8 +261,7 @@ function newExpense() {
 	$('#fm').form('clear');
 	// Set today date
 	var dt = new Date();
-	var today = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-"
-			+ dt.getDate();
+	var today = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
 	$('#date').datebox('setValue', today); // set datebox value
 	// var v = $('#dd').datebox('getValue'); // get datebox value
 
@@ -285,6 +283,7 @@ function newExpense() {
 	url = 'rest/transactions/saveTransaction.do';
 }
 // Just open the edit dialogue
+var editedRowId;
 function editExpense() {
 	$('#save_and_add').linkbutton('disable');
 
@@ -300,72 +299,177 @@ function editExpense() {
 		$('#description').val(row.description);
 		$('#amount').val(row.amount);
 		$('#date').datebox('setValue', row.date);
-		url = 'rest/transactions/updateTransaction.do?id=' + row.id;
+//		url = 'rest/transactions/updateTransaction.do?id=' + row.id;
+		url = 'rest/transactions/updateTransaction.do';
+		editedRowId = row.id;
 	}
 }
 
 function saveExpense(close) {
-	$('#fm').form( 'submit',
-		{
-			url : url,
-			onSubmit : function() {
-				var depositVal = $('#deposit').combotree('getText');
-				var withdrawVal = $('#withdraw').combotree('getText');
-				if (depositVal == withdrawVal) {
-					alert("Please select different deposit account than withdraw account.");
-					return false;
-				}
-				var rootElements = "Assets;Income;Expenses;Liabilities";
-				if (rootElements.indexOf(depositVal) != -1) {
-					alert("Please select leaf account.");
-					return false;
-				}
-				if (rootElements.indexOf(withdrawVal) != -1) {
-					alert("Please select leaf account.");
-					return false;
-				}
-				return $(this).form('validate');
-			},
-			success : function(result) {
-				var result = eval('(' + result + ')');
-				if (result.success) {
-					if (close) {
-						$('#dlg').dialog('close'); // close the
-					}
-					updateGridAndChart();
-				} else {
-					$.messager.show({
-						title : 'Error',
-						msg : result.msg
-					});
-				}
+	
+	
+	
+//	var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+//	var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+//	var csrfToken = $("meta[name='_csrf']").attr("content");
+//	var data = {};
+//	data[csrfParameter] = csrfToken;
+//	
+//	$('#fm').form('submit', {
+//		url : url,
+//		data: data,
+//		onSubmit : function() {
+//			
+//			return $(this).form('validate');
+//		},
+//		success : function(result) {
+//			var result = eval('(' + result + ')');
+//			if (result.success) {
+//				if (close) {
+//					$('#dlg').dialog('close'); // close the
+//				}
+//				updateGridAndChart();
+//			} else {
+//				$.messager.show({
+//					title : 'Error',
+//					msg : result.msg
+//				});
+//			}
+//		}
+//	});
+	
+	
+	var depositVal = $('#deposit').combotree('getText');
+	var withdrawVal = $('#withdraw').combotree('getText');
+	if (depositVal == withdrawVal) {
+		alert("Please select different deposit account than withdraw account.");
+		return false;
+	}
+	var rootElements = "Assets;Income;Expenses;Liabilities";
+	if (rootElements.indexOf(depositVal) != -1) {
+		alert("Please select leaf account.");
+		return false;
+	}
+	if (rootElements.indexOf(withdrawVal) != -1) {
+		alert("Please select leaf account.");
+		return false;
+	}
+	
+	
+	
+	
+//	jQuery.ajax({
+//		url : url,
+//		async : false,
+//		data : {
+//			id: editedRowId,
+//			amount : amount,
+//			date : $('#date').datebox('getValue'),
+//			description : $('#description').val(),
+//			withdraw : withdrawId,
+//			deposit : depositVal
+//		},
+//		headers : getCsrfHeaders(),
+//		type : 'POST',
+//		dataType : 'json',
+//		success : function(result) {
+//			//alert("Data: " + data + "\nStatus: " + status);
+//			var result = eval('(' + result + ')');
+//			if (result.success) {
+//				if (close) {
+//					$('#dlg').dialog('close'); // close the
+//				}
+//				updateGridAndChart();
+//			} else {
+//				$.messager.show({
+//					title : 'Error',
+//					msg : result.msg
+//				});
+//			}
+//		}
+//	});
+//	
+	//TODO: Move all javascript code into javascript files.
+//	alert(url);
+	var depositId = $('#deposit').combotree('getValue');
+	var withdrawId = $('#withdraw').combotree('getValue');
+	var description = $('#description').val();
+	var date = $('#date').datebox('getValue');
+	var amount = $('#amount').val();
+	jQuery.ajax({
+		url : url,
+		async : false,
+		data : {
+			id: editedRowId,
+ 			amount : amount,
+ 			date : date,
+ 			description : description,
+ 			withdraw : withdrawId,
+ 			deposit : depositId
+		},
+		headers : getCsrfHeaders(),
+		type : 'POST',
+		dataType : 'json',
+		success : function(result) {
+			//alert("Data: " + data + "\nStatus: " + status);
+			if (close) {
+				$('#dlg').dialog('close');
+				// close the dialog
 			}
-		});
+			//The following line did not update data grid. seems it POST, so it does not work with REST
+			// $('#dg').datagrid('reload');
+			updateGridAndChart();
+		}
+	});
+
+	
+
+	
 }
 
 function removeExpense() {
 	var row = $('#dg').datagrid('getSelected');
 	if (row) {
-		$.messager.confirm('Confirm',
-				'Are you sure you want to remove this record?', function(r) {
-					if (r) {
-						$.post('rest/transactions/removeTransaction.do', {
-							id : row.id
-						}, function(result) {
-							if (result.success) {
-								// $('#dg').datagrid('reload'); // reload the
-								// user data
-								updateGridAndChart();
+		$.messager.confirm('Confirm', 'Are you sure you want to remove this record?', function(r) {
+			if (r) {
 
-							} else {
-								$.messager.show({ // show error message
-									title : 'Error',
-									msg : result.msg
-								});
-							}
-						}, 'json');
+				//				$.post('rest/transactions/removeTransaction.do', {
+				//					id : row.id
+				//				}, function(result) {
+				//					if (result.success) {
+				//						// user data
+				//						updateGridAndChart();
+				//
+				//					} else {
+				//						$.messager.show({ // show error message
+				//							title : 'Error',
+				//							msg : result.msg
+				//						});
+				//					}
+				//				}, 'json');
+
+				$.ajax({
+					url : 'rest/transactions/removeTransaction.do?id='+row.id,
+					headers : getCsrfHeaders(),
+					async : false,
+					type : "DELETE",
+					dataType : 'json',
+					success : function(result) {
+						if (result.success) {
+							// user data
+							updateGridAndChart();
+
+						} else {
+							$.messager.show({ // show error message
+								title : 'Error',
+								msg : result.msg
+							});
+						}
 					}
 				});
+
+			}
+		});
 	}
 }
 

@@ -3,6 +3,10 @@
 <html>
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<!-- CSRF Protection headers used in JSON requests in javascript -->
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>	
+	
 	<link rel="stylesheet" type="text/css" href="easyui/themes/finance/easyui.css">
 	<link rel="stylesheet" type="text/css" href="finance.css">
 	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
@@ -42,6 +46,8 @@
 	    		  url: 'rest/users/sendResetEMail.do?email='+ email ,
 	    		  async: false,
 	    		  dataType: 'json',
+	    			headers : getCsrfHeaders(),
+
 	    		  success: function (response) {
 	    			  resp = response;//already parsed
 	    		  }

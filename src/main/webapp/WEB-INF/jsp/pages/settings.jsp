@@ -4,11 +4,16 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<!-- CSRF Protection headers used in JSON requests in javascript -->
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>	
+	
 	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
 	<link rel="stylesheet" type="text/css" href="easyui/themes/finance/easyui.css">
 	<link rel="stylesheet" type="text/css" href="finance.css">	
 	<script type="text/javascript" src="easyui/jquery.min.js"></script>
 	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/rest.js"></script>	
 	
 	<style>
 	  p {
@@ -61,7 +66,9 @@
 	    		  		'&password='+pass+'&password2='+pass2 + '&usd_rate=' + usdRate +
 	    		  		'&sar_rate=' + sarRate,
 	    		  async: false,
-                  type: "GET",
+	    			headers : getCsrfHeaders(),
+
+            type: "GET",
 	    		  dataType: 'json',
 	    		  success: function (response) {
 	    			  resp = response;  //JSON.parse()//eval()//already done

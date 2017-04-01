@@ -1,6 +1,7 @@
 package pf.web;
 
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 //import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +33,8 @@ import pf.user.UserRepository;
 @AutoConfigureMockMvc
 public class MockedMvcTest {
 
-//	private static final Logger log = LoggerFactory.getLogger(MockedMvcTest.class);
+	// private static final Logger log =
+	// LoggerFactory.getLogger(MockedMvcTest.class);
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -70,9 +72,12 @@ public class MockedMvcTest {
 	@WithMockUser
 
 	public void testLogin() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/login").accept(MediaType.APPLICATION_FORM_URLENCODED)
-				.param("username", "test@test.test").param("password", "test")).andExpect(status().is(302))// 302
-																											// Found
+		mockMvc.perform(MockMvcRequestBuilders.post("/login").with(csrf())
+				.accept(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("username", "test@test.test")
+				.param("password", "test"))
+			.andExpect(status().is(302))// Found
+
 				// .andExpect(content().contentType("text/html"))
 				.andExpect(content().string("")) // forward to /transactions
 				.andExpect(MockMvcResultMatchers.redirectedUrl("/transactions"));
@@ -81,7 +86,8 @@ public class MockedMvcTest {
 
 	@Test
 	public void logout() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/logout").accept(MediaType.APPLICATION_FORM_URLENCODED))
+		mockMvc.perform(MockMvcRequestBuilders.post("/logout").with(csrf())
+				.accept(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().is(302))// 302 Found
 				.andExpect(MockMvcResultMatchers.redirectedUrl("/login?msg=logout"));
 
@@ -133,17 +139,17 @@ public class MockedMvcTest {
 				.param("year", "2016")).andExpect(MockMvcResultMatchers.jsonPath("$.total", CoreMatchers.is("1")));
 	}
 
-	
 	@MockBean
-	private Zoho zohoMail; 
-	
+	private Zoho zohoMail;
+
 	@Test
 	public void registerAndVerify() throws Exception {
 		// register new user
-		
-//		when(zohoMail.sendZohoMail(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(true);
-		
-		
+
+		// when(zohoMail.sendZohoMail(anyString(), anyString(), anyString(),
+		// anyString(), anyString(), anyString(),
+		// anyString())).thenReturn(true);
+
 		String email = "test2@test.test";
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/register.do").param("email", email)
 				.param("password", "2016").param("password2", "2016"))
@@ -154,17 +160,14 @@ public class MockedMvcTest {
 		assertNotNull(user);
 
 		// Verify the email
-		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/verifyEmail.do").param("email", email)
-				.param("code", user.getVerification_key()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/verifyEmail.do").param("email", email).param("code",
+				user.getVerification_key()))
 				// .andExpect(MockMvcResultMatchers.content().string("{"status":"success"}"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("success")));
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/resendVerifyEmail.do").param("email", email))
-		.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("success"))); 
+				.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("success")));
 
-	
 	}
-	
-	
 
 }

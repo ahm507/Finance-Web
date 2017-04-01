@@ -3,6 +3,10 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<!-- CSRF Protection headers used in JSON requests in javascript -->
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>	
+	
 	<link rel="stylesheet" type="text/css" href="easyui/themes/finance/easyui.css">
 	<link rel="stylesheet" type="text/css" href="finance.css">
 	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
@@ -40,6 +44,7 @@
 	    	$.ajax({
 	    		  url: 'rest/users/resetPassword.do?email='+ email + '&code=' + code + '&password='+pass+'&password2='+pass2 ,
 	    		  async: false,
+	    			headers : getCsrfHeaders(),
 	    		  dataType: 'json',
 	    		  success: function (response) {
 	    			  resp = response;

@@ -165,6 +165,9 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 	}
 
 	private String getFileName(final Part part) {
+		if(part == null) {
+			return "null";
+		}
 		final String partHeader = part.getHeader("content-disposition");
 		logger.log(Level.INFO, "Part Header = {0}", partHeader);
 		for (String content : part.getHeader("content-disposition").split(";")) {
@@ -172,7 +175,7 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 				return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
 			}
 		}
-		return null;
+		return "null";
 	}
 	// FATAL ERROR: YOU CAN NOT MAP TO STATIC RESOURCES. ONLY JSP.
 

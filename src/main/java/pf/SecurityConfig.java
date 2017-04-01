@@ -43,16 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/rest/users/**") 
 				.permitAll()
 				.antMatchers("/admin").hasRole("ADMIN") //No admin interface yet!
-				.antMatchers("/transactions", "/accounts", "/charts", "/export", "/import", "/settings").hasRole("USER")
+				.antMatchers("/transactions", "/accounts", "/charts", "/export", "/import", "/settings", "/upload").hasRole("USER")
 				.antMatchers("/rest/**").hasRole("USER")
 				.anyRequest().fullyAuthenticated() 
 		.and()
 			.formLogin().loginPage("/login").failureUrl("/login?msg=error").successForwardUrl("/transactions")
 				.defaultSuccessUrl("/transactions").permitAll()
 		.and()
-			.logout().logoutSuccessUrl("/login?msg=logout").invalidateHttpSession(true).permitAll()
-				//TODO: enable CSRF protection
-				.and().csrf().disable();
+			.logout().logoutSuccessUrl("/login?msg=logout").invalidateHttpSession(true).permitAll();
 		
 	}
 	

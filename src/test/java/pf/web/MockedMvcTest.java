@@ -3,9 +3,11 @@ package pf.web;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 //import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,13 +73,9 @@ public class MockedMvcTest {
 
 	@Test
 	@WithMockUser
-
 	public void testLogin() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/login").with(csrf())
-				.accept(MediaType.APPLICATION_FORM_URLENCODED)
-				.param("username", "test@test.test")
-				.param("password", "test"))
-			.andExpect(status().is(302))// Found
+		mockMvc.perform(MockMvcRequestBuilders.post("/login").with(csrf()).accept(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("username", "test@test.test").param("password", "test")).andExpect(status().is(302))// Found
 
 				// .andExpect(content().contentType("text/html"))
 				.andExpect(content().string("")) // forward to /transactions
@@ -86,8 +85,8 @@ public class MockedMvcTest {
 
 	@Test
 	public void logout() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/logout").with(csrf())
-				.accept(MediaType.APPLICATION_FORM_URLENCODED))
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/logout").with(csrf()).accept(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().is(302))// 302 Found
 				.andExpect(MockMvcResultMatchers.redirectedUrl("/login?msg=logout"));
 
@@ -167,6 +166,17 @@ public class MockedMvcTest {
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/users/resendVerifyEmail.do").param("email", email))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("success")));
+
+	}
+
+	//This test case succeed but it throw null pointer exception!! At least I am sure it basiclly works from security point of view.
+	@Test
+	@WithMockUser(username = "test@test.test", password = "test", roles = { "USER", "ADMIN" })
+	public void upload() throws Exception {
+		 
+		MockMultipartFile multipartFile = new MockMultipartFile("file", "test.txt", "text/plain",
+				"Spring Framework".getBytes());
+		mockMvc.perform(fileUpload("/upload").file(multipartFile).with(csrf())).andExpect(status().is(200));
 
 	}
 

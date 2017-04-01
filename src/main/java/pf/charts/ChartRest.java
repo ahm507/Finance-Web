@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import pf.user.UserEntity;
 import pf.user.UserRepository;
 import pf.user.UserRest;
 import pf.RestLib;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -29,10 +33,11 @@ public class ChartRest {
 
 	ChartService chartService;
 	UserRepository userRepository;
-
-	ChartRest(ChartService chartService, UserRepository userRepository) {
+	WeeklyReport weeklyReport;
+	ChartRest(ChartService chartService, UserRepository userRepository, WeeklyReport weeklyReport) {
 		this.chartService = chartService;
 		this.userRepository = userRepository;
+		this.weeklyReport = weeklyReport;
 	}
 
 	@RequestMapping("/getExpensesTrend.do")
@@ -53,6 +58,13 @@ public class ChartRest {
 
 		return chartService.getChartFields(type, userId);
 
+	}
+
+	@RequestMapping("/weekly-report")
+	public String weeklyReport(HttpServletRequest request) throws FileNotFoundException, Exception {
+		String userEmail = request.getRemoteUser();
+		weeklyReport.processForUser(userRepository.findByEmail(userEmail));
+		return "Seems OK, please check your inbox";
 	}
 	
 	@ExceptionHandler(Exception.class)

@@ -22,7 +22,6 @@ import pf.RestLib;
 
 public class BackupRest {
 	
-	
 	private static final Logger log = LoggerFactory.getLogger(BackupRest.class);
 
 	BackupService backupService;

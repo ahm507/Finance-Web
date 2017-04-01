@@ -67,20 +67,24 @@ public class WeeklyReport {
 	public void process() throws Exception {
 		Iterable<UserEntity> allUsers = userRepository.findAll();// OrderByEmail
 		for (UserEntity user : allUsers) {
-			this.userEmail = user.getEmail();
-			String yearString = new SimpleDateFormat("yyyy").format(new Date());
-			retrieveData(user.getId(), yearString);
-			doAnalysis();
-			String to = user.getEmail();
-			String emailBody = renderEmailTemplate(to);
-
-			String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-			String subject = String.format("Weekly Financial Report as of %s ", dateStamp);
-
-			mailer.sendWeeklyReport(to, subject, emailBody);
-			String fullPath = String.format("%s%s-%s.html", batchReportsFolder, to, dateStamp);
-			storeToFile(emailBody, fullPath);
+			processForUser(user);
 		}
+	}
+
+	public void processForUser(UserEntity user) throws Exception, FileNotFoundException {
+		this.userEmail = user.getEmail();
+		String yearString = new SimpleDateFormat("yyyy").format(new Date());
+		retrieveData(user.getId(), yearString);
+		doAnalysis();
+		String to = user.getEmail();
+		String emailBody = renderEmailTemplate(to);
+
+		String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String subject = String.format("Weekly Financial Report as of %s ", dateStamp);
+
+		mailer.sendWeeklyReport(to, subject, emailBody);
+		String fullPath = String.format("%s%s-%s.html", batchReportsFolder, to, dateStamp);
+		storeToFile(emailBody, fullPath);
 	}
 
 	private void storeToFile(String emailBody, String fullPath) throws FileNotFoundException {

@@ -1,6 +1,11 @@
 package pf.charts;
 
-import com.google.gson.Gson;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,17 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import pf.user.UserEntity;
+import pf.RestLib;
 import pf.user.UserRepository;
 import pf.user.UserRest;
-import pf.RestLib;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * This is a thin layer REST class for the ChartApi class. Just a wrapper to

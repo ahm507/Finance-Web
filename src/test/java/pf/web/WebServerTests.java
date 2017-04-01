@@ -16,16 +16,10 @@ package pf.web;
  */
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,16 +31,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.not;
-import static org.junit.Assert.assertNotEquals;
 
 /**
  * Basic integration tests for demo application.
@@ -58,7 +46,7 @@ import static org.junit.Assert.assertNotEquals;
 @DirtiesContext
 public class WebServerTests {
 
-	private final static Logger logger = Logger.getLogger(WebServerTests.class.getName());
+//	private final static Logger logger = Logger.getLogger(WebServerTests.class.getName());
 	
 	@Autowired
 	private TestRestTemplate restTemplate;

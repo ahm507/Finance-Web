@@ -18,7 +18,6 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import pf.email.Mailer;
-import pf.transaction.TransactionService;
 import pf.user.UserEntity;
 import pf.user.UserRepository;
 
@@ -27,18 +26,17 @@ public class WeeklyReport {
 
 	// Dependency Definition
 	private ChartService chartService;
-	private TransactionService transactionService;
 	private SpringTemplateEngine templateEngine;
 	private UserRepository userRepository;
 	private Mailer mailer;
 	private String batchReportsFolder;
 
 	@Autowired
-	public WeeklyReport(ChartService chartService, TransactionService transactionService, UserRepository userRepository,
+	public WeeklyReport(ChartService chartService, UserRepository userRepository,
 			SpringTemplateEngine templateEngine, Mailer mailer,
 			@Value("${pf.service.weekly-report.folder:/Users/Macpro/Server/pf-batch-reports/}") String batchReportsFolder) {
 		this.chartService = chartService;
-		this.transactionService = transactionService;
+
 		this.userRepository = userRepository;
 		this.templateEngine = templateEngine;
 		this.mailer = mailer;

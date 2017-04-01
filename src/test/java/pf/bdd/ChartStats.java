@@ -1,6 +1,19 @@
 package pf.bdd;
 
-import org.jbehave.core.annotations.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jbehave.core.annotations.AfterScenario;
+import org.jbehave.core.annotations.AfterStory;
+import org.jbehave.core.annotations.BeforeScenario;
+import org.jbehave.core.annotations.BeforeStory;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +26,6 @@ import pf.charts.ChartService;
 import pf.email.Mailer;
 import pf.transaction.TransactionService;
 import pf.user.UserService;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by ahmedhammad on 6/28/16.
@@ -178,9 +184,6 @@ public class ChartStats extends BddBase {
 
     @When("calculating trend data for all categories for all years")
     public void when3() throws Exception {
-//        StoreFactory jdbcFactory = Settings.getStoreFactoryForJdbc();
-//        ChartService chartMgmt = jdbcFactory.createChartMgmt();
-        String category = "";
         allYearsTrendData = chartService.getTrendDataAllYears(userId, userEmail);
     }
 

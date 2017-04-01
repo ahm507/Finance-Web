@@ -1,6 +1,12 @@
 package pf.service;
 
-import au.com.bytecode.opencsv.CSVReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import javax.transaction.Transactional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -11,19 +17,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import au.com.bytecode.opencsv.CSVReader;
 import pf.account.DeepAccountLayersException;
 import pf.account.NullAccountException;
 import pf.backup.BackupService;
 import pf.backup.CurrencyTransefereException;
 import pf.backup.RestoreService;
-import pf.email.Mailer;
 import pf.user.UserRepository;
-
-import javax.transaction.TransactionSynchronizationRegistry;
-import javax.transaction.Transactional;
-import java.io.*;
-import java.util.Date;
-import java.util.Vector;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -1,14 +1,14 @@
 package pf;
 
-import com.google.gson.Gson;
-import pf.user.UserRest;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import com.google.gson.Gson;
+
+import pf.user.UserRest;
 
 public class RestLib {
 	private final static Logger LOGGER = Logger.getLogger(UserRest.class.getName());

@@ -24,11 +24,13 @@ public class UserService {
 	private UserRepository userRepo;
 	private AccountRepository accountRepo;
 	private TransactionRepository transactionRepo;
+	private Mailer mailer;
 	
-	public UserService(TransactionRepository transactionRepo, AccountRepository accountRepo, UserRepository userRepo) {
+	public UserService(TransactionRepository transactionRepo, AccountRepository accountRepo, UserRepository userRepo, Mailer mailer) {
 		this.userRepo = userRepo;
 		this.accountRepo = accountRepo;
 		this.transactionRepo = transactionRepo;
+		this.mailer = mailer;
 	}
 
 	
@@ -91,7 +93,6 @@ public class UserService {
 	public void resendVerifyEmail(String email) throws Exception {
 		UserEntity user = userRepo.findByEmail(email);
 		if(null != user) {
-			Mailer mailer = new Mailer();
 			mailer.sendVerifyEmail(email, user.getVerification_key());
 		} else {
 			throw new Exception("Email does not exist in database:" + email);
@@ -195,7 +196,6 @@ public class UserService {
 		if(user != null) { //means it is not verified yet
 			user.setReset_password_key(resetCode);
 			userRepo.save(user);
-			Mailer mailer = new Mailer();
 			mailer.sendResetEmail(email, resetCode);
 		} else {
 			throw new Exception("Email not found");
@@ -224,7 +224,6 @@ public class UserService {
 		if (comments == null || comments.isEmpty()) { 
 			throw new Exception("EmptyFeedback");
 		}
-		Mailer mailer = new Mailer();
 		mailer.sendFeedbackEmail(email, name, title, comments);		
 	}
 

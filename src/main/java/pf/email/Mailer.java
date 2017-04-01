@@ -17,11 +17,11 @@ public class Mailer {
 	private String smtpPassword;
 	
 	@Value("${registerVerifyEmail.from}")
-	String registerSendFrom;// = settings.getRegisterMailFrom();
+	String registerSendFrom;
 	@Value("${registerVerifyEmail.subject}")
-	String registerMailSubject;// = settings.getRegisterMailSubject();
+	String registerMailSubject;
 	@Value("${registerVerifyEmail.body}")
-	String registerMailBody;// = settings.getRegisterMailSubject();
+	String registerMailBody;
 	
 	@Value("${passwordReset.from}")
 	String resetMailFrom;
@@ -30,15 +30,22 @@ public class Mailer {
 	@Value("${passwordReset.body}")
 	String resetMailBody;
 
+	@Value("${smtp.send-email:true}") 
+	boolean sendEmail;
+	
+	
+	private Mailer() {
+		//prevent using new as it must be injected by Spring to inject all required values
+	}
 	
 	public void sendVerifyEmail(String email, String uuid) throws Exception {
-		Zoho mail = new Zoho();
+		Zoho mail = new Zoho(sendEmail);
 		String mailBody = String.format(registerMailBody, email, uuid);
 		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, email, registerMailSubject, mailBody, registerSendFrom);
 	}
 
 	public void sendResetEmail(String email, String resetCode) throws Exception {
-		pf.email.Zoho mail = new pf.email.Zoho();
+		pf.email.Zoho mail = new Zoho(sendEmail);
 		String mailBody = String.format(resetMailBody, email, resetCode);
 		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, email, resetMailSubject, mailBody,
 				resetMailFrom);
@@ -50,7 +57,7 @@ public class Mailer {
 		//Send email
 		assert name != null;
 		assert title != null;
-		pf.email.Zoho mail = new pf.email.Zoho();
+		pf.email.Zoho mail = new Zoho(sendEmail);
 		String sendFrom = email;
 		String mailSubject = "Support: " + title;
 		String mailBody = comments;
@@ -61,7 +68,7 @@ public class Mailer {
 		//Send email
 		assert to != null;
 		assert subject != null;
-		Zoho mail = new Zoho();
+		Zoho mail = new Zoho(sendEmail);
 		String sendFrom = "support@salarycontrol.com";
 		mail.sendZohoMail( smtpHost, smtpUser, smtpPassword, to, subject, body, sendFrom);
 	}
@@ -71,7 +78,7 @@ public class Mailer {
 		//Send email
 		assert to != null;
 		assert subject != null;
-		Zoho mail = new Zoho();
+		Zoho mail = new Zoho(sendEmail);
 		String sendFrom = "support@salarycontrol.com";
 		mail.sendMailMultiPart( smtpHost, smtpUser, smtpPassword, to, subject, body, sendFrom, fileFullPath);
 	}

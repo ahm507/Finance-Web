@@ -3,14 +3,20 @@ package pf.service;
 import au.com.bytecode.opencsv.CSVReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import pf.account.DeepAccountLayersException;
+import pf.account.NullAccountException;
 import pf.backup.BackupService;
+import pf.backup.CurrencyTransefereException;
 import pf.backup.RestoreService;
+import pf.email.Mailer;
 import pf.user.UserRepository;
 
 import javax.transaction.TransactionSynchronizationRegistry;
@@ -34,6 +40,9 @@ public class ExportImportTest {
 
     @Autowired
     private ResourceLoader resourceLoader;
+
+    
+	private static final Logger log = LoggerFactory.getLogger(ExportImportTest.class);
 
 
 //    @Test
@@ -67,11 +76,27 @@ public class ExportImportTest {
         restore.importFile(reader, userId);
 
         //Verify no exception
-
-
     }
 
-
+//    @Autowired
+//    Mailer mailer;
+//    
+//    @Test
+//    public void email() throws Exception {
+//    	
+//    	mailer.sendBackupEmail("ahm507@gmail.com", "test", "test", "/Users/Macpro/Server/pf-batch-reports/test@test.test-pf-backup-2017-03-28.csv.zip");
+//    	
+//    }
+    
+    
+    @Test
+    public void automBackupForUser() throws FileNotFoundException, UnsupportedEncodingException, NullAccountException, DeepAccountLayersException, CurrencyTransefereException, IOException, Exception {
+    	String email = "test@test.test"; 
+    	backup.autoBackupForUser(email);
+    	log.info("Auto backup is ok for to teh file:" + backup.getFileName());
+   
+    }
+    
 
 
 }

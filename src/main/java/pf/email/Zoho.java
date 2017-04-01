@@ -16,15 +16,23 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Properties;
 
 public class Zoho {
 
-	@Value("${smtp.send-email}")
+	
 	boolean sendEmail;
+	public Zoho(boolean sendEmail) {
+		this.sendEmail = sendEmail;
+	}
+	
+	private static final Logger log = LoggerFactory.getLogger(Zoho.class);
 
+	
 	public boolean sendZohoMail(String smtpAddress, String userName, String password, String recipient, String subject,
 			String message, String from) throws MessagingException {
 		String recipientsTo[] = new String[1];
@@ -35,17 +43,17 @@ public class Zoho {
 		return true;
 	}
 
-	public boolean sendMailMultiPart(String smtpAddress, String userName, String password, String recipient, String subject,
-			String message, String from, String attachmentsFilePath) throws MessagingException {
+	public boolean sendMailMultiPart(String smtpAddress, String userName, String password, String recipient,
+			String subject, String message, String from, String attachmentsFilePath) throws MessagingException {
 		String recipientsTo[] = new String[1];
 		recipientsTo[0] = recipient;
 
-		sendMailWithAttachments(smtpAddress, userName, password, recipientsTo, null, null, subject, message, from, attachmentsFilePath);
+		sendMailWithAttachments(smtpAddress, userName, password, recipientsTo, null, null, subject, message, from,
+				attachmentsFilePath);
 
 		return true;
 	}
 
-	
 	private void sendAuthZohoMail(String smtpAddress, String userName, String password, String recipientsTo[],
 			String recipientsCC[], String recipientsBCC[], String subject, String message, String from)
 			throws MessagingException {
@@ -64,8 +72,15 @@ public class Zoho {
 		props.setProperty("mail.smtp.socketFactory.fallback", "false");
 		props.setProperty("mail.smtp.socketFactory.port", "465");
 
-		Authenticator auth = new SMTPAuthenticator(userName, password);
-		Session session = Session.getDefaultInstance(props, auth);
+		// Authenticator auth = new SMTPAuthenticator(userName, password);
+		// Session session = Session.getDefaultInstance(props, auth);
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(userName, password);
+			}
+		});
+
 		session.setDebug(false);
 		Message msg = new MimeMessage(session);
 		InternetAddress addressFrom = new InternetAddress(from);
@@ -107,27 +122,9 @@ public class Zoho {
 
 	}
 
-	/**
-	 * SimpleAuthenticator is used to do simple authentication when the SMTP
-	 * server requires it.
-	 */
-	private class SMTPAuthenticator extends Authenticator {
-		String userName, password;
-
-		SMTPAuthenticator(String userName, String password) {
-			this.userName = userName;
-			this.password = password;
-		}
-
-		public PasswordAuthentication getPasswordAuthentication() {
-			return new PasswordAuthentication(userName, password);
-		}
-	}
-
-	
 	void sendMailWithAttachments(String smtpAddress, String userName, String password, String recipientsTo[],
-			String recipientsCC[], String recipientsBCC[], String subject, String message, String from, String attachmentsFilePath)
-			throws MessagingException {
+			String recipientsCC[], String recipientsBCC[], String subject, String message, String from,
+			String attachmentsFilePath) throws MessagingException {
 		// Set the host smtp address
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
@@ -141,8 +138,15 @@ public class Zoho {
 		props.setProperty("mail.smtp.socketFactory.fallback", "false");
 		props.setProperty("mail.smtp.socketFactory.port", "465");
 
-		Authenticator auth = new SMTPAuthenticator(userName, password);
-		Session session = Session.getDefaultInstance(props, auth);
+		// Authenticator auth = new SMTPAuthenticator(userName, password);
+		// Session session = Session.getDefaultInstance(props, auth);
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(userName, password);
+			}
+		});
+
 		session.setDebug(false);
 		Message msg = new MimeMessage(session);
 		InternetAddress addressFrom = new InternetAddress(from);
@@ -174,29 +178,36 @@ public class Zoho {
 		// Setting the Subject and Content Type
 		msg.setSubject(subject);
 		/////////////////////////////
-		
-		 // Now set the actual message
-        BodyPart messageBodyPart = new MimeBodyPart();
-        //Part 1
-		messageBodyPart.setText(message);
-        Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(messageBodyPart);
 
-        // Part two is attachment
-        messageBodyPart = new MimeBodyPart();
-        DataSource source = new FileDataSource(attachmentsFilePath);
-        messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName(attachmentsFilePath);
-        multipart.addBodyPart(messageBodyPart);
+		// Now set the actual message
+		BodyPart messageBodyPart = new MimeBodyPart();
+		// Part 1
+//		messageBodyPart.setText(message);
+		messageBodyPart.setContent(message, "text/html; charset=utf-8");
+
+		Multipart multipart = new MimeMultipart();
+		multipart.addBodyPart(messageBodyPart);
+
+		// Part two is attachment
+		messageBodyPart = new MimeBodyPart();
+		DataSource source = new FileDataSource(attachmentsFilePath);
+		messageBodyPart.setDataHandler(new DataHandler(source));
+		//visibleFileName is visible in the email attachments
+		String visibleFileName = attachmentsFilePath.substring(attachmentsFilePath.lastIndexOf('/')+1);
+		messageBodyPart.setFileName(visibleFileName);
+		multipart.addBodyPart(messageBodyPart);
 
 		msg.setContent(multipart);
-		
+
 		// reallySendMail is used primary to stop sending too much emails in
 		// testing
-		if (sendEmail) {
+		if (sendEmail == true) {
 			Transport.send(msg);
-		}
+			log.info("Backup email is sent successfuly to " + recipientsTo[0]);			
+		} else {
+			log.info("Backup email is NOT sent to " + recipientsTo[0]);
+ 		}
 
 	}
-	
+
 }

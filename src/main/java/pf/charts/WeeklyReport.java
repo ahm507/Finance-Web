@@ -111,7 +111,9 @@ public class WeeklyReport {
 		// this.userEmail = userEmail;
 
 		int currentMonthIndex = Calendar.getInstance().get(Calendar.MONTH);
-		currentMonth = currentYearBalance.get(currentMonthIndex);
+		//This index calculation is safer for testing data
+		int index = Math.min(currentYearBalance.size()-1, currentMonthIndex);
+		currentMonth = currentYearBalance.get(index);
 		
 
 		// I assume last element is current year

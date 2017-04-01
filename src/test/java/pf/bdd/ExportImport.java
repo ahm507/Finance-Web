@@ -12,6 +12,7 @@ import pf.account.AccountEntity;
 import pf.account.AccountService;
 import pf.backup.BackupService;
 import pf.backup.RestoreService;
+import pf.email.Mailer;
 import pf.transaction.TransactionEntity;
 import pf.transaction.TransactionRepository;
 import pf.transaction.TransactionService;
@@ -53,6 +54,8 @@ public class ExportImport extends BddBase {
 	@Autowired
 	RestoreService restore;
 	
+	@Autowired
+	Mailer mailer;
 	
 //    AccountService accountService;
 //    UserService userService;
@@ -89,7 +92,7 @@ public class ExportImport extends BddBase {
         	userService.deleteUser(userId);
         }
         
-        userId = userService.registerUser(email, password, password, new DummyMailer(), accountService, 1.0, 1.0);
+        userId = userService.registerUser(email, password, password, mailer, accountService, 1.0, 1.0);
     }
 
     @Given("have these accounts: $table")

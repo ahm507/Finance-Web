@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import pf.account.AccountEntity;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
+import pf.email.Mailer;
 import pf.transaction.TransactionService;
 import pf.user.UserService;
 import java.util.HashMap;
@@ -39,6 +40,9 @@ public class AccountBalance extends BddBase {
 	UserService userService;
 	@Autowired
 	AccountService accountService;
+	
+	@Autowired
+	Mailer mailer;
     
     List<Map<String, Object>> trendData;
 
@@ -57,7 +61,7 @@ public class AccountBalance extends BddBase {
     @Given("user email '$email' and password '$secret' and USD rate is $usdRate and SAR rate is $sarRate")
     public void given1(String email, String password, double usdRate, double sarRate) throws Exception {
         userEmail = email;
-        userId = userService.registerUser(email, password, password, new DummyMailer(), accountService,
+        userId = userService.registerUser(email, password, password, mailer, accountService,
                 usdRate, sarRate);
     }
 

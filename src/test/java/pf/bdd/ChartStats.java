@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import pf.account.AccountEntity;
 import pf.account.AccountService;
 import pf.charts.ChartService;
+import pf.email.Mailer;
 import pf.transaction.TransactionService;
 import pf.user.UserService;
 
@@ -40,6 +41,9 @@ public class ChartStats extends BddBase {
 	@Autowired
 	ChartService chartService;
 	
+	@Autowired
+	Mailer mailer;
+	
     String userId, userEmail;
     HashMap<String, String> accountMap = new HashMap<String, String>();
     List<Map<String, Object>> trendData;
@@ -66,7 +70,7 @@ public class ChartStats extends BddBase {
     @Given("user email '$email' and password '$secret' and USD rate is $usdRate and SAR rate is $sarRate")
     public void given1(String email, String password, double usdRate, double sarRate) throws Exception {
         userEmail = email;
-        userId = userService.registerUser(email, password, password, new DummyMailer(), accountService,
+        userId = userService.registerUser(email, password, password, mailer, accountService,
                 usdRate, sarRate);
     }
 

@@ -132,7 +132,6 @@ public class BackupService {
 //	@Scheduled(cron = "0 0 0 */5 * *") // Every 5 days
 
 	@Scheduled(cron = "0 0 0 * * *") // Every day as a testing period
-	
 	public void autoBackup() throws Exception {
 		Iterable<UserEntity> allUsers = userRepository.findAll();// OrderByEmail
 		for (UserEntity user : allUsers) {
@@ -153,7 +152,8 @@ public class BackupService {
 		this.fullPathName = batchReportsFolder + fullFileName; 
 		//FIXME: Unify into Export/Backup one naming system
 		String contents = getExportContents(userId);
-		ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(fullPathName + ".zip")));
+		String zipFileName = fullPathName + ".zip";
+		ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFileName)));
 		
 		ZipEntry entry = new ZipEntry(fullFileName);
 		zip.putNextEntry(entry);
@@ -164,7 +164,7 @@ public class BackupService {
 		String htmlEmail = renderEmailTemplate(userEmail);
 		String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		String subject = String.format("Weekly Backup as of %s ", dateStamp);
-		mailer.sendBackupEmail(userEmail, subject, htmlEmail, fullPathName);
+		mailer.sendBackupEmail(userEmail, subject, htmlEmail, zipFileName);
 	}
 
 	public String getPeridicFileFullPath() {

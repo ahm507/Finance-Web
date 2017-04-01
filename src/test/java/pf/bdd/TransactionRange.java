@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import pf.account.AccountService;
 import pf.charts.ChartService;
+import pf.email.Mailer;
 import pf.service.*;
 import pf.account.AccountEntity;
 import pf.transaction.TransactionDTO;
@@ -21,6 +22,9 @@ import pf.user.UserService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -36,7 +40,8 @@ public class TransactionRange extends BddBase {
     AccountService accountService;
 	@Autowired
 	ChartService chartService;
-	    
+	@Resource
+	Mailer mailer;
     
     String userId;
     HashMap<String, String> accountMap = new HashMap<String, String>();
@@ -63,7 +68,7 @@ public class TransactionRange extends BddBase {
 //
 //        accountService = Settings.getStoreFactoryForJdbc().createAccountMgmt();
 //        userService = Settings.getStoreFactoryForJdbc().createUserMgmt();
-        userId = userService.registerUser(email, password, password, new DummyMailer(), accountService, 1.0, 1.0);
+        userId = userService.registerUser(email, password, password, mailer, accountService, 1.0, 1.0);
     }
 
     @Given("have these accounts: $table")

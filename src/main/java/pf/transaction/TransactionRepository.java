@@ -29,19 +29,19 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     List<Transaction> findByUser_Id(String userId);
 
 
-    @Query("select t from TransactionEntity t where t.id=?1")
+    @Query("select t from Transaction t where t.id=?1")
     Transaction queryById(String id);
 
-	@Query(value = "SELECT min(date(r.date)), max(date(r.date)) FROM TransactionEntity r where r.user = ?1")
+	@Query(value = "SELECT min(date(r.date)), max(date(r.date)) FROM Transaction r where r.user = ?1")
 	String queryMinAndMaxDate(User user);
 
 
-    @Query("SELECT t FROM TransactionEntity t where t.user = ?1 AND (t.date BETWEEN ?2 AND ?3) AND (t.withdrawAccount = ?4 OR t.depositAccount=?4) ORDER BY t.date")
+    @Query("SELECT t FROM Transaction t where t.user = ?1 AND (t.date BETWEEN ?2 AND ?3) AND (t.withdrawAccount = ?4 OR t.depositAccount=?4) ORDER BY t.date")
     List<Transaction> queryByUserAndDateBetweenAndAccountOrderByDate(
 		    User user, String dateFrom, String dateTo,
 		    Account account);
 
-    @Query("SELECT t FROM TransactionEntity t where t.user = ?1 AND (t.withdrawAccount = ?2 OR t.depositAccount=?2) ORDER BY t.date")
+    @Query("SELECT t FROM Transaction t where t.user = ?1 AND (t.withdrawAccount = ?2 OR t.depositAccount=?2) ORDER BY t.date")
     List<Transaction> queryByUserAndAccountOrderByDate(User user, Account account);
 
   

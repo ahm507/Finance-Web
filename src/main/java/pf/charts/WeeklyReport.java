@@ -31,7 +31,6 @@ public class WeeklyReport {
 	private Mailer mailer;
 	private String batchReportsFolder;
 
-	@Autowired
 	public WeeklyReport(ChartService chartService, UserRepository userRepository,
 			SpringTemplateEngine templateEngine, Mailer mailer,
 			@Value("${pf.service.weekly-report.folder:/Users/Macpro/Server/pf-batch-reports/}") String batchReportsFolder) {

@@ -1,25 +1,25 @@
 package pf.user;
 
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity 
 @Table (name="user")
 public class User implements UserDetails {
 
-	
 	private static final long serialVersionUID = -6092199166051420344L;
 	@Id  //primary key
 	private String id;
@@ -37,8 +37,6 @@ public class User implements UserDetails {
 	private Double usd_rate;
 	private Double sar_rate;
 	
-
-	//Default constructor is required by hibernate
 	public User() {
 		
 	}

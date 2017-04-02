@@ -22,20 +22,19 @@ public class RestoreService {
 	AccountService accountService;
 	TransactionRepository transRepo;
 	TransactionService transactionService;
-	public RestoreService(	AccountRepository accountRepo,
-			AccountService accountService,
-			TransactionRepository transRepo,
+
+	public RestoreService(AccountRepository accountRepo, AccountService accountService, TransactionRepository transRepo,
 			TransactionService transactionService) {
 
 		this.accountRepo = accountRepo;
 		this.accountService = accountService;
 		this.transRepo = transRepo;
 		this.transactionService = transactionService;
-		
+
 	}
-	
+
 	HashMap<String, String> map = new HashMap<>();
-	
+
 	public Vector<String> importFile(String userId, Reader reader) throws Exception {
 		CSVReader csvReader = null;
 		Vector<String> output = new Vector<>();
@@ -44,26 +43,20 @@ public class RestoreService {
 			output = importFile(csvReader, userId);
 			csvReader.close();
 		} finally {
-			if(csvReader != null) {
+			if (csvReader != null) {
 				csvReader.close();
 			}
 		}
 		return output;
 	}
+
 	@Transactional
 	public Vector<String> importFile(String userId, String fileName) throws Exception {
 		CSVReader reader = null;
 		Vector<String> output = new Vector<>();
-
-		try {
-			reader = new CSVReader(new FileReader(fileName));
-			output = importFile(reader, userId);
-			reader.close();
-		} finally {
-			if(reader != null) {
-				reader.close();
-			}
-		}
+		reader = new CSVReader(new FileReader(fileName));
+		output = importFile(reader, userId);
+		reader.close();
 		return output;
 	}
 
@@ -74,7 +67,7 @@ public class RestoreService {
 		deleteAccountsAndTransactions(userId);
 
 		Vector<String> output = new Vector<>();
-		//skip first line of field column name
+		// skip first line of field column name
 		reader.readNext();
 		int line = 0;
 		while ((nextLine = reader.readNext()) != null) {
@@ -93,7 +86,6 @@ public class RestoreService {
 
 	}
 
-
 	private void createTransactionAndAccounts(String userId, String[] segments) throws Exception {
 		String date = segments[0];
 		String description = segments[1];
@@ -105,52 +97,56 @@ public class RestoreService {
 		String depositId = getAccountId(userId, depositName, currency);
 		amount = amount.replace("\"", "");
 		amount = amount.replace(",", "");
-		description = description.replace("\"", "");		
+		description = description.replace("\"", "");
 		transactionService.saveTransaction(userId, date, description, withdrawId, depositId, amount);
 	}
 
-	//Two levels only: This limitation has many side effects, changing it must be tested fully.
+	// Two levels only: This limitation has many side effects, changing it must
+	// be tested fully.
 	private String getAccountId(String userId, String accountNamePath, String currency) throws Exception {
-		//get from hash
+		// get from hash
 		String accountId = map.get(accountNamePath);
-		if(accountId != null) {
+		if (accountId != null) {
 			return accountId;
 		}
-		//else get from DB
+		// else get from DB
 		String[] seg = accountNamePath.split(":");
-		if(seg.length != 2) {
+		if (seg.length != 2) {
 			throw new Exception("Parser Error: " + accountNamePath);
 		}
 		String strAcc1 = seg[0];
 		String strAcc2 = seg[1];
-		String type = seg[0]; //.toLowerCase()
+		String type = seg[0]; // .toLowerCase()
 		switch (type) {
-			case ChartService.CAT_ASSETS:
-				type = Account.ASSET; //singular to match the database
-				break;
-			case ChartService.CAT_EXPENSES:
-				type = Account.EXPENSE;
-				break;
-			case ChartService.CAT_INCOME:
-				type = Account.INCOME;
-				break;
-			case ChartService.CAT_LIABILITIES:
-				type = Account.LIABILITY;
-				break;
-			case ChartService.CAT_OTHER:
-				type = Account.OTHER;
-				break;
-			default:
-				throw new Exception("Parent Account must be one of 'Assets/Expenses/Income/Liability/Other', " + type + " is invalid!");
+		case ChartService.CAT_ASSETS:
+			type = Account.ASSET; // singular to match the database
+			break;
+		case ChartService.CAT_EXPENSES:
+			type = Account.EXPENSE;
+			break;
+		case ChartService.CAT_INCOME:
+			type = Account.INCOME;
+			break;
+		case ChartService.CAT_LIABILITIES:
+			type = Account.LIABILITY;
+			break;
+		case ChartService.CAT_OTHER:
+			type = Account.OTHER;
+			break;
+		default:
+			throw new Exception(
+					"Parent Account must be one of 'Assets/Expenses/Income/Liability/Other', " + type + " is invalid!");
 		}
-		
+
 		String parent = "0";
 		String id = map.get(strAcc1);
-		if(id == null) {
-//			AccountEntity acc1 = accountRepo.findWithAccountNameAndParentId(userId, strAcc1, parent);
+		if (id == null) {
+			// AccountEntity acc1 =
+			// accountRepo.findWithAccountNameAndParentId(userId, strAcc1,
+			// parent);
 			Account acc1 = accountRepo.findByUser_IdAndIdAndParent(userId, strAcc1, parent);
-			
-			if(acc1 == null) {
+
+			if (acc1 == null) {
 				String acc1UUID = accountService.createWithParent(userId, strAcc1, "", type, parent, currency);
 				acc1 = accountRepo.findByUser_IdAndId(userId, acc1UUID);
 			}
@@ -159,10 +155,11 @@ public class RestoreService {
 		} else {
 			parent = id;
 		}
-		//here is the component 2
-//		AccountEntity acc2 = accountRepo.findWithAccountNameAndParentId(userId, strAcc2, parent);
+		// here is the component 2
+		// AccountEntity acc2 =
+		// accountRepo.findWithAccountNameAndParentId(userId, strAcc2, parent);
 		Account acc2 = accountRepo.findByUser_IdAndIdAndParent(userId, strAcc2, parent);
-		if(acc2 == null) {
+		if (acc2 == null) {
 			String acc2UUID = accountService.createWithParent(userId, strAcc2, "", type, parent, currency);
 			acc2 = accountRepo.findByUser_IdAndId(userId, acc2UUID);
 		}

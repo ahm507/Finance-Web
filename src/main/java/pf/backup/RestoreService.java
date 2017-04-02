@@ -3,7 +3,7 @@ package pf.backup;
 import au.com.bytecode.opencsv.CSVReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
 import pf.charts.ChartService;
@@ -126,19 +126,19 @@ public class RestoreService {
 		String type = seg[0]; //.toLowerCase()
 		switch (type) {
 			case ChartService.CAT_ASSETS:
-				type = AccountEntity.ASSET; //singular to match the database
+				type = Account.ASSET; //singular to match the database
 				break;
 			case ChartService.CAT_EXPENSES:
-				type = AccountEntity.EXPENSE;
+				type = Account.EXPENSE;
 				break;
 			case ChartService.CAT_INCOME:
-				type = AccountEntity.INCOME;
+				type = Account.INCOME;
 				break;
 			case ChartService.CAT_LIABILITIES:
-				type = AccountEntity.LIABILITY;
+				type = Account.LIABILITY;
 				break;
 			case ChartService.CAT_OTHER:
-				type = AccountEntity.OTHER;
+				type = Account.OTHER;
 				break;
 			default:
 				throw new Exception("Parent Account must be one of 'Assets/Expenses/Income/Liability/Other', " + type + " is invalid!");
@@ -148,7 +148,7 @@ public class RestoreService {
 		String id = map.get(strAcc1);
 		if(id == null) {
 //			AccountEntity acc1 = accountRepo.findWithAccountNameAndParentId(userId, strAcc1, parent);
-			AccountEntity acc1 = accountRepo.findByUser_IdAndIdAndParent(userId, strAcc1, parent);
+			Account acc1 = accountRepo.findByUser_IdAndIdAndParent(userId, strAcc1, parent);
 			
 			if(acc1 == null) {
 				String acc1UUID = accountService.createWithParent(userId, strAcc1, "", type, parent, currency);
@@ -161,7 +161,7 @@ public class RestoreService {
 		}
 		//here is the component 2
 //		AccountEntity acc2 = accountRepo.findWithAccountNameAndParentId(userId, strAcc2, parent);
-		AccountEntity acc2 = accountRepo.findByUser_IdAndIdAndParent(userId, strAcc2, parent);
+		Account acc2 = accountRepo.findByUser_IdAndIdAndParent(userId, strAcc2, parent);
 		if(acc2 == null) {
 			String acc2UUID = accountService.createWithParent(userId, strAcc2, "", type, parent, currency);
 			acc2 = accountRepo.findByUser_IdAndId(userId, acc2UUID);

@@ -1,6 +1,6 @@
 package pf.account;
 
-import pf.user.UserEntity;
+import pf.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "account")
-public class AccountEntity  {
+public class Account  {
 	//Constants
 	//transient and @transient can be used
 	//FIXME: make type an enum
@@ -30,9 +30,9 @@ public class AccountEntity  {
 	// primary key: I handle key generation myself
 	private String id;
 
-	@ManyToOne(optional = false, targetEntity=UserEntity.class)
+	@ManyToOne(optional = false, targetEntity=User.class)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
-	private UserEntity user;
+	private User user;
 // private String userId;
 
 
@@ -52,16 +52,16 @@ public class AccountEntity  {
 	//transient and @transient can be used
 	
 	// calculated: Not stored in database 
-	@Transient private List<AccountEntity> children = new ArrayList<>();
+	@Transient private List<Account> children = new ArrayList<>();
 	@Transient private double balance;
 	@Transient private String balanceFormated;
 
 	//Default constructor is required by hibernate
-	public AccountEntity() {
+	public Account() {
 		
 	}
 	
-	public AccountEntity(String uuid, String parentId, UserEntity user, String name, String description, String type, String currency) {
+	public Account(String uuid, String parentId, User user, String name, String description, String type, String currency) {
 		this.parent = parentId;
 		this.id = uuid;
 		this.user = user;
@@ -88,11 +88,11 @@ public class AccountEntity  {
 		this.parent = parent;
 	}
 
-	public UserEntity getUserId() {
+	public User getUserId() {
 		return user;
 	}
 
-	public void setUserId(UserEntity user) {
+	public void setUserId(User user) {
 		this.user = user;
 	}
 
@@ -136,11 +136,11 @@ public class AccountEntity  {
 		this.balance = balance;
 	}
 
-	public List<AccountEntity> getChildren() {
+	public List<Account> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<AccountEntity> children) {
+	public void setChildren(List<Account> children) {
 		this.children = children;
 	}
 

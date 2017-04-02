@@ -21,7 +21,7 @@ public class TransactionDTO {
 	private String withdraw;
 	private String deposit;
 
-	TransactionDTO(TransactionEntity entity) {
+	TransactionDTO(Transaction entity) {
 		id = entity.getId();
 		date = entity.getDate();
 		description = entity.getDescription();

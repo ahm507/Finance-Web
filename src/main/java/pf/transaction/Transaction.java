@@ -1,13 +1,13 @@
 package pf.transaction;
 
-import pf.account.AccountEntity;
-import pf.user.UserEntity;
+import pf.account.Account;
+import pf.user.User;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="transaction")
-public class TransactionEntity {
+public class Transaction {
 	@Id
 //	@GeneratedValue(strategy=GenerationType.AUTO)
 
@@ -23,27 +23,27 @@ public class TransactionEntity {
 	@Transient private String amountFormated;
 	@Transient private String balanceFormated; //formatted as 12,122,343.00
 
-	@ManyToOne(optional = false, targetEntity=UserEntity.class)
+	@ManyToOne(optional = false, targetEntity=User.class)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
-	private UserEntity user;
+	private User user;
 
-	@ManyToOne(optional = false, targetEntity=AccountEntity.class)
+	@ManyToOne(optional = false, targetEntity=Account.class)
 	@JoinColumn(name = "withdrawId", referencedColumnName = "id")
-	private AccountEntity withdrawAccount;
+	private Account withdrawAccount;
 
-	@ManyToOne(optional = false, targetEntity=AccountEntity.class)
+	@ManyToOne(optional = false, targetEntity=Account.class)
 	@JoinColumn(name = "depositId", referencedColumnName = "id")
-	private AccountEntity depositAccount;
+	private Account depositAccount;
 
 	//Default constructor is required by Hibernate
-	public TransactionEntity() {
+	public Transaction() {
 		
 	}
 	
 	
 //	transRepo.insert(uuid, userId, date, description, withdrawId, depositId, cleanAmount);
-public TransactionEntity(String id, UserEntity user, String date, String description,
-                         AccountEntity withdraw, AccountEntity deposit,
+public Transaction(String id, User user, String date, String description,
+                         Account withdraw, Account deposit,
                          double amount) {
 		this.id = id;
 		this.user = user;
@@ -59,11 +59,11 @@ public TransactionEntity(String id, UserEntity user, String date, String descrip
 		this.amount =amount;  		
 	}
 
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
@@ -75,19 +75,19 @@ public TransactionEntity(String id, UserEntity user, String date, String descrip
 		this.id = id;
 	}
 
-	public AccountEntity getWithdrawAccount() {
+	public Account getWithdrawAccount() {
 		return withdrawAccount;
 	}
 
-	public void setWithdrawAccount(AccountEntity withdrawAccount) {
+	public void setWithdrawAccount(Account withdrawAccount) {
 		this.withdrawAccount = withdrawAccount;
 	}
 
-	public AccountEntity getDepositAccount() {
+	public Account getDepositAccount() {
 		return depositAccount;
 	}
 
-	public void setDepositAccount(AccountEntity deposit) {
+	public void setDepositAccount(Account deposit) {
 		this.depositAccount = deposit;
 	}
 

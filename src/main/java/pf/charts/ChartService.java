@@ -1,7 +1,7 @@
 package pf.charts;
 
 import org.springframework.stereotype.Service;
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
 import pf.transaction.TransactionDTO;
@@ -91,7 +91,7 @@ public class ChartService {
             return getTrendDataTotals(userId, year);
         }
         //Asset and Liabilities
-        if (type.equals(AccountEntity.ASSET) || type.equals(AccountEntity.LIABILITY)) {
+        if (type.equals(Account.ASSET) || type.equals(Account.LIABILITY)) {
             return getTrendDataBalances(userId, year, type);
         }
         //income and expenses
@@ -102,19 +102,19 @@ public class ChartService {
         List<Map<String, String>> accs = new ArrayList<>();
         HashMap<String, String> asset = new HashMap<>();
         asset.put("name", CAT_ASSETS);
-        asset.put("id", AccountEntity.ASSET);
+        asset.put("id", Account.ASSET);
         accs.add(asset);
         HashMap<String, String> income = new HashMap<>();
         income.put("name", CAT_INCOME);
-        income.put("id", AccountEntity.INCOME);
+        income.put("id", Account.INCOME);
         accs.add(income);
         HashMap<String, String> expense = new HashMap<>();
         expense.put("name", CAT_EXPENSES);
-        expense.put("id", AccountEntity.EXPENSE);
+        expense.put("id", Account.EXPENSE);
         accs.add(expense);
         HashMap<String, String> liability = new HashMap<>();
         liability.put("name", CAT_LIABILITIES);
-        liability.put("id", AccountEntity.LIABILITY);
+        liability.put("id", Account.LIABILITY);
         accs.add(liability);
         return accs;
     }
@@ -137,7 +137,7 @@ public class ChartService {
             throws Exception {
         List<Map<String, Object>> out = new ArrayList<>();
         //for all months
-        List<AccountEntity> accs = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
+        List<Account> accs = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
         for (int month = 1; month <= 12; month++) {
             //get month transaction
             List<TransactionDTO> trans = transactionService.getYearMonthTransactions(userId, year, month); //for all accounts
@@ -145,7 +145,7 @@ public class ChartService {
             HashMap<String, Object> map = new HashMap<>();
             map.put("Month", getMonthName(month));
             double monthTotal = 0;
-            for (AccountEntity a : accs) {
+            for (Account a : accs) {
                 double balance = transactionService.computeBalance(a.getId(), a.getType(), trans);
                 double rate = getExchangeRate(a.getCurrency());
                 balance *= rate;
@@ -159,9 +159,9 @@ public class ChartService {
     }
 
     private double getExchangeRate(String currency) {
-        if (currency.equals(AccountEntity.USD)) {
+        if (currency.equals(Account.USD)) {
             return usdRate;
-        } else if (currency.equals(AccountEntity.SAR)) {
+        } else if (currency.equals(Account.SAR)) {
             return sarRate;
         }
         return 1; //EGP
@@ -179,8 +179,8 @@ public class ChartService {
             balanceData.add(month);
         }
         //determine interval, smallest and largest date
-        List<AccountEntity> accounts = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
-        for (AccountEntity account : accounts) {
+        List<Account> accounts = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
+        for (Account account : accounts) {
             //Get all transactions with computed balance
             List<TransactionDTO> transactions = transactionService.getTransactions(userId, account.getId());
             for (int month = 0; month <= 11; month++) {
@@ -224,22 +224,22 @@ public class ChartService {
         }
 
         //Expenses
-        String type = AccountEntity.EXPENSE;
+        String type = Account.EXPENSE;
         String totalName = CAT_EXPENSES;
         getTotalSummation(userId, year, type, totalName, out);
 
         //Income
-        type = AccountEntity.INCOME;
+        type = Account.INCOME;
         totalName = CAT_INCOME;
         getTotalSummation(userId, year, type, totalName, out);
 
         //Asset Balances
-        type = AccountEntity.ASSET;
+        type = Account.ASSET;
         totalName = CAT_ASSETS;
         getTotalsWithBalance(userId, year, type, totalName, out);
 
         //Liabilities Balances
-        type = AccountEntity.LIABILITY;
+        type = Account.LIABILITY;
         totalName = CAT_LIABILITIES;
         getTotalsWithBalance(userId, year, type, totalName, out);
         return out;
@@ -248,12 +248,12 @@ public class ChartService {
     private void getTotalSummation(String userId,
                                    String year, String type, String totalName,
                                    List<Map<String, Object>> out) throws Exception {
-        List<AccountEntity> accs;
+        List<Account> accs;
         accs = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
         for (int monthIndex = 1; monthIndex <= 12; monthIndex++) {
         	List<TransactionDTO> transactions = transactionService.getYearMonthTransactions(userId, year, monthIndex); //for all accounts
             double total = 0;
-            for (AccountEntity account : accs) {
+            for (Account account : accs) {
                 double balance = transactionService.computeBalance(account.getId(), account.getType(), transactions);
                 total += (balance * getExchangeRate(account.getCurrency()));
             }
@@ -264,8 +264,8 @@ public class ChartService {
     private void getTotalsWithBalance(String userId,
                                       String year, String type, String totalName, List<Map<String, Object>> out) throws Exception {
 
-        List<AccountEntity> accs = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
-        for (AccountEntity account : accs) {
+        List<Account> accs = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
+        for (Account account : accs) {
             //Get all transactions with computed balance
         	List<TransactionDTO> ts = transactionService.getTransactions(userId, account.getId()); //for all years & one account
             for (int month = 0; month <= 11; month++) {
@@ -299,22 +299,22 @@ public class ChartService {
         }
 //
 //      //Expenses
-        String accountType = AccountEntity.EXPENSE;
+        String accountType = Account.EXPENSE;
         String totalName = CAT_EXPENSES;
         getTotalsAllYears(userId, years, accountType, totalName, out);
 
 //        //Income
-        accountType = AccountEntity.INCOME;
+        accountType = Account.INCOME;
         totalName = CAT_INCOME;
         getTotalsAllYears(userId, years, accountType, totalName, out);
 
 //        //Asset Balances
-        accountType = AccountEntity.ASSET;
+        accountType = Account.ASSET;
         totalName = CAT_ASSETS;
         getTotalsWithBalance(userId, years, accountType, totalName, out);
 
 //        //Liabilities Balances
-        accountType = AccountEntity.LIABILITY;
+        accountType = Account.LIABILITY;
         totalName = CAT_LIABILITIES;
         getTotalsWithBalance(userId, years, accountType, totalName, out);
         return out;
@@ -325,12 +325,12 @@ public class ChartService {
                                    List<String> years, String accountType, String totalName,
                                    Map<String, Map<String, Object>> out) throws Exception {
 
-        List<AccountEntity> expenseAccounts = accountRepo.findByUser_IdAndTypeOrderByText(userId, accountType);
+        List<Account> expenseAccounts = accountRepo.findByUser_IdAndTypeOrderByText(userId, accountType);
 
         for (String year : years) {
             List<TransactionDTO> transactions = transactionService.getYearTransactions(userId, year); //for all expenseAccounts
             double total = 0;
-            for (AccountEntity account : expenseAccounts) {
+            for (Account account : expenseAccounts) {
                 double balance = transactionService.computeBalance(account.getId(), account.getType(), transactions);
                 total += (balance * getExchangeRate(account.getCurrency()));
             }
@@ -342,8 +342,8 @@ public class ChartService {
                                       List<String> years, String type, String totalName,
                                       Map<String, Map<String, Object>> out) throws Exception {
 
-        List<AccountEntity> accounts = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
-        for (AccountEntity account : accounts) {
+        List<Account> accounts = accountRepo.findByUser_IdAndTypeOrderByText(userId, type);
+        for (Account account : accounts) {
             //Get all transactions with computed balance
         	List<TransactionDTO> transactions = transactionService.getTransactions(userId, account.getId()); //for all years & one account
             for (String year : years) {

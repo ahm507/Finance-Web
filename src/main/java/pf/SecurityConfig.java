@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
-import pf.user.UserEntity;
+import pf.user.User;
 import pf.user.UserService;
 
 @Configuration
@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 				String email = (String) authentication.getPrincipal();
 				String providedPassword = (String) authentication.getCredentials();
-				UserEntity user = null;
+				User user = null;
 				try {
 					user = userService.login(email, providedPassword);
 				} catch( Exception ex) { //throwing exception is the only way to show user name/password is incorrect.

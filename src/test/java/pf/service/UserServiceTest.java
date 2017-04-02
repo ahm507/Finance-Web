@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoRule;
 import pf.account.AccountService;
 import pf.email.Mailer;
 import pf.user.InvalidEmailSyntaxException;
-import pf.user.UserEntity;
+import pf.user.User;
 import pf.user.UserRepository;
 import pf.user.UserService;
 
@@ -52,9 +52,9 @@ public class UserServiceTest {
 	public void login() throws Exception {
         String email = "test@test.com";
         String password = "secret";
-        UserEntity testUser = new UserEntity("123", email, password);
+        User testUser = new User("123", email, password);
         when(mockUserRepo.findByEmailAndPassword(email, UserService.md5(password))).thenReturn(testUser);
-        UserEntity user = userService.login(email, password);
+        User user = userService.login(email, password);
         assertEquals("123", user.getId());
 	}
 	

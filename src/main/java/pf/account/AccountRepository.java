@@ -2,43 +2,43 @@ package pf.account;
 
 
 import org.springframework.data.repository.CrudRepository;
-import pf.user.UserEntity;
+import pf.user.User;
 import java.util.List;
 
-public interface AccountRepository  extends CrudRepository<AccountEntity, Long> {
+public interface AccountRepository  extends CrudRepository<Account, Long> {
 
-    AccountEntity findById(String id);
+    Account findById(String id);
 	
-    List<AccountEntity> findByUserOrderByText(UserEntity user);
+    List<Account> findByUserOrderByText(User user);
 
-    List<AccountEntity> findByUserAndParentOrderByText(UserEntity user, String parent);
+    List<Account> findByUserAndParentOrderByText(User user, String parent);
 
-    AccountEntity findByUserAndId(UserEntity user, String accountId);
+    Account findByUserAndId(User user, String accountId);
 
-    List<AccountEntity> findByUserAndTextAndParentOrderByText(UserEntity user,
+    List<Account> findByUserAndTextAndParentOrderByText(User user,
                                                               String text,
                                                               String parent);
 
     //TODO: Making account type ENUM
-    List<AccountEntity> findByUserAndTypeOrderByText(UserEntity user, String type);
+    List<Account> findByUserAndTypeOrderByText(User user, String type);
 
 
-    List<AccountEntity> findByUserAndParentAndTextOrderByText(UserEntity user,
+    List<Account> findByUserAndParentAndTextOrderByText(User user,
                                                               String parent,
                                                               String text);
     
-    List<AccountEntity> findByUserAndParentAndTypeOrderByText(UserEntity user, String parent, String type);
+    List<Account> findByUserAndParentAndTypeOrderByText(User user, String parent, String type);
     
     //Used to get all leaf accounts without the parent root
-    List<AccountEntity> findByUser_IdAndTypeAndParentNotOrderByText(String userId, String type, String parent);
+    List<Account> findByUser_IdAndTypeAndParentNotOrderByText(String userId, String type, String parent);
     
-    AccountEntity findByUser_IdAndId(String userId, String accountId);
+    Account findByUser_IdAndId(String userId, String accountId);
     
-    List<AccountEntity> findByUser_IdAndTypeOrderByText(String userId, String type);
+    List<Account> findByUser_IdAndTypeOrderByText(String userId, String type);
    
-    AccountEntity findByUser_IdAndIdAndParent(String userId, String accountId, String parent);
+    Account findByUser_IdAndIdAndParent(String userId, String accountId, String parent);
 
-	AccountEntity findByUser_EmailAndId(String string, String accountId);
+	Account findByUser_EmailAndId(String string, String accountId);
     
 	void deleteByUser_Id(String userId);
 

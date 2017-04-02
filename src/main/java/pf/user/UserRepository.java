@@ -3,17 +3,17 @@ package pf.user;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository  extends CrudRepository<UserEntity, Long> {
+public interface UserRepository  extends CrudRepository<User, Long> {
 
-	UserEntity findByEmail(String email);
+	User findByEmail(String email);
 
-	UserEntity findById(String id);
+	User findById(String id);
 
-	UserEntity findByEmailAndPassword(String email, String hashedPassword);
+	User findByEmailAndPassword(String email, String hashedPassword);
 
-	UserEntity findByEmailAndResetPasswordKey(String email, String resetCode);
+	User findByEmailAndResetPasswordKey(String email, String resetCode);
 
-	UserEntity findByEmailAndVerificationKey(String email, String verificationCode);
+	User findByEmailAndVerificationKey(String email, String verificationCode);
 
 	void deleteById(String userId);
 

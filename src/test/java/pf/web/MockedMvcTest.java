@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import pf.email.Zoho;
-import pf.user.UserEntity;
+import pf.user.User;
 import pf.user.UserRepository;
 
 @SpringBootTest
@@ -155,7 +155,7 @@ public class MockedMvcTest {
 				// .andExpect(MockMvcResultMatchers.content().string("{"status":"success"}"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is("success")));
 
-		UserEntity user = userRepository.findByEmail(email);
+		User user = userRepository.findByEmail(email);
 		assertNotNull(user);
 
 		// Verify the email

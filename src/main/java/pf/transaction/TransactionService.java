@@ -1,10 +1,10 @@
 package pf.transaction;
 
 import org.springframework.stereotype.Service;
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountRepository;
 import pf.backup.MinMaxDate;
-import pf.user.UserEntity;
+import pf.user.User;
 import pf.user.UserRepository;
 
 import java.text.DecimalFormat;
@@ -50,9 +50,9 @@ public class TransactionService {
 			return new ArrayList<>(); //empty result
 		}
 
-		List<TransactionEntity> transactions = transRepo.queryByUserAndAccountOrderByDate(userRepo.findById(userId),
+		List<Transaction> transactions = transRepo.queryByUserAndAccountOrderByDate(userRepo.findById(userId),
 				accountRepo.findById(accountId));
-		AccountEntity account = accountRepo.findByUser_IdAndId(userId, accountId);
+		Account account = accountRepo.findByUser_IdAndId(userId, accountId);
 		if(account == null) { //there is no account with this ID
 			List<TransactionDTO> dto = new ArrayList<>();
 			transactions.stream().forEach(t -> dto.add(new TransactionDTO(t)));
@@ -73,8 +73,8 @@ public class TransactionService {
 		String uuid = UUID.randomUUID().toString();
 
 		//verify no transfer between accounts of different currencies
-		AccountEntity withdrawAccount = accountRepo.findByUser_IdAndId(userId, withdrawId);
-		AccountEntity depositAccount = accountRepo.findByUser_IdAndId(userId, depositId);
+		Account withdrawAccount = accountRepo.findByUser_IdAndId(userId, withdrawId);
+		Account depositAccount = accountRepo.findByUser_IdAndId(userId, depositId);
 		
 		if(withdrawAccount == null) throw new Exception("withdrawAccount is null for userId:" + userId + ", and withdrawID=" + withdrawId);
 		if(depositAccount == null) throw new Exception("depositAccount is null for userId:" + userId + ", and depositId=" + depositId);
@@ -94,7 +94,7 @@ public class TransactionService {
 			date += concatTimeNow();
 		}
 
-		TransactionEntity transEntity = new TransactionEntity(uuid,
+		Transaction transEntity = new Transaction(uuid,
 				userRepo.findById(userId),
 				date, description,
 				accountRepo.findByUser_IdAndId(userId, withdrawId),
@@ -110,7 +110,7 @@ public class TransactionService {
 
 	public void updateTransaction(String id, String date, String description, String withdraw, String deposit, String amount) throws Exception {
 		String amountCleared = amount.replace(",", "");
-		TransactionEntity trans = transRepo.queryById(id);
+		Transaction trans = transRepo.queryById(id);
 		//Add time component if needed
 		//date comes from UI without leading zeros
 //		String today = new SimpleDateFormat ("yyyy-M-d").format(new Date());
@@ -136,7 +136,7 @@ public class TransactionService {
 	}
 
 	public void removeTransaction(String id) throws Exception {
-		TransactionEntity trans = transRepo.queryById(id);
+		Transaction trans = transRepo.queryById(id);
 		transRepo.delete(trans);
 	}
 
@@ -261,13 +261,13 @@ public class TransactionService {
 		if(accountId == null || "".equals(accountId)) {
 			return dto; //just empty list
 		}
-		UserEntity user = userRepo.findById(userId);
-		AccountEntity account = accountRepo.findByUser_IdAndId(userId, accountId);
+		User user = userRepo.findById(userId);
+		Account account = accountRepo.findByUser_IdAndId(userId, accountId);
 //		Date dateFromObject = new Date();
 //		SimpleDateFormat ft =
 //				new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-		List<TransactionEntity> transactions = transRepo.queryByUserAndDateBetweenAndAccountOrderByDate
+		List<Transaction> transactions = transRepo.queryByUserAndDateBetweenAndAccountOrderByDate
 				(user, fromDate, toDate, account);
 		transactions.forEach(t -> dto.add(new TransactionDTO(t)));
 		computeBalance(accountId, account.getType(), dto);
@@ -306,11 +306,11 @@ public class TransactionService {
 
 	int getDepositSign(String type) {
 		switch (type) {
-			case AccountEntity.INCOME:
+			case Account.INCOME:
 				return -1;
-			case AccountEntity.ASSET:
+			case Account.ASSET:
 				return 1;
-			case AccountEntity.EXPENSE:
+			case Account.EXPENSE:
 				return 1;
 			default:  // if(type.equals("liabilities")) {
 				return -1;
@@ -319,11 +319,11 @@ public class TransactionService {
 
 	int getWithdrawSign(String type) {
 		switch (type) {
-			case AccountEntity.INCOME:
+			case Account.INCOME:
 				return 1;
-			case AccountEntity.ASSET:
+			case Account.ASSET:
 				return -1;
-			case AccountEntity.EXPENSE:
+			case Account.EXPENSE:
 				return -1;
 			default:  // if(type.equals("liabilities")) {
 				return 1;

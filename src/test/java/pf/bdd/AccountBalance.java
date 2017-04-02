@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
 import pf.email.Mailer;
@@ -77,10 +77,10 @@ public class AccountBalance extends BddBase {
     }
 
     protected String getAccountType(String type) {
-	    if ("asset".equals(type)) return AccountEntity.ASSET;
-	    if ("expense".equals(type)) return AccountEntity.EXPENSE;
-	    if ("income".equals(type)) return AccountEntity.INCOME;
-	    else return AccountEntity.LIABILITY;
+	    if ("asset".equals(type)) return Account.ASSET;
+	    if ("expense".equals(type)) return Account.EXPENSE;
+	    if ("income".equals(type)) return Account.INCOME;
+	    else return Account.LIABILITY;
 	}
     
     
@@ -100,7 +100,7 @@ public class AccountBalance extends BddBase {
         }
     }
 
-    List<AccountEntity> accounts;
+    List<Account> accounts;
 
     @When("getting account total balances")
     public void when1() throws Exception {
@@ -109,7 +109,7 @@ public class AccountBalance extends BddBase {
 
     @Then("Income balance is $amount")
     public void then1(double amount) {
-        AccountEntity income =  accounts.stream().filter(x -> "Income".equals(x.getText())).findAny().orElse(null);
+        Account income =  accounts.stream().filter(x -> "Income".equals(x.getText())).findAny().orElse(null);
         double balance = accountService.getBalanceEgp(income);
         assertEquals(amount, balance, 0.00001) ;
     }
@@ -120,7 +120,7 @@ public class AccountBalance extends BddBase {
     
     @Then("Assets balance is $amount")
     public void then2(double amount) {        
-        AccountEntity assets =  accounts.stream().filter(x -> "Assets".equals(x.getText())).findAny().orElse(null);
+        Account assets =  accounts.stream().filter(x -> "Assets".equals(x.getText())).findAny().orElse(null);
         double balance = accountService.getBalanceEgp(assets);
         assertEquals(amount, balance, 0.00001) ;
     }

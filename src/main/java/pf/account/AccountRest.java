@@ -38,7 +38,7 @@ public class AccountRest {
 	// @POST //to match the easyui tree grid way
 	// method = RequestMethod.POST,
 	@RequestMapping(value = "/getAccounts.do")
-	public List<AccountEntity> getAccounts(HttpServletRequest request) throws Exception {
+	public List<Account> getAccounts(HttpServletRequest request) throws Exception {
 
 		return accountService.getAccountsTree(request.getRemoteUser());// , type
 	}
@@ -76,7 +76,7 @@ public class AccountRest {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getAccount.do")
-	public AccountEntity getAccount(HttpServletRequest request, @RequestParam("id") String id) throws Exception {
+	public Account getAccount(HttpServletRequest request, @RequestParam("id") String id) throws Exception {
 		// FIXME: You can send user entity directly to service layer
 		String userId = userRepository.findByEmail(request.getRemoteUser()).getId();
 		return accountService.getAccount(userId, id);

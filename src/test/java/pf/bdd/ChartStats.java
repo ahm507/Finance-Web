@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountService;
 import pf.charts.ChartService;
 import pf.email.Mailer;
@@ -92,10 +92,10 @@ public class ChartStats extends BddBase {
     }
 
     String getAccountType(String type) {
-        if ("asset".equals(type)) return AccountEntity.ASSET;
-        if ("expense".equals(type)) return AccountEntity.EXPENSE;
-        if ("income".equals(type)) return AccountEntity.INCOME;
-        else return AccountEntity.LIABILITY;
+        if ("asset".equals(type)) return Account.ASSET;
+        if ("expense".equals(type)) return Account.EXPENSE;
+        if ("income".equals(type)) return Account.INCOME;
+        else return Account.LIABILITY;
     }
 
     @Given("have these transactions: $table")

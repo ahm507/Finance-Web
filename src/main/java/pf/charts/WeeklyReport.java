@@ -18,7 +18,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import pf.email.Mailer;
-import pf.user.UserEntity;
+import pf.user.User;
 import pf.user.UserRepository;
 
 @Service
@@ -63,13 +63,13 @@ public class WeeklyReport {
 	// @Scheduled(cron="0 0 0 1,5,10,15,20,25,30 * *") //Every 5 days
 	@Scheduled(cron = "0 0 0 * * *") // Every day as a testing period
 	public void process() throws Exception {
-		Iterable<UserEntity> allUsers = userRepository.findAll();// OrderByEmail
-		for (UserEntity user : allUsers) {
+		Iterable<User> allUsers = userRepository.findAll();// OrderByEmail
+		for (User user : allUsers) {
 			processForUser(user);
 		}
 	}
 
-	public void processForUser(UserEntity user) throws Exception, FileNotFoundException {
+	public void processForUser(User user) throws Exception, FileNotFoundException {
 		this.userEmail = user.getEmail();
 		String yearString = new SimpleDateFormat("yyyy").format(new Date());
 		retrieveData(user.getId(), yearString);

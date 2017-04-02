@@ -2,7 +2,7 @@ package pf.user;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
 import pf.email.Mailer;
@@ -56,13 +56,13 @@ public class UserService {
 	                           AccountService account, double usdRate, double sarRate)
 			throws Exception {
 		//check if user exist
-		UserEntity userRow = userRepo.findByEmail(email);
+		User userRow = userRepo.findByEmail(email);
 		if(userRow != null) {
 			logger.warning("This email is already used:" + email);
 			throw new Exception("Email Already Used");
 		}
 		//create user business logic
-		UserEntity newUser = createUserEntity(email, password, password2);
+		User newUser = createUserEntity(email, password, password2);
 		//persist user
 		int verified = 0;
 		newUser.setVerified(verified);
@@ -75,14 +75,14 @@ public class UserService {
 		return newUser.getId();
 	}
 
-	public UserEntity login(String email, String password)
+	public User login(String email, String password)
 			throws InvalidEmailSyntaxException, NoSuchAlgorithmException, InvalidPasswordException, UserNotExistException {
 		if ( ! validEmailSyntax(email))
 			throw new InvalidEmailSyntaxException();
 		if (password == null || password.isEmpty())
 			throw new InvalidPasswordException("InvalidPassword");
 
-		UserEntity userRow = userRepo.findByEmailAndPassword(email, md5(password));
+		User userRow = userRepo.findByEmailAndPassword(email, md5(password));
 		if( userRow == null) {
 			throw new UserNotExistException("UserNotExist"); // or may be not verified
 		} else {
@@ -91,7 +91,7 @@ public class UserService {
 	}
 
 	public void resendVerifyEmail(String email) throws Exception {
-		UserEntity user = userRepo.findByEmail(email);
+		User user = userRepo.findByEmail(email);
 		if(null != user) {
 			mailer.sendVerifyEmail(email, user.getVerification_key());
 		} else {
@@ -106,7 +106,7 @@ public class UserService {
 			if(newPass1.isEmpty() || newPass1.equals(newPass2) == false) {
 				throw new Exception("EmptyPassword|InvalidUSDRate|InvalidSARRate");
 			}
-			UserEntity userRow = userRepo.findByEmailAndPassword(email, md5(oldPass));
+			User userRow = userRepo.findByEmailAndPassword(email, md5(oldPass));
 			if (userRow != null) { //Old password is OK
 				userRow.setPassword(md5(newPass1));
 				userRow.setUsd_rate(usdRate);
@@ -119,7 +119,7 @@ public class UserService {
 				if (usdRate <= 0 || sarRate <= 0) {
 					throw new Exception("InvalidUSDRate:Negative of zero rate is not allowed");
 				}
-				UserEntity user = userRepo.findByEmail(email);
+				User user = userRepo.findByEmail(email);
 				user.setUsd_rate(usdRate);
 				user.setSar_rate(sarRate);
 				userRepo.save(user);
@@ -152,7 +152,7 @@ public class UserService {
 	}
 
 	public void resetPassword(String email, String code, String newPass1, String newPass2) throws Exception {
-		UserEntity user = userRepo.findByEmailAndResetPasswordKey(email, code);
+		User user = userRepo.findByEmailAndResetPasswordKey(email, code);
 //		UserStore user = userStore.findWithResetCode(email, code);
 		if(user != null) { //reset_password_key is OK
 			if(newPass1.equals(newPass2) && newPass1.isEmpty() == false) {
@@ -169,11 +169,11 @@ public class UserService {
 
 	public boolean isExist(String email, String hashedPassword) throws Exception {
 //		UserStore user = userStore.findVerified(email, password);
-		UserEntity user = userRepo.findByEmailAndPassword(email, hashedPassword);
+		User user = userRepo.findByEmailAndPassword(email, hashedPassword);
 		return (user != null);
 	}
 
-	public UserEntity createUserEntity(String email, String password, String password2) throws Exception {
+	public User createUserEntity(String email, String password, String password2) throws Exception {
 
 		if (!validEmailSyntax(email)) {
 			throw new Exception("InvalidEmail");
@@ -185,14 +185,14 @@ public class UserService {
 			throw new Exception("MismatchedPasswordException");
 		}
 
-		UserEntity newUser = new UserEntity(getUUID(),  email, md5(password));
+		User newUser = new User(getUUID(),  email, md5(password));
 		newUser.setVerification_key(getUUID()); //Why?!
 		return newUser;
 	}
 
 	public void sendResetEmail(String email) throws Exception {
 		String resetCode = getUUID();
-		UserEntity user = userRepo.findByEmail(email);
+		User user = userRepo.findByEmail(email);
 		if(user != null) { //means it is not verified yet
 			user.setReset_password_key(resetCode);
 			userRepo.save(user);
@@ -203,9 +203,9 @@ public class UserService {
 	
 	}
 	
-	public UserEntity verifyEmail(String email, String verificationCode) throws Exception {
+	public User verifyEmail(String email, String verificationCode) throws Exception {
 //		UserStore user = userStore.findWithVerificationCode(email, code);
-		UserEntity user = userRepo.findByEmailAndVerificationKey(email, verificationCode);
+		User user = userRepo.findByEmailAndVerificationKey(email, verificationCode);
 		if(user != null) { //means it is not verified yet
 			user.setVerified(1);
 			userRepo.save(user);
@@ -245,33 +245,33 @@ public class UserService {
 
 	private void createNewUserAccounts(String userId, AccountService account) throws Exception {
 		//Income Accounts
-		account.createWithParent(userId, "Income", "", AccountEntity.INCOME, "0", AccountEntity.EGP);
-		account.create(userId, "Salary", "", AccountEntity.INCOME, AccountEntity.EGP);
-		account.create(userId, "Bonus", "", AccountEntity.INCOME, AccountEntity.EGP);
-		account.create(userId, "Bank Profits", "", AccountEntity.INCOME, AccountEntity.EGP);
-		account.create(userId, "General Income", "", AccountEntity.INCOME, AccountEntity.EGP);
+		account.createWithParent(userId, "Income", "", Account.INCOME, "0", Account.EGP);
+		account.create(userId, "Salary", "", Account.INCOME, Account.EGP);
+		account.create(userId, "Bonus", "", Account.INCOME, Account.EGP);
+		account.create(userId, "Bank Profits", "", Account.INCOME, Account.EGP);
+		account.create(userId, "General Income", "", Account.INCOME, Account.EGP);
 		//Asset Accounts
-		account.createWithParent(userId, "Assets", "", AccountEntity.ASSET, "0", AccountEntity.EGP);
-		account.create(userId, "Cash in Wallet", "", AccountEntity.ASSET, AccountEntity.EGP);
-		account.create(userId, "Current Bank Account", "", AccountEntity.ASSET, AccountEntity.EGP);
-		account.create(userId, "Savings Bank Account", "", AccountEntity.ASSET, AccountEntity.EGP);
-		account.create(userId, "General Asset", "", AccountEntity.ASSET, AccountEntity.EGP);
+		account.createWithParent(userId, "Assets", "", Account.ASSET, "0", Account.EGP);
+		account.create(userId, "Cash in Wallet", "", Account.ASSET, Account.EGP);
+		account.create(userId, "Current Bank Account", "", Account.ASSET, Account.EGP);
+		account.create(userId, "Savings Bank Account", "", Account.ASSET, Account.EGP);
+		account.create(userId, "General Asset", "", Account.ASSET, Account.EGP);
 		//Liability accounts
-		account.createWithParent(userId, "Liability", "", AccountEntity.LIABILITY, "0", AccountEntity.EGP);
-		account.create(userId, "Master Card", "", AccountEntity.LIABILITY, AccountEntity.EGP);
-		account.create(userId, "Visa Card", "", AccountEntity.LIABILITY, AccountEntity.EGP);
-		account.create(userId, "General Liability", "", AccountEntity.LIABILITY, AccountEntity.EGP);
+		account.createWithParent(userId, "Liability", "", Account.LIABILITY, "0", Account.EGP);
+		account.create(userId, "Master Card", "", Account.LIABILITY, Account.EGP);
+		account.create(userId, "Visa Card", "", Account.LIABILITY, Account.EGP);
+		account.create(userId, "General Liability", "", Account.LIABILITY, Account.EGP);
 		//Expense Accounts
-		account.createWithParent(userId, "Expenses", "", AccountEntity.EXPENSE, "0", AccountEntity.EGP);
-		account.create(userId, "Food", "", AccountEntity.EXPENSE, AccountEntity.EGP);
-		account.create(userId, "Clothes", "", AccountEntity.EXPENSE, AccountEntity.EGP);
-		account.create(userId, "Education", "", AccountEntity.EXPENSE, AccountEntity.EGP);
-		account.create(userId, "Car", "", AccountEntity.EXPENSE, AccountEntity.EGP);
-		account.create(userId, "Charity", "", AccountEntity.EXPENSE, AccountEntity.EGP);
-		account.create(userId, "General Expense", "", AccountEntity.EXPENSE, AccountEntity.EGP);
+		account.createWithParent(userId, "Expenses", "", Account.EXPENSE, "0", Account.EGP);
+		account.create(userId, "Food", "", Account.EXPENSE, Account.EGP);
+		account.create(userId, "Clothes", "", Account.EXPENSE, Account.EGP);
+		account.create(userId, "Education", "", Account.EXPENSE, Account.EGP);
+		account.create(userId, "Car", "", Account.EXPENSE, Account.EGP);
+		account.create(userId, "Charity", "", Account.EXPENSE, Account.EGP);
+		account.create(userId, "General Expense", "", Account.EXPENSE, Account.EGP);
 		//Other
-		account.createWithParent(userId, "Other", "", AccountEntity.OTHER, "0", AccountEntity.EGP);
-		account.create(userId, "Other", "", AccountEntity.OTHER, AccountEntity.EGP);
+		account.createWithParent(userId, "Other", "", Account.OTHER, "0", Account.EGP);
+		account.create(userId, "Other", "", Account.OTHER, Account.EGP);
 	}
 
 	@Transactional

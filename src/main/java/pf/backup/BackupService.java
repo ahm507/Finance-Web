@@ -22,14 +22,14 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import pf.account.AccountEntity;
+import pf.account.Account;
 import pf.account.AccountService;
 import pf.account.DeepAccountLayersException;
 import pf.account.NullAccountException;
 import pf.email.Mailer;
-import pf.transaction.TransactionEntity;
+import pf.transaction.Transaction;
 import pf.transaction.TransactionRepository;
-import pf.user.UserEntity;
+import pf.user.User;
 import pf.user.UserRepository;
 
 //import pf.db.AccountStoreJdbc;
@@ -63,13 +63,13 @@ public class BackupService {
 
 	String userId;
 
-	public List<TransactionEntity> backupUserData(String userId)
+	public List<Transaction> backupUserData(String userId)
 			throws NullAccountException, DeepAccountLayersException {
 		this.userId = userId;
-		List<TransactionEntity> transes = transRepo.findByUser_Id(userId);
+		List<Transaction> transes = transRepo.findByUser_Id(userId);
 		// Use HashMap as a cache
-		HashMap<String, AccountEntity> map = new HashMap<>();
-		for (TransactionEntity t : transes) {
+		HashMap<String, Account> map = new HashMap<>();
+		for (Transaction t : transes) {
 			// WithdrawPath Acc1:Acc2:Acc3
 			t.setWithdrawAccountPath(
 					accountService.getAccountPath(userId, t.getWithdrawId(), t.getWithdrawAccount().getText(), map));
@@ -83,9 +83,9 @@ public class BackupService {
 		return "Date, Description, Account, Transfer to, Amount, Currency";
 	}
 
-	public String getRowFormatted(TransactionEntity t) throws CurrencyTransefereException {
-		AccountEntity account1 = t.getWithdrawAccount();
-		AccountEntity account2 = t.getDepositAccount();
+	public String getRowFormatted(Transaction t) throws CurrencyTransefereException {
+		Account account1 = t.getWithdrawAccount();
+		Account account2 = t.getDepositAccount();
 
 		if (!account1.getCurrency().equals(account2.getCurrency())) {
 			throw new CurrencyTransefereException(
@@ -104,19 +104,19 @@ public class BackupService {
 
 	public void backup(String userId, PrintWriter printWriter) throws Exception {
 		printWriter.println(getTitleFormatted());
-		List<TransactionEntity> ts = backupUserData(userId);
-		for (TransactionEntity t : ts) {
+		List<Transaction> ts = backupUserData(userId);
+		for (Transaction t : ts) {
 			printWriter.println(getRowFormatted(t));
 		}
 	}
 
 	public String getExportContents(String userId)
 			throws NullAccountException, DeepAccountLayersException, CurrencyTransefereException {
-		List<TransactionEntity> ts = backupUserData(String.valueOf(userId));
+		List<Transaction> ts = backupUserData(String.valueOf(userId));
 
 		StringBuilder buffer = new StringBuilder();
 		buffer.append(getTitleFormatted()).append("\r\n");
-		for (TransactionEntity t : ts) {
+		for (Transaction t : ts) {
 			buffer.append(getRowFormatted(t)).append("\r\n");
 		}
 		String contents = buffer.toString();
@@ -131,15 +131,15 @@ public class BackupService {
 
 	@Scheduled(cron = "0 0 0 * * *") // Every day as a testing period
 	public void autoBackup() throws Exception {
-		Iterable<UserEntity> allUsers = userRepository.findAll();// OrderByEmail
-		for (UserEntity user : allUsers) {
+		Iterable<User> allUsers = userRepository.findAll();// OrderByEmail
+		for (User user : allUsers) {
 			String userEmail = user.getEmail();
 			autoBackupForUser(user.getId(), userEmail);
 		}
 	}
 
 	public void autoBackupForUser(String email) throws FileNotFoundException, UnsupportedEncodingException, NullAccountException, DeepAccountLayersException, CurrencyTransefereException, IOException, Exception {
-		UserEntity userEntity = userRepository.findByEmail(email);
+		User userEntity = userRepository.findByEmail(email);
 		autoBackupForUser(userEntity.getId(), email);
 	}
 	

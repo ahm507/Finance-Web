@@ -17,7 +17,7 @@ import java.util.List;
 
 @Entity 
 @Table (name="user")
-public class UserEntity implements UserDetails {
+public class User implements UserDetails {
 
 	
 	private static final long serialVersionUID = -6092199166051420344L;
@@ -39,12 +39,12 @@ public class UserEntity implements UserDetails {
 	
 
 	//Default constructor is required by hibernate
-	public UserEntity() {
+	public User() {
 		
 	}
 	
 	//Essential properties only
-	public UserEntity(String id, String email, String password) {
+	public User(String id, String email, String password) {
 		this.id = id;
 		this.email = email;
 		this.password = password;

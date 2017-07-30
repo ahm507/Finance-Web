@@ -47,24 +47,17 @@ public class TransactionRange extends BddBase {
 
     //AfterScenario&BeforeScenario
     //BeforeStory
+
     @AfterStory
     public void tearDown() throws Exception {
-//        TestLib.cleanupTestDB();
-    	if(null != null) {
-    		userService.deleteUser(userId);
-    	}
+//		ALWAYS FALSE
+//    	if(null != null) {
+//    		userService.deleteUser(userId);
+//    	}
     }
 
     @Given("user email '$email' and password '$password'")
     public void given(String email, String password) throws Exception {
-        //DB configurations
-//        String rootPath = TestConfig.getTestRootPath();
-//        Settings.setup(rootPath);
-//        JdbcConnection.setup(Settings.getObject());
-//        TestLib.cleanupTestDB();
-//
-//        accountService = Settings.getStoreFactoryForJdbc().createAccountMgmt();
-//        userService = Settings.getStoreFactoryForJdbc().createUserMgmt();
         userId = userService.registerUser(email, password, password, mailer, accountService, 1.0, 1.0);
     }
 

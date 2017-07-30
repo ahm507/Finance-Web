@@ -108,12 +108,7 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 	public String test(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model)
 			throws NullAccountException, DeepAccountLayersException, CurrencyTransefereException {
 
-		StringBuilder buffer = new StringBuilder();
-
-		buffer.append("User is:" + request.getRemoteUser() + "<br>");
-
-		return buffer.toString();
-
+		return "User is:" + request.getRemoteUser() + "<br>";
 	}
 
 	@PostMapping("/upload")
@@ -135,17 +130,16 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 		final String fileName = getFileName(filePart);
 
 		OutputStream out = null;
-		InputStream filecontent = null;
 		response.setContentType("text/html;charset=UTF-8");
 		final PrintWriter writer = response.getWriter();
 		String fullFileName = path + File.separator + userId + "-" + fileName;
 		out = new FileOutputStream(new File(fullFileName));
-		filecontent = filePart.getInputStream();
+		InputStream fileContent = filePart.getInputStream();
 
 		int read = 0;
 		final byte[] bytes = new byte[1024];
 
-		while ((read = filecontent.read(bytes)) != -1) {
+		while ((read = fileContent.read(bytes)) != -1) {
 			out.write(bytes, 0, read);
 		}
 		writer.println("<h2>" + fileName + " is uploaded successfully</h2>");
@@ -159,10 +153,9 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 
 		writer.println("<br>Import is completed successfully");
 
-		if (null != out)
-			out.close();
-		if (null != filecontent)
-			filecontent.close();
+		out.close();
+		if (null != fileContent)
+			fileContent.close();
 
 	}
 

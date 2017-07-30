@@ -34,8 +34,7 @@ public class ChartService {
 	
 	
     static public final String CAT_INCOME = "Income";
-    static public final String CAT_LIABILITIES = "Liabilities";
-   
+    static public final String CAT_LIABILITIES = "Liabilities"; 
     static public final String CAT_EXPENSES = "Expenses";
     static public final String CAT_ASSETS = "Assets";
     static public final String CAT_OTHER = "Other";
@@ -98,7 +97,11 @@ public class ChartService {
         return getDataSummation(userId, year, type);
     }
 
-    public List<Map<String, String>> getTotalsDataFields() {
+    /**
+     * This API has no use as  abusiness logic. It is used only to feed the user interface with json definition of the categories.
+     * @return list of financial categories name
+     */
+    public static List<Map<String, String>> getTotalsDataFields() {
         List<Map<String, String>> accs = new ArrayList<>();
         HashMap<String, String> asset = new HashMap<>();
         asset.put("name", CAT_ASSETS);

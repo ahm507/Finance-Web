@@ -1,19 +1,10 @@
 package pf.web;
 
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
-//import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,10 +17,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import pf.email.Zoho;
 import pf.user.User;
 import pf.user.UserRepository;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+//import static org.hamcrest.core.StringStartsWith.startsWith;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
+
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -38,6 +42,9 @@ public class MockedMvcTest {
 
 	// private static final Logger log =
 	// LoggerFactory.getLogger(MockedMvcTest.class);
+	
+	private static final Logger log = LoggerFactory.getLogger(MockedMvcTest.class);
+
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -48,6 +55,7 @@ public class MockedMvcTest {
 	// @Autowired
 	// private WebApplicationContext context;
 
+	//configure manually if needed
 	// @Before
 	// public void setup() throws Exception {
 	//
@@ -89,7 +97,6 @@ public class MockedMvcTest {
 				MockMvcRequestBuilders.post("/logout").with(csrf()).accept(MediaType.APPLICATION_FORM_URLENCODED))
 				.andExpect(status().is(302))// 302 Found
 				.andExpect(MockMvcResultMatchers.redirectedUrl("/login?msg=logout"));
-
 	}
 
 	@Test
@@ -99,7 +106,6 @@ public class MockedMvcTest {
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/transactions/getYearList.do"))
 				.andExpect(MockMvcResultMatchers.status().is(200))// 200 OK
 				.andExpect(MockMvcResultMatchers.jsonPath("$[0]", CoreMatchers.is("2016")));
-
 	}
 
 	@Test
@@ -135,7 +141,8 @@ public class MockedMvcTest {
 
 		String accountId = "d2cedb8e-b049-464a-8142-c92814036047";
 		mockMvc.perform(MockMvcRequestBuilders.get("/rest/transactions/getTransactions.do").param("account", accountId)
-				.param("year", "2016")).andExpect(MockMvcResultMatchers.jsonPath("$.total", CoreMatchers.is("1")));
+				.param("year", "2016"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.total", CoreMatchers.is("1")));
 	}
 
 	@MockBean
@@ -179,5 +186,54 @@ public class MockedMvcTest {
 		mockMvc.perform(fileUpload("/upload").file(multipartFile).with(csrf())).andExpect(status().is(200));
 
 	}
+	
+//	@MockBean
+//	private TransactionService transactionServiceMock;
+//
+	@Test
+	@WithMockUser(username = "INVALID@test.test", roles = { "USER", "ADMIN" })
+	public void getYearListNull() throws Exception {
+
+//		TransactionService transactionService= mock(TransactionService.class);
+//		Mockito.when(transactionServiceMock.getYearList(any())).thenReturn(null);
+				
+		mockMvc.perform(MockMvcRequestBuilders.get("/rest/transactions/getYearList.do"))
+		.andExpect(MockMvcResultMatchers.status().is(200))// 200 OK
+		.andExpect(MockMvcResultMatchers.content().string(CoreMatchers.containsString("NO-DATA")))
+;
+
+//		log.warn("$$$Content is:" + content().);
+		
+//	      verify(transactionServiceMock).getYearList("INVALID@test.test");
+		
+	}
+	
+	
+	final String REST_TRANSACTION_ROOT = "/rest/transactions/";
+	@Test
+	@WithMockUser(username = "test@test.test", password = "test", roles = { "USER", "ADMIN" })
+	public void getYearTransactions() throws Exception {
+		String masterCard = "2100ba44-4d4d-49dd-a358-8ceb43ff2714";
+		String userId = "c9fab3da-faa4-41d4-b898-9eb94b5ab297-2";
+		mockMvc.perform(get(REST_TRANSACTION_ROOT + "getYearTransactions.do").param("year", "2017").param("accountId", masterCard))
+		.andExpect(MockMvcResultMatchers.jsonPath("$[0].id", CoreMatchers.is(userId)));
+		
+		//getUpToMonthTransactions
+		mockMvc.perform(get(REST_TRANSACTION_ROOT + "getUpToMonthTransactions.do")
+				.param("year", "2017").param("month", "0").param("accountId", masterCard))
+//				.andExpect(jsonPath("$", CoreMatchers.hasSize(2)))
+				.andExpect(MockMvcResultMatchers.jsonPath("$[1].id", CoreMatchers.is(userId)));
+;		
+
+		//getUpToYearTransactions
+		mockMvc.perform(get(REST_TRANSACTION_ROOT + "getUpToYearTransactions.do")
+		.param("year", "2017").param("accountId", masterCard).param("userId", userId))
+		.andExpect(MockMvcResultMatchers.content().string(containsString(userId)));
+;		
+
+
+	}
+	
+	
 
 }

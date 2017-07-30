@@ -1,19 +1,5 @@
 package pf;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 import pf.account.DeepAccountLayersException;
 import pf.account.NullAccountException;
 import pf.backup.BackupService;
@@ -30,6 +15,15 @@ import pf.backup.CurrencyTransefereException;
 import pf.backup.RestoreService;
 import pf.charts.WeeklyReport;
 import pf.user.UserRepository;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.*;
+import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //import java.util.Date;
 //import java.util.Map;
@@ -51,15 +45,23 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		String[][] mappings = new String[][] { { "/login", "pages/login.jsp" }, { "/", "pages/login.jsp" },
-				{ "/contactus", "pages/contactus.jsp" }, { "/password-forget", "pages/password-forget.jsp" },
-				{ "/password-reset", "pages/password-reset.jsp" }, { "/privacy", "pages/privacy.jsp" },
-				{ "/register", "pages/register.jsp" }, { "/error2", "pages/error.jsp" },
-				// authorized only
-				{ "/transactions", "pages/transactions.jsp" }, { "/accounts", "pages/accounts.jsp" },
-				{ "/export", "pages/export.jsp" }, { "/register-verify", "pages/register-verify.jsp" },
-				{ "/settings", "pages/settings.jsp" }, { "/charts", "pages/charts.jsp" },
-				{ "/import", "pages/import.jsp" }
+		String[][] mappings = new String[][] { 
+			{ "/login", "pages/login.jsp" }, 
+			{ "/", "pages/login.jsp" },
+			{ "/contactus", "pages/contactus.jsp" }, 
+			{ "/password-forget", "pages/password-forget.jsp" },
+			{ "/password-reset", "pages/password-reset.jsp" }, 
+			{ "/privacy", "pages/privacy.jsp" },
+			{ "/register", "pages/register.jsp" }, 
+			{ "/error2", "pages/error.jsp" },
+			// authorized only
+			{ "/transactions", "pages/transactions.jsp" }, 
+			{ "/accounts", "pages/accounts.jsp" },
+			{ "/export", "pages/export.jsp" }, 
+			{ "/register-verify", "pages/register-verify.jsp" },
+			{ "/settings", "pages/settings.jsp" },
+			{ "/charts", "pages/charts.jsp" },
+			{ "/import", "pages/import.jsp" }
 
 		};
 

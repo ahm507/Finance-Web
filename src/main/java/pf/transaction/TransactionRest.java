@@ -1,24 +1,16 @@
 package pf.transaction;
 
+import com.google.gson.Gson;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import pf.RestLib;
+import pf.user.UserRepository;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.google.gson.Gson;
-
-import pf.RestLib;
-import pf.user.UserRepository;
 
 @RestController
 @RequestMapping("/rest/transactions")
@@ -66,8 +58,8 @@ public class TransactionRest {
 	}
 
 	@RequestMapping("/getYearTransactions.do")
-	public String getYearTransactions(HttpServletRequest request, @RequestParam("year") String year,
-			@RequestParam("accountId") String accountId) throws Exception {
+	public String getYearTransactions(HttpServletRequest request, String year,
+			String accountId) throws Exception {
 		String jsonString;
 
 		String userEmail = request.getRemoteUser();
@@ -85,12 +77,12 @@ public class TransactionRest {
 
 	@RequestMapping("/getUpToMonthTransactions.do")
 	public List<TransactionDTO> getUpToMonthTransactions(HttpServletRequest request, @RequestParam("year") String year,
-			@RequestParam("accountId") String accountId, @RequestParam("month") String month) throws Exception {
+			@RequestParam("accountId") String accountId, @RequestParam("month") String monthZeroBased) throws Exception {
 
 		String userEmail = request.getRemoteUser();
 		logger.info("Logged in user email: " + userEmail);
 		String userId = userRepository.findByEmail(userEmail).getId();
-		return transactionService.getUpToMonthTransactions(userId, accountId, year, month);
+		return transactionService.getUpToMonthTransactions(userId, accountId, year, monthZeroBased);
 
 	}
 

@@ -89,7 +89,7 @@ public class TransactionService {
 		//Add time to date string
 		//if there is no time component; because it is used from import and from brand new transaction creation.
 		//Usually space separates between data and time
-		//fixme: this way of handling dates as strings is not locale safe
+		//FIXME: this way of handling dates as strings is not locale safe
 		if(date.indexOf(" ") == -1) {
 			date += concatTimeNow();
 		}

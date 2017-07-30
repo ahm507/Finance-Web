@@ -6,16 +6,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import pf.account.Account;
 import pf.account.AccountRepository;
 import pf.account.AccountService;
 import pf.email.Mailer;
 import pf.transaction.TransactionService;
 import pf.user.UserService;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 //import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
@@ -31,7 +32,7 @@ public class AccountBalance extends BddBase {
 //    AccountService accountMgmt;
 //    UserService user;
     String userId, userEmail;
-    HashMap<String, String> accountMap = new HashMap<String, String>();
+    HashMap<String, String> accountMap = new HashMap<>();
 //    Transaction transaction;
     
 	@Autowired

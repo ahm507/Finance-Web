@@ -1,10 +1,5 @@
 package pf.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,13 +7,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
 import pf.account.AccountService;
 import pf.email.Mailer;
 import pf.user.InvalidEmailSyntaxException;
 import pf.user.User;
 import pf.user.UserRepository;
 import pf.user.UserService;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@SpringApplicationConfiguration(classes = PfApplication.class)
@@ -69,26 +66,15 @@ public class UserServiceTest {
 	
 	@Test(expected = Exception.class)
 	public void loginInvalidPassword() throws Exception {
-        String email = "test@test.com";
-//        String password = "secret";
-//        UserEntity testUser = new UserEntity("123", email, password);
-//        when(mockUserRepo.findByEmailAndPassword(email, UserService.md5(password))).thenReturn(testUser);
-        assertEquals("123", userService.login(email, "wrong password"));
+		userService.login("test@test.com", "wrong password");
 	}
 	
 	@Test(expected = Exception.class)
 	public void loginNullPassword() throws Exception {
-        String email = "test@test.com";
-//        String password = "secret";
-//        UserEntity testUser = new UserEntity("123", email, password);
-//        when(mockUserRepo.findByEmailAndPassword(email, UserService.md5(password))).thenReturn(testUser);
-        assertEquals("123", userService.login(email, null));
+        userService.login("test@test.com", null);
 	}
 	
-	
-//	registerUser(String email, String password, String password2, Mailer mailer,
-//			   Account account, double usdRate, double sarRate)
-	
+
 	@Mock
 	AccountService mockAccount;
 	

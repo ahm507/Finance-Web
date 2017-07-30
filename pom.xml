@@ -199,6 +199,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- PMD Static Code Analysis -->
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.8</version>
+                <type>maven-plugin</type>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -239,9 +248,9 @@
             </plugin>
 
 
-            <!--JACOCO-->
+            <!-- JACOCO Code Coverage -->
 
-            <!--Works through mvn verify commmand. It actually fail if try to execure it directly-->
+            <!--Works through mvn verify command. It actually fail if you try to execute it directly-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -284,6 +293,9 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+
 
 
         </plugins>

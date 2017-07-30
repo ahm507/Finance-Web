@@ -61,7 +61,7 @@ public class ExportImport extends BddBase {
 //    UserService userService;
 //    Transaction transactionService;
     String userId, userEmail;
-    HashMap<String, String> accountMap = new HashMap<String, String>();
+    HashMap<String, String> accountMap = new HashMap<>();
     double m_balance = 0;
     ExamplesTable accountsTable;
     ExamplesTable transactionsTable;

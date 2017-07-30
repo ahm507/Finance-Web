@@ -43,7 +43,7 @@ public class ChartStats extends BddBase {
 	Mailer mailer;
 	
     String userId, userEmail;
-    HashMap<String, String> accountMap = new HashMap<String, String>();
+    HashMap<String, String> accountMap = new HashMap<>();
     List<Map<String, Object>> trendData;
 
     @BeforeStory

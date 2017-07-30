@@ -1,14 +1,5 @@
 package pf.bdd;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -18,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import pf.account.Account;
 import pf.account.AccountService;
 import pf.charts.ChartService;
@@ -26,6 +16,14 @@ import pf.email.Mailer;
 import pf.transaction.TransactionDTO;
 import pf.transaction.TransactionService;
 import pf.user.UserService;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -43,7 +41,7 @@ public class TransactionRange extends BddBase {
 	Mailer mailer;
     
     String userId;
-    HashMap<String, String> accountMap = new HashMap<String, String>();
+    HashMap<String, String> accountMap = new HashMap<>();
     double m_balance = 0;
 
 

@@ -1,12 +1,6 @@
 package pf.service;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
-import javax.transaction.Transactional;
-
+import au.com.bytecode.opencsv.CSVReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,14 +10,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import au.com.bytecode.opencsv.CSVReader;
 import pf.account.DeepAccountLayersException;
 import pf.account.NullAccountException;
 import pf.backup.BackupService;
 import pf.backup.CurrencyTransefereException;
 import pf.backup.RestoreService;
 import pf.user.UserRepository;
+
+import javax.transaction.Transactional;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -71,7 +69,10 @@ public class ExportImportTest {
     	
         String userId = "4f680c93-838d-4329-9aba-7bedca232a89";
         Resource resource = resourceLoader.getResource("classpath:import.csv");
-        FileReader file2 = new FileReader(resource.getURL().getPath());
+//	    String dir = System.getProperty("user.dir");
+//	    String dir2 = ExportImportTest.class.getResource("").getPath();
+//	    URL dir3 = resource.getURL();
+	    FileReader file2 = new FileReader(resource.getURL().getPath());
         CSVReader reader = new CSVReader(file2);
         restore.importFile(reader, userId);
 

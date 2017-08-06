@@ -33,17 +33,21 @@ pipeline {
                     sh 'mvn -B pmd:pmd pmd:cpd jdepend:generate'
             }
             post {
-                pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
-                //jdepend
-                //cpd
-                dry canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+                success {
+                    pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+                    //jdepend
+                    //cpd
+                    dry canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+                }
 
             }
 
         }
 
         stage ('JavaDoc') {
-            sh 'mvn -B javadoc:javadoc'
+            steps {
+                sh 'mvn -B javadoc:javadoc'
+                }
         }
 
         //A step before deploying

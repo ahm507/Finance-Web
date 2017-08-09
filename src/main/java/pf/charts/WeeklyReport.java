@@ -1,25 +1,19 @@
 package pf.charts;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-
 import pf.email.Mailer;
 import pf.user.User;
 import pf.user.UserRepository;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class WeeklyReport {
@@ -60,7 +54,9 @@ public class WeeklyReport {
 	}
 
 	// @Scheduled(cron="0 0 0 1,5,10,15,20,25,30 * *") //Every 5 days
+	//minute hour dayOfMonth month dayOfWeek
 	@Scheduled(cron = "0 0 0 * * *") // Every day as a testing period
+	//@Scheduled(cron = "@daily") // Every day: shortcut
 	public void process() throws Exception {
 		Iterable<User> allUsers = userRepository.findAll();// OrderByEmail
 		for (User user : allUsers) {

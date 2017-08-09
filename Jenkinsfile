@@ -2,10 +2,6 @@
 
 pipeline {
     agent any
-//    tools {
-//        maven 'Maven 3.3.1'
-//        jdk 'jdk8'
-//    }
     stages {
 
         stage ('Compile') {
@@ -35,9 +31,10 @@ pipeline {
             post {
                 success {
                     pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
-                    //jdepend
-                    //cpd
                     dry canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+                    //jdepend is not supported yet
+                    //I found
+
                 }
 
             }
@@ -48,6 +45,11 @@ pipeline {
             steps {
                 sh 'mvn -B javadoc:javadoc'
                 }
+               post {
+                    success {
+                        javadoc()
+                    }
+               }
         }
 
         //A step before deploying
@@ -64,16 +66,13 @@ pipeline {
 
         }
 
+        //TODO
+
         //integration-test
 
         //Deploy Stage
 
-
         //Run end to end tests
-
-
-
-
 
     }
 }

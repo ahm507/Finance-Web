@@ -66,6 +66,16 @@
 </style>
 
 
+<script>
+    //Trivial to move to JS file
+    function exportCSV() {
+        var year = $('#chart_year').val();
+        var chart_type = $('#chart_type').val();
+        location.href = "chart-export?year=" + year + "&type=" + chart_type;
+    }
+
+</script>
+
 <title>Charts</title>
 </head>
 <body>
@@ -73,6 +83,9 @@
 	<%@include file="header-charts.jspf"%>
 
 	<br>
+
+	<a href="#" onclick="exportCSV()">Export CSV</a>
+
 	<div id='jqxChart'
 		style="width: 99%; height: 300px; position: relative; left: 0px; top: 0px;">
 	</div>

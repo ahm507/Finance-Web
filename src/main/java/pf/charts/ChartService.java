@@ -14,7 +14,6 @@ import java.util.*;
 
 @Service
 public class ChartService {
-
 	
     AccountRepository accountRepo;
     UserRepository userRepo;
@@ -28,11 +27,9 @@ public class ChartService {
         this.userRepo = userRepo;
         this.accountService = accountService;
         this.transactionService = transactionService;
- 
     	
     }
-	
-	
+
     static public final String CAT_INCOME = "Income";
     static public final String CAT_LIABILITIES = "Liabilities"; 
     static public final String CAT_EXPENSES = "Expenses";
@@ -52,8 +49,49 @@ public class ChartService {
         return out;
     }
 
+	//List<Map<String, Object>>
+	public String getExpensesTrendHtml(String year, String type, String userId, String email) throws Exception {
 
-    public List<Map<String, Object>> getExpensesTrend(String year, String type, String userId, String email) throws Exception {
+		List<Map<String, Object>> out2 = getExpensesTrend(year, type, userId, email);
+		String string = convertToHtml(year, type, email, out2);
+		return string;
+	}
+
+	private String convertToHtml(String year, String type, String email, List<Map<String, Object>> out2) {
+		boolean headerRendered = false;
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("<h1>email: "+ email + ", type: " + type + ", for year: " + year + "</h1>");
+		stringBuffer.append("<table border=1>");
+		for(Map<String, Object> map : out2) {
+			Set<String> keys = map.keySet();
+			if( ! headerRendered) {
+				headerRendered = true;
+				convertHeaderHtml(stringBuffer, keys);
+			}
+			convertRowHtml(stringBuffer, map, keys);
+		}
+		stringBuffer.append("</table>");
+		return stringBuffer.toString();
+	}
+
+	private void convertHeaderHtml(StringBuffer stringBuffer, Set<String> keys) {
+		stringBuffer.append("<tr>");
+		for(String key : keys) {
+			stringBuffer.append("<td>" + key + "</td>");
+		}
+		stringBuffer.append("</tr>\r\n");
+	}
+
+	private void convertRowHtml(StringBuffer stringBuffer, Map<String, Object> map, Set<String> keys) {
+		stringBuffer.append("<tr>");
+		for(String key : keys) {
+			stringBuffer.append("<td>" + map.get(key) + "</td>");
+		}
+		stringBuffer.append("</tr>\r\n");
+	}
+
+
+	public List<Map<String, Object>> getExpensesTrend(String year, String type, String userId, String email) throws Exception {
         List<Map<String, Object>> out2 = new ArrayList<>();
         if("all".equals(year)) { //NOT WORKING YET
             Map<String, Map<String, Object>> out = getTrendDataAllYears(userId, email);
@@ -67,7 +105,6 @@ public class ChartService {
         }
         return out2;
     }
-
 
 
     public Map<String, Map<String, Object>> getTrendDataAllYears(String userId, String email) throws Exception {

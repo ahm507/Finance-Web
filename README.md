@@ -34,7 +34,7 @@ License:
 * The text and code is license as GNU 3.0 located at: https://www.gnu.org/copyleft/gpl.html
 
 Screen shots:
-=============
+--------------
 The following screen shots are utilizing and showing sample test data.
 
 Transactions View:

@@ -1,10 +1,7 @@
 package pf;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -13,6 +10,7 @@ import pf.account.NullAccountException;
 import pf.backup.BackupService;
 import pf.backup.CurrencyTransefereException;
 import pf.backup.RestoreService;
+import pf.charts.ChartService;
 import pf.charts.WeeklyReport;
 import pf.user.UserRepository;
 
@@ -36,11 +34,14 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 	BackupService backupService;
 	UserRepository userRepository;
 	RestoreService restoreService;
+	ChartService chartService;
 
-	ApplicationController(BackupService backupService, UserRepository userRepository, RestoreService restoreService) {
+	ApplicationController(BackupService backupService, UserRepository userRepository, RestoreService restoreService,
+	                      ChartService chartService) {
 		this.backupService = backupService;
 		this.userRepository = userRepository;
 		this.restoreService = restoreService;
+		this.chartService = chartService;
 	}
 
 	@Override
@@ -82,10 +83,24 @@ public class ApplicationController extends WebMvcConfigurerAdapter {
 
 		model.put("csvFileName", backupService.getFileName());
 		model.put("csvContents", backupService.getExportContents(userId));
-		// FIXME: just return results directely. No need to exporting.jsp
+		// FIXME: just return results directly. No need to exporting.jsp
 		return "pages/exporting.jsp";
 
 	}
+
+	@GetMapping("/chart-export") //as html for better copy and paste into excel
+	@ResponseBody
+	public String chartExport(HttpServletRequest request, HttpServletResponse response,
+	                          @RequestParam("year") String year, @RequestParam("type") String type)
+			throws Exception {
+		String email = request.getRemoteUser();
+		String userId = userRepository.findByEmail(email).getId();
+		String csvResponse = chartService.getExpensesTrendHtml(year, type, userId, email);
+		response.setContentType("text/html");
+		response.setCharacterEncoding("UTF-8");
+		return csvResponse;
+	}
+
 
 	@GetMapping("/exception")
 	public String exception() throws Exception {
